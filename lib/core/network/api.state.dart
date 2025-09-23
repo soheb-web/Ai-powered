@@ -1,0 +1,243 @@
+import 'package:ai_powered_app/data/models/RecentPrpertyModel.dart';
+import 'package:dio/dio.dart';
+import 'package:retrofit/retrofit.dart';
+import '../../data/models/FavoritesListModel.dart';
+import '../../data/models/FetachPropertyModel.dart';
+import '../../data/models/InquaryModel.dart';
+import '../../data/models/InquaryUserModel.dart';
+import '../../data/models/JobsProfileGetModel.dart';
+import '../../data/models/MatchProfileModel.dart';
+import '../../data/models/MatrimonyProfileDetail.dart';
+import '../../data/models/PropertyAgentUserModel.dart';
+import '../../data/models/PropertyDetailModel.dart';
+import '../../data/models/RealStateProfileGetModel.dart';
+import '../../data/models/employerResisterRequestModel.dart';
+import '../../data/models/favratePostModel.dart';
+import '../../data/models/jobDetailModel.dart';
+import '../../data/models/jobListModel.dart';
+import '../../data/models/login.body.dart';
+import '../../data/models/profileBasedModel.dart';
+import '../../data/models/profileModel.dart';
+import '../../data/models/register.req.model.dart';
+import '../../data/models/rentModel.dart';
+import '../../screen/jobs.screen/myJobScreen.dart';
+import 'package:retrofit/http.dart';
+part 'api.state.g.dart';
+
+
+@RestApi(baseUrl: 'https://matrimony.rajveerfacility.in/api')
+
+abstract class APIStateNetwork {
+  factory APIStateNetwork(Dio dio, ) = _APIStateNetwork;
+
+////////////////////////////////Matrimony Api Network////////////////////////////////////////////
+
+  @POST('/matrimony/auth/login')
+  Future<HttpResponse<dynamic>> login(@Body() LoginBody body);
+
+  @POST('/matrimony/auth/register')
+  Future<HttpResponse<dynamic>> register(@Body() RegisterRequest body);
+
+  @GET('/matrimony/profile/')
+  Future<HttpResponse<ProfileModel>> fetchProfile(
+     @Query("user_id") String userId,
+     );
+
+  @POST('/matrimony/profile/upload-photo')
+  @MultiPart()
+  Future<HttpResponse<dynamic>> uploadProfilePhoto(
+     @Part(name: 'photo[]') List<MultipartFile> photos,
+     @Query('user_id') String userId,
+     );
+
+  @POST('/matrimony/profile-update')
+  Future<HttpResponse<dynamic>> updateProfile(
+     @Query("user_id") String userId,
+     @Body() Map<String, dynamic> body,
+     );
+
+  @GET('/matrimony/search')
+  Future<HttpResponse<ProfileBasedModel>> searchProfileBasedQuery(
+     @Query('user_id') String userId,
+     );
+
+  @POST('/matrimony/match')
+  Future<HttpResponse<dynamic>> matchUser(
+     @Query('user_id') String userId,
+     @Body() Map<String, dynamic> body,
+     );
+
+ @GET('/matrimony/matches')
+ Future<HttpResponse<MatchProfileModel>> getMatches(
+     @Query('user_id') String userId,
+     );
+
+
+/////////////////////////////////////Jobs Api Network//////////////////////////////////////
+ @POST('/jobs/auth/login')
+  Future<HttpResponse<dynamic>> jobsLogin(@Body() LoginBody body);
+
+ @POST('/jobs/employer/register')
+ Future<HttpResponse<dynamic>> resisterEmployer(@Body() EmployerRegisterRequestBody body);
+
+
+ @GET('/jobs/listings')
+ Future<HttpResponse<JobListModel>> getJobListings();
+
+
+ @GET('/jobs/listing')
+ Future<HttpResponse<JobDetailModel>> getJobDetails(
+     @Query('job_id') String jobId,
+     );
+
+
+ @POST('/jobs/apply')
+ Future<HttpResponse<dynamic>> applyForJob(
+     @Body() Map<String, dynamic> body,
+     );
+
+ @GET('/jobs/my-applications')
+ Future<HttpResponse<JobApplicationListModel>> getMyJobApplications(
+     @Query('user_id') String userId,
+     );
+
+
+ @POST('/jobs/employer/post-job')
+ Future<HttpResponse<dynamic>> postJobs(
+     @Body() Map<String, dynamic> body,
+     );
+
+ @GET('/jobseeker/profile')
+ Future<HttpResponse<JobsProfileGetModel>> getJobsProfile(
+     @Query('user_id') String userId,
+     );
+
+
+
+
+
+
+
+
+//////////////////////////////Real State Network//////////////////////////////////////////////
+
+
+
+
+
+ @POST('/realestate/auth/login')
+ Future<HttpResponse<dynamic>> realStateLogin(@Body() LoginBody body);
+
+ @POST('/realestate/auth/register')
+ Future<HttpResponse<dynamic>> registerRealState(@Body() RegisterRequest body);
+
+ @POST('/realestate/createProperty')
+ Future<HttpResponse<dynamic>> createProperty(
+     @Body() Map<String, dynamic> body,
+     );
+
+ @GET('/realestate/properties')
+ Future<HttpResponse<FetachPropertyModel>> fetchPropertiesList(
+     @Query('user_id') String userId,
+     );
+
+
+ @GET('/realestate/properties')
+ Future<HttpResponse<RentModel>> rentPropertiesList(
+     @Query('property_type') String jobType,
+     @Query('user_id') String userId,
+     );
+
+
+
+ @GET('/properties/today')
+ Future<HttpResponse<RecentPropertyModel>> todayPropertiesList(
+     @Query('user_id') String userId,
+     );
+
+
+
+ @GET('/realestate/getProperty')
+ Future<HttpResponse<PropertyDetailModel>> getPropertiesDetail(
+     @Query('property_id') String propertyId,
+     );
+
+
+
+
+ @POST('/realestate/inquiries')
+ Future<HttpResponse<dynamic>> userInquiries(@Body() SendInquiryBody body);
+
+
+ @GET('/realestate/inquiries/get')
+ Future<HttpResponse<InquaryUserListModel>> getUserInquiries(
+     @Query('user_id') String userId,
+     );
+
+
+
+ @POST('/realestate/favorites')
+ Future<HttpResponse<dynamic>> userFavorate(@Body() SendFavrateBody body);
+
+
+ // @GET('/realestate/favorites/get')
+ // Future<HttpResponse<InquaryUserListModel>> getUserFavorate(
+ //     @Query('user_id') String userId,
+ //     );
+
+ @GET('/properties/profile')
+ Future<HttpResponse<RealStateProfileGetModel>> getRealStateProfile(
+     @Query('user_id') String userId,
+     );
+
+
+ @POST('/properties/updateProfile')
+ Future<HttpResponse<dynamic>> realStateUpdate(
+     @Query('user_id') String userId,
+     @Body() Map<String, dynamic> body,
+     );
+
+ @POST('/book-property')
+ Future<HttpResponse<dynamic>> bookProperty(
+     @Body() Map<String, dynamic> body,
+     );
+
+
+ @POST('/getBooking-List')
+ Future<HttpResponse<PropertyAgentUserModel>> getPropertyBookList(
+     @Query('user_id') String userId,
+     );
+
+
+
+ @POST('/realestate/properties/update')
+ Future<HttpResponse<dynamic>> updateProperty(
+     @Query('property_id') String propertyId,
+     @Body() Map<String, dynamic> body,
+     );
+
+
+ @GET('/realestate/favorites/get')
+ Future<HttpResponse<FavoritesListModel>> favoritesPropertyList(
+     @Query('user_id') String userId,
+     );
+
+
+
+
+ @DELETE('/realestate/properties/Delete')
+ Future<HttpResponse<FavoritesListModel>> deleteProperty(
+     @Query('user_id') String userId,
+     @Query('property_id') String propertyId,
+     );
+
+
+
+ @GET('/matrimony/profile/')
+ Future<HttpResponse<DetailModel>> profileDetail(
+     @Query("user_id") String userId,
+     );
+
+}
+
+
