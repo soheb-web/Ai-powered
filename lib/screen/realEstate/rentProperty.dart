@@ -163,7 +163,7 @@ class _RentPropertyState extends ConsumerState<RentProperty> {
                   if( role=="buyer" )
                     InkWell(
                       onTap:   () async {
-                        final isFavorite = property.is_favorite ?? false;
+                        final isFavorite = property.isFavorite ?? false;
                         final action = isFavorite ? 'remove' : 'add';
 
                         try {
@@ -185,8 +185,8 @@ class _RentPropertyState extends ConsumerState<RentProperty> {
                       },
 
                       child: Icon(
-                        property.is_favorite!  ? Icons.favorite : Icons.favorite_border,
-                        color:  property.is_favorite!  ? Colors.red : Colors.grey,
+                        property.isFavorite!  ? Icons.favorite : Icons.favorite_border,
+                        color:  property.isFavorite!  ? Colors.red : Colors.grey,
                       ),
                     )
                 ],),)

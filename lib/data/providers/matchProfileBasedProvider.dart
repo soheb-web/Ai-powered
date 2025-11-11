@@ -10,7 +10,6 @@ final matchProfileBasedProvider = FutureProvider.autoDispose<MatchProfileModel>(
   await ref.watch(profileDataProvider.future); // ensure profile is loaded
   final box = await Hive.openBox('userdata');
   final userId = box.get('user_id');
-  // final token = box.get('token');
   if (userId == null) {
     Fluttertoast.showToast(msg: "User ID not found in Hive.");
     throw Exception("User ID is missing");

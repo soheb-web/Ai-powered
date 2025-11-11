@@ -30,15 +30,14 @@ class PropertyAgentUserModel {
 
 class Booking {
   int? id;
-  int? userId;
-  int? propertyId;
+  String? userId;
+  String? propertyId;
   DateTime? bookingDate;
   String? bookingTime;
   String? status;
   DateTime? createdAt;
   DateTime? updatedAt;
   Property? property;
-  User? user;
 
   Booking({
     this.id,
@@ -50,7 +49,6 @@ class Booking {
     this.createdAt,
     this.updatedAt,
     this.property,
-    this.user,
   });
 
   factory Booking.fromJson(Map<String, dynamic> json) => Booking(
@@ -63,7 +61,6 @@ class Booking {
     createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
     updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
     property: json["property"] == null ? null : Property.fromJson(json["property"]),
-    user: json["user"] == null ? null : User.fromJson(json["user"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -76,7 +73,6 @@ class Booking {
     "created_at": createdAt?.toIso8601String(),
     "updated_at": updatedAt?.toIso8601String(),
     "property": property?.toJson(),
-    "user": user?.toJson(),
   };
 }
 
@@ -88,11 +84,11 @@ class Property {
   String? category;
   String? price;
   String? location;
-  int? bedrooms;
-  int? bathrooms;
+  String? bedrooms;
+  String? bathrooms;
   String? area;
   dynamic amenities;
-  int? listedBy;
+  String? listedBy;
   DateTime? listedDate;
   String? agentName;
   String? mobileNumber;
@@ -179,46 +175,6 @@ class Property {
     "bhk": bhk,
     "furnish_such": furnishSuch,
     "photo": photo,
-    "created_at": createdAt?.toIso8601String(),
-    "updated_at": updatedAt?.toIso8601String(),
-  };
-}
-
-class User {
-  int? id;
-  String? name;
-  String? email;
-  String? phone;
-  String? role;
-  DateTime? createdAt;
-  DateTime? updatedAt;
-
-  User({
-    this.id,
-    this.name,
-    this.email,
-    this.phone,
-    this.role,
-    this.createdAt,
-    this.updatedAt,
-  });
-
-  factory User.fromJson(Map<String, dynamic> json) => User(
-    id: json["id"],
-    name: json["name"],
-    email: json["email"],
-    phone: json["phone"],
-    role: json["role"],
-    createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
-    updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "name": name,
-    "email": email,
-    "phone": phone,
-    "role": role,
     "created_at": createdAt?.toIso8601String(),
     "updated_at": updatedAt?.toIso8601String(),
   };

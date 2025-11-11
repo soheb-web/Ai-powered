@@ -440,16 +440,21 @@ import 'package:fluttertoast/fluttertoast.dart';
 class PropertyDetailPage extends ConsumerStatefulWidget {
   final int? propertyId;
   const PropertyDetailPage(this.propertyId, {super.key});
+
   @override
   _PropertyDetailPageState createState() => _PropertyDetailPageState();
+
 }
 
 class _PropertyDetailPageState extends ConsumerState<PropertyDetailPage> {
+
   DateTime _selectedDateTime = DateTime.now(); // Initialize with current date and time
   bool _isBooking = false; // To manage loading state during booking
   // Function to show Date and Time Picker and handle booking
+
   Future<void> _selectDateTimeAndBook(BuildContext context, WidgetRef ref) async {
     // Step 1: Select Date
+
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: _selectedDateTime,
@@ -492,6 +497,7 @@ class _PropertyDetailPageState extends ConsumerState<PropertyDetailPage> {
         );
       },
     );
+
 
     if (pickedTime == null) return; // User cancelled time picker
 

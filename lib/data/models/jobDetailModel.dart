@@ -1,59 +1,54 @@
 import 'dart:convert';
 
-JobDetailModel jobDetailModelFromJson(String str) =>
-    JobDetailModel.fromJson(json.decode(str));
+JobDetailModel jobDetailModelFromJson(String str) => JobDetailModel.fromJson(json.decode(str));
 
-String jobDetailModelToJson(JobDetailModel data) =>
-    json.encode(data.toJson());
+String jobDetailModelToJson(JobDetailModel data) => json.encode(data.toJson());
 
 class JobDetailModel {
-  final bool status;
-  final String message;
-  final Data data;
+  bool? status;
+  String? message;
+  Data? data;
 
-  JobDetailModel({
-    required this.status,
-    required this.message,
-    required this.data,
-  });
+  JobDetailModel({this.status, this.message, this.data});
 
   factory JobDetailModel.fromJson(Map<String, dynamic> json) => JobDetailModel(
-    status: json["status"] ?? false,
-    message: json["message"] ?? "",
-    data: Data.fromJson(json["data"] ?? {}),
+    status: json["status"],
+    message: json["message"],
+    data: json["data"] == null ? null : Data.fromJson(json["data"]),
   );
 
   Map<String, dynamic> toJson() => {
     "status": status,
     "message": message,
-    "data": data.toJson(),
+    "data": data?.toJson(),
   };
 }
 
 class Data {
-  final int id;
-  final String title;
-  final String company;
-  final String? description;
-  final List<String>? requirements; // Changed from String? to List<String>?
-  final String? location;
-  final String? salaryRange;
-  final String? employmentType;
-  final String? status;
-  final DateTime? createdAt;
-  final DateTime? updatedAt;
-  final int? minExperience;
-  final int? maxExperience;
-  final String? salaryMin; // Changed to String? to match JSON
-  final String? salaryMax; // Changed to String? to match JSON
-  final DateTime? postedDate;
-  final DateTime? applicationDeadline;
-  final int? employerId;
+  int? id;
+  String? title;
+  dynamic company;
+  String? description;
+  List<String>? requirements;  // ← AB LIST HAI
+  String? location;
+  dynamic salaryRange;
+  String? employmentType;
+  String? status;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+  String? minExperience;
+  String? maxExperience;
+  String? salaryMin;
+  String? salaryMax;
+  dynamic postedDate;
+  DateTime? applicationDeadline;
+  dynamic employerId;
+  String? category;
 
   Data({
-    required this.id,
-    required this.title,
-    required this.company,
+    this.id,
+    this.title,
+    this.company,
     this.description,
     this.requirements,
     this.location,
@@ -69,40 +64,65 @@ class Data {
     this.postedDate,
     this.applicationDeadline,
     this.employerId,
+    this.category,
   });
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
-    id: json["id"] ?? 0,
-    title: json["title"] ?? "",
-    company: json["company"] ?? "",
-    description: json["description"],
-    requirements: json["requirements"] != null
-        ? (json["requirements"] is List
-        ? List<String>.from(json["requirements"].map((x) => x.toString()))
-        : [json["requirements"].toString()])
-        : null,
-    location: json["location"],
-    salaryRange: json["salary_range"],
-    employmentType: json["employment_type"],
-    status: json["status"],
-    createdAt: json["created_at"] != null
-        ? DateTime.tryParse(json["created_at"])
-        : null,
-    updatedAt: json["updated_at"] != null
-        ? DateTime.tryParse(json["updated_at"])
-        : null,
-    minExperience: json["min_experience"],
-    maxExperience: json["max_experience"],
-    salaryMin: json["salary_min"]?.toString(), // Convert to String
-    salaryMax: json["salary_max"]?.toString(), // Convert to String
-    postedDate: json["posted_date"] != null
-        ? DateTime.tryParse(json["posted_date"])
-        : null,
-    applicationDeadline: json["application_deadline"] != null
-        ? DateTime.tryParse(json["application_deadline"])
-        : null,
-    employerId: json["employer_id"],
-  );
+  factory Data.fromJson(Map<String, dynamic> json) {
+    // ← YEH SABSE ZAROORI HAI
+    var reqRaw = json["requirements"];
+
+    List<String> parsedReqs = [];
+    if (reqRaw != null) {
+      if (reqRaw is List) {
+        parsedReqs = reqRaw.cast<String>();
+      } else if (reqRaw is String) {
+        try {
+          // Fix: "[\"'item1', 'item2'\"]" → ["item1", "item2"]
+          String cleaned = reqRaw
+              .replaceAll("'", '"')
+              .replaceAll(r'\"', '"');
+
+          if (cleaned.startsWith('[') && cleaned.endsWith(']')) {
+            final List<dynamic> list = jsonDecode(cleaned);
+            parsedReqs = list.cast<String>();
+          } else {
+            // Fallback: split by comma
+            parsedReqs = cleaned
+                .split(',')
+                .map((s) => s.replaceAll('"', '').replaceAll("'", '').trim())
+                .where((s) => s.isNotEmpty)
+                .toList();
+          }
+        } catch (e) {
+          parsedReqs = [reqRaw];
+        }
+      }
+    }
+
+    return Data(
+      id: json["id"],
+      title: json["title"],
+      company: json["company"],
+      description: json["description"],
+      requirements: parsedReqs,  // ← AB HAMESHA LIST HOGA
+      location: json["location"],
+      salaryRange: json["salary_range"],
+      employmentType: json["employment_type"],
+      status: json["status"],
+      createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+      updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
+      minExperience: json["min_experience"],
+      maxExperience: json["max_experience"],
+      salaryMin: json["salary_min"],
+      salaryMax: json["salary_max"],
+      postedDate: json["posted_date"],
+      applicationDeadline: json["application_deadline"] == null
+          ? null
+          : DateTime.parse(json["application_deadline"]),
+      employerId: json["employer_id"],
+      category: json["category"],
+    );
+  }
 
   Map<String, dynamic> toJson() => {
     "id": id,
@@ -120,8 +140,9 @@ class Data {
     "max_experience": maxExperience,
     "salary_min": salaryMin,
     "salary_max": salaryMax,
-    "posted_date": postedDate?.toIso8601String(),
+    "posted_date": postedDate,
     "application_deadline": applicationDeadline?.toIso8601String(),
     "employer_id": employerId,
+    "category": category,
   };
 }

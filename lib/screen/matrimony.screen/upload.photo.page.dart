@@ -26,10 +26,7 @@ class _UploadPhotoPageState extends ConsumerState<UploadPhotoPage> {
   List<File> selectedFiles = [];
   bool isLoading = false;
 
-  @override
-  void initState() {
-    super.initState();
-  }
+
 
   Future<void> pickFiles() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -45,10 +42,10 @@ class _UploadPhotoPageState extends ConsumerState<UploadPhotoPage> {
               .toList(),
         );
       });
-      // Update provider
       ref.read(propertyImageProvider.notifier).state = selectedFiles;
     }
   }
+
 
   void removeFile(int index) {
     setState(() {
@@ -67,23 +64,26 @@ class _UploadPhotoPageState extends ConsumerState<UploadPhotoPage> {
       body:
           isLoading
               ? const Center(child: CircularProgressIndicator())
-              : SingleChildScrollView(
+
+              :
+          SingleChildScrollView(
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 24.w),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(height: 20.h),
-                      // Previously Uploaded Photos
+
                       profileAsync.when(
                         data: (profile) {
-                          // Assuming PropertyDetailModel has a 'photos' field similar to DetailModel
+
                           List<String> oldPhotos =
                               profile.data.photos
                                   .where((photo) => photo is String)
                                   .cast<String>()
                                   .toList() ??
                               [];
+
                           return oldPhotos.isNotEmpty
                               ? Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -263,166 +263,9 @@ class _UploadPhotoPageState extends ConsumerState<UploadPhotoPage> {
                         ),
                       SizedBox(height: 20.h),
 
-                      // GestureDetector(
-                      //   onTap: () async {
-                      //     bool isProfileCreation = false;
-                      //     bool hasExistingPhotos = false;
-                      //     // Check if this is profile creation or update
-                      //     profileAsync.whenData((profile) {
-                      //       hasExistingPhotos = profile.data.photos?.isNotEmpty ?? false;
-                      //       // Assume profile creation if no photos exist and no profile data
-                      //       isProfileCreation = profile.data.photos == null || profile.data.photos!.isEmpty;
-                      //     });
-                      //
-                      //     // Validation: Mandatory photo upload for profile creation
-                      //     // if (selectedFiles.isEmpty) {
-                      //     //   ScaffoldMessenger.of(context).showSnackBar(
-                      //     //     const SnackBar(
-                      //     //       content: Text('Please upload at least one photo for profile creation.'),
-                      //     //       backgroundColor: Colors.redAccent,
-                      //     //     ),
-                      //     //   );
-                      //     //   return;
-                      //     // }
-                      //
-                      //     // Proceed with upload if there are new photos
-                      //
-                      //     if (hasExistingPhotos==false && selectedFiles.isEmpty) {
-                      //       ScaffoldMessenger.of(context).showSnackBar(
-                      //         const SnackBar(
-                      //           content: Text("Please upload at least one photo for profile creation !"),
-                      //         ),
-                      //       );
-                      //     }
-                      //     else{
-                      //       setState(() {
-                      //         isLoading = true;
-                      //       });
-                      //
-                      //       try {
-                      //         await ref.read(uploadProfilePhotosProvider(selectedFiles).future);
-                      //
-                      //         ScaffoldMessenger.of(context).showSnackBar(
-                      //           const SnackBar(
-                      //             content: Text("Photos uploaded successfully!"),
-                      //           ),
-                      //         );
-                      //       } catch (e) {
-                      //         ScaffoldMessenger.of(context).showSnackBar(
-                      //           SnackBar(content: Text("Upload failed: $e")),
-                      //         );
-                      //         setState(() {
-                      //           isLoading = false;
-                      //         });
-                      //         return;
-                      //       }
-                      //
-                      //     }
-                      //
-                      //     setState(() {
-                      //       isLoading = false;
-                      //     });
-                      //     Navigator.push(
-                      //       context,
-                      //       MaterialPageRoute(
-                      //         builder: (context) => const LocationLifestylePage(),
-                      //       ),
-                      //     );
-                      //   },
-                      //   child: Container(
-                      //     width: double.infinity,
-                      //     height: 53.h,
-                      //     decoration: BoxDecoration(
-                      //       borderRadius: BorderRadius.circular(15.r),
-                      //       color: const Color(0xFF97144d),
-                      //     ),
-                      //     child: Center(
-                      //       child: isLoading
-                      //
-                      //           ? SizedBox(
-                      //
-                      //         width: 24.sp,
-                      //         height: 24.sp,
-                      //         child: const CircularProgressIndicator(
-                      //           valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                      //           strokeWidth: 2,
-                      //         ),
-                      //       )
-                      //           : Text(
-                      //         "Continue",
-                      //         style: GoogleFonts.inter(
-                      //           fontSize: 18.sp,
-                      //           fontWeight: FontWeight.w500,
-                      //           color: Colors.white,
-                      //         ),
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
+
 
                       GestureDetector(
-                        // onTap: () async {
-                        //   setState(() {
-                        //     isLoading = true;
-                        //   });
-                        //
-                        //   bool isProfileCreation = false;
-                        //   bool hasExistingPhotos = false;
-                        //
-                        //   final profileData = ref.read(profileDataProvider).maybeWhen(
-                        //     data: (profile) {
-                        //       hasExistingPhotos = profile.data.photos?.isNotEmpty ?? false;
-                        //       isProfileCreation = !hasExistingPhotos;
-                        //       return profile;
-                        //     },
-                        //     orElse: () => null,
-                        //   );
-                        //
-                        //   // Validation: Require at least one photo if creating profile
-                        //   if (isProfileCreation && selectedFiles.isEmpty) {
-                        //     ScaffoldMessenger.of(context).showSnackBar(
-                        //       const SnackBar(
-                        //         content: Text("Please upload at least one photo for profile creation!"),
-                        //         backgroundColor: Colors.redAccent,
-                        //       ),
-                        //     );
-                        //     setState(() {
-                        //       isLoading = false;
-                        //     });
-                        //     return;
-                        //   }
-                        //
-                        //   // Proceed with upload if needed
-                        //   try {
-                        //     if (selectedFiles.isNotEmpty) {
-                        //       await ref.read(uploadProfilePhotosProvider(selectedFiles).future);
-                        //
-                        //       ScaffoldMessenger.of(context).showSnackBar(
-                        //         const SnackBar(content: Text("Photos uploaded successfully!")),
-                        //       );
-                        //     }
-                        //   } catch (e) {
-                        //     ScaffoldMessenger.of(context).showSnackBar(
-                        //       SnackBar(content: Text("Upload failed: $e")),
-                        //     );
-                        //     setState(() {
-                        //       isLoading = false;
-                        //     });
-                        //     return;
-                        //   }
-                        //
-                        //   setState(() {
-                        //     isLoading = false;
-                        //   });
-                        //
-                        //   // Navigate after all processes are done
-                        //   Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //       builder: (context) => const LocationLifestylePage(),
-                        //     ),
-                        //   );
-                        // },
                         onTap: () async {
                           setState(() {
                             isLoading = true;

@@ -1,11 +1,10 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
-
 import '../../data/providers/jobApply.dart';
 import '../../data/providers/jobDetailProvider.dart';
 
@@ -19,7 +18,6 @@ class JobDetailsScreen extends ConsumerStatefulWidget {
 
 class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
   bool isLoading = false;
-  bool isFavorite = false;
 
   @override
   Widget build(BuildContext context) {
@@ -30,19 +28,28 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
       appBar: AppBar(
         backgroundColor: const Color(0xFFF5F8FA),
         elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios, color: Color(0xFF1E1E1E)),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
-      body: Stack(
+      body:
+
+      Stack(
         children: [
           SingleChildScrollView(
-            padding: EdgeInsets.only(
-              left: 24.w,
-              right: 24.w,
-              top: 10.h,
-              bottom: 100.h,
-            ),
+            padding: EdgeInsets.only(left: 24.w, right: 24.w, top: 10.h, bottom: 100.h),
             child: jobDetailAsync.when(
               data: (jobDetail) {
                 final job = jobDetail.data;
+                if (job == null) {
+                  return const Center(child: Text("No job data available"));
+                }
+
+                // DEBUG (Remove in production)
+                // print("Raw requirements: ${job.requirements}");
+                // print("Type: ${job.requirements.runtimeType}");
+
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -52,7 +59,6 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
                         fontSize: 30.sp,
                         fontWeight: FontWeight.w500,
                         color: const Color(0xFF030016),
-                        
                       ),
                     ),
                     SizedBox(height: 20.h),
@@ -61,7 +67,7 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
                     _sectionTitle("Job Description"),
                     _sectionContent(job.description ?? "No description available"),
                     SizedBox(height: 30.h),
-                    _sectionTitle("Responsibilities"),
+                    _sectionTitle("Requirements"),
                     _buildRequirementsList(job.requirements),
                     SizedBox(height: 30.h),
                   ],
@@ -85,13 +91,23 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
           ),
         ],
       ),
+
     );
   }
 
+  // ====================== JOB CARD ======================
   Widget _buildJobCard(dynamic job) {
-    return
+    final String salary = job?.salaryMin != null && job?.salaryMax != null
+        ? "₹${job.salaryMin} - ₹${job.salaryMax}"
+        : job?.salaryRange ?? "Salary not specified";
 
-      Container(
+    final String employmentType = switch (job?.employmentType) {
+      'full_time' => 'Full Time',
+      'part_time' => 'Part Time',
+      _ => job?.employmentType ?? 'Not specified',
+    };
+
+    return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20.r),
         color: Colors.white,
@@ -111,8 +127,6 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
           children: [
             Row(
               children: [
-
-
                 Container(
                   width: 40.w,
                   height: 40.h,
@@ -123,55 +137,52 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
                   child: Center(
                     child: Image.asset(
                       "assets/rajveer.png",
-                      color: const Color(0xFFFFFFFF),
+                      color: Colors.white,
+                      width: 24.w,
                     ),
                   ),
                 ),
-                  // ),
-                // ),
                 SizedBox(width: 10.w),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      job.title ?? "Untitled Job",
-                      style: GoogleFonts.alexandria(
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w500,
-                        color: const Color(0xFF1E1E1E),
-                        
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        job?.title ?? "Untitled Job",
+                        style: GoogleFonts.alexandria(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w500,
+                          color: const Color(0xFF1E1E1E),
+                        ),
                       ),
-                    ),
-                    Text(
-                      job.company ?? "Unknown Company",
-                      style: GoogleFonts.alexandria(
-                        fontSize: 11.sp,
-                        fontWeight: FontWeight.w500,
-                        color: const Color(0xFF9A97AE),
-                        letterSpacing: -0.2,
+                      Text(
+                        job?.company ?? "Unknown Company",
+                        style: GoogleFonts.alexandria(
+                          fontSize: 11.sp,
+                          fontWeight: FontWeight.w500,
+                          color: const Color(0xFF9A97AE),
+                          letterSpacing: -0.2,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ],
             ),
             SizedBox(height: 15.h),
-            _buildJobInfoRow(Icons.location_on_outlined, job.location ?? "Not specified"),
+            _buildJobInfoRow(Icons.location_on_outlined, job?.location ?? "Not specified"),
             SizedBox(height: 10.h),
-            _buildJobInfoRow(
-              Icons.currency_rupee, // Rupee icon
-              job.salaryRange ?? (job.salaryMin != null && job.salaryMax != null
-                  ? "₹${job.salaryMin} - ₹${job.salaryMax}"
-                  : "Salary not specified"),
+            _buildJobInfoRow(Icons.currency_rupee, salary),
+            SizedBox(height: 10.h),
+            Row(
+              children: [
+                _tag(employmentType),
+                SizedBox(width: 8.w),
+                if (job?.minExperience != null || job?.maxExperience != null)
+                  _tag("${job.minExperience}–${job.maxExperience} Yrs"),
+              ],
             ),
-            SizedBox(height: 25.h),
-            // Row(
-            //   children: [
-            //     _tag(job.employmentType ??""),
-            //     // SizedBox(width: 10.w),
-            //     // _tag(job.employmentType ?? "Not specified"),
-            //   ],
-            // ),
+            SizedBox(height: 10.h),
           ],
         ),
       ),
@@ -195,42 +206,61 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
       ],
     );
   }
+  Widget _buildRequirementsList(dynamic requirements) {
+    List<String> reqList = [];
 
-  Widget _buildRequirementsList(List<String>? requirements) {
-    if (requirements == null || requirements.isEmpty) {
-      return Text(
-        "No requirements specified",
-        style: GoogleFonts.alexandria(
-          fontSize: 16.sp,
-          fontWeight: FontWeight.w500,
-          color: const Color(0xFF878599),
-          letterSpacing: -0.1,
-        ),
-      );
+    if (requirements == null || requirements.toString().trim().isEmpty) {
+      return _sectionContent("No requirements specified");
+    }
+
+    String raw = requirements.toString().trim();
+
+    try {
+      // Step 1: Remove outer [ ]
+      if (raw.startsWith('[')) raw = raw.substring(1);
+      if (raw.endsWith(']')) raw = raw.substring(0, raw.length - 1);
+
+      // Step 2: Remove outer quotes
+      if (raw.startsWith('"') && raw.endsWith('"')) {
+        raw = raw.substring(1, raw.length - 1);
+      }
+
+      // Step 3: Fix ALL escapes: \" , \' , \\ → normal
+      raw = raw
+          .replaceAll(r'\"', '"')
+          .replaceAll(r"\'", "'")
+          .replaceAll(r'\\', r'\');
+
+      // Step 4: Remove ALL quotes around items
+      raw = raw.replaceAll("'", "").replaceAll('"', '');
+
+      // Step 5: Split by comma (now safe)
+      reqList = raw
+          .split(',')
+          .map((s) => s.trim())
+          .where((s) => s.isNotEmpty)
+          .toList();
+
+    } catch (e) {
+      reqList = [raw];
+    }
+
+    if (reqList.isEmpty) {
+      return _sectionContent("No requirements specified");
     }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: requirements
-          .asMap()
-          .entries
-          .map(
-            (entry) => Padding(
+      children: reqList.map((req) {
+        return Padding(
           padding: EdgeInsets.only(bottom: 8.h),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                "• ",
-                style: GoogleFonts.alexandria(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w500,
-                  color: const Color(0xFF878599),
-                ),
-              ),
+              Text("• ", style: GoogleFonts.alexandria(fontSize: 16.sp, color: const Color(0xFF878599))),
               Expanded(
                 child: Text(
-                  entry.value,
+                  req,
                   style: GoogleFonts.alexandria(
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w500,
@@ -241,12 +271,12 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
               ),
             ],
           ),
-        ),
-      )
-          .toList(),
+        );
+      }).toList(),
     );
   }
 
+  // ====================== APPLY BUTTON ======================
   Widget _buildApplyButton() {
     return GestureDetector(
       onTap: () async {
@@ -290,11 +320,7 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
           borderRadius: BorderRadius.circular(20.r),
           color: const Color(0xFF0A66C2),
           boxShadow: const [
-            BoxShadow(
-              offset: Offset(0, 4),
-              blurRadius: 10,
-              color: Color(0x40000000),
-            ),
+            BoxShadow(offset: Offset(0, 4), blurRadius: 10, color: Color(0x40000000)),
           ],
         ),
         child: Center(
@@ -302,10 +328,7 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
               ? const SizedBox(
             width: 24,
             height: 24,
-            child: CircularProgressIndicator(
-              color: Colors.white,
-              strokeWidth: 2.5,
-            ),
+            child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2.5),
           )
               : Text(
             "Apply Now",
@@ -320,22 +343,20 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
     );
   }
 
+  // ====================== HELPER WIDGETS ======================
   Widget _tag(String text) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12.w),
-      height: 28.h,
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
       decoration: BoxDecoration(
         color: const Color(0xFFE6EDF2),
         borderRadius: BorderRadius.circular(40.r),
       ),
-      child: Center(
-        child: Text(
-          text,
-          style: GoogleFonts.alexandria(
-            fontSize: 11.sp,
-            fontWeight: FontWeight.w400,
-            color: const Color(0xFF1E1E1E),
-          ),
+      child: Text(
+        text,
+        style: GoogleFonts.alexandria(
+          fontSize: 11.sp,
+          fontWeight: FontWeight.w400,
+          color: const Color(0xFF1E1E1E),
         ),
       ),
     );
@@ -348,7 +369,6 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
         fontSize: 20.sp,
         fontWeight: FontWeight.w500,
         color: const Color(0xFF030016),
-        
       ),
     );
   }

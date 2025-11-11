@@ -180,10 +180,6 @@ abstract class APIStateNetwork {
  Future<HttpResponse<dynamic>> userFavorate(@Body() SendFavrateBody body);
 
 
- // @GET('/realestate/favorites/get')
- // Future<HttpResponse<InquaryUserListModel>> getUserFavorate(
- //     @Query('user_id') String userId,
- //     );
 
  @GET('/properties/profile')
  Future<HttpResponse<RealStateProfileGetModel>> getRealStateProfile(
@@ -239,5 +235,9 @@ abstract class APIStateNetwork {
      );
 
 }
+
+
+
+
 
 

@@ -487,9 +487,9 @@ class BasicDetail extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: const Color(0xFFFDF6F8),
-      appBar: AppBar(
-          leading: null,
-          backgroundColor: const Color(0xFFFDF6F8)),
+      // appBar: AppBar(
+      //     leading: null,
+      //     backgroundColor: const Color(0xFFFDF6F8)),
       body: profileAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(child: Text('Error: $e')),
@@ -510,6 +510,45 @@ class BasicDetail extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    GestureDetector(
+                      onTap: () async {
+                        final box = await Hive.openBox('userdata');
+                        await box.clear();
+                        if (context.mounted) {
+                          Navigator.pushReplacement(
+                            context,
+                            CupertinoPageRoute(
+                              builder: (_) => const StartPage(),
+                            ),
+                          );
+                        }
+                      },
+                      child: Container(
+                        width: 103.w,
+                        height: 53.h,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15.r),
+                          color: const Color(0xFF97144d),
+                        ),
+                        child: Center(
+                          child: Text(
+                            "Logout",
+                            style: GoogleFonts.gothicA1(
+                              fontSize: 18.sp,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -566,38 +605,7 @@ class BasicDetail extends ConsumerWidget {
                         ),
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () async {
-                        final box = await Hive.openBox('userdata');
-                        await box.clear();
-                        if (context.mounted) {
-                          Navigator.pushReplacement(
-                            context,
-                            CupertinoPageRoute(
-                              builder: (_) => const StartPage(),
-                            ),
-                          );
-                        }
-                      },
-                      child: Container(
-                        width: 103.w,
-                        height: 53.h,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15.r),
-                          color: const Color(0xFF97144d),
-                        ),
-                        child: Center(
-                          child: Text(
-                            "Logout",
-                            style: GoogleFonts.gothicA1(
-                              fontSize: 18.sp,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+
 
                   ],
                 ),

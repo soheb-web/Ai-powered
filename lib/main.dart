@@ -30,12 +30,13 @@ void main() async {
   } catch (e) {
     log("Hive initialization failed: $e");
   }
+
   runApp(
     ProviderScope(
-      // <-- This is mandatory
       child: MyApp(),
     ),
   );
+
 }
 
 class MyApp extends StatelessWidget {
@@ -101,5 +102,6 @@ class AuthCheck extends StatelessWidget {
       },
     );
   }
+
 
 }

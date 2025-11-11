@@ -30,8 +30,8 @@ class InquaryUserListModel {
 
 class Inquiry {
   int? id;
-  int? userId;
-  int? propertyId;
+  String? userId;
+  String? propertyId;
   String? message;
   String? status;
   DateTime? sentDate;
@@ -84,11 +84,11 @@ class Property {
   String? category;
   String? price;
   String? location;
-  int? bedrooms;
-  int? bathrooms;
+  String? bedrooms;
+  String? bathrooms;
   String? area;
   dynamic amenities;
-  int? listedBy;
+  String? listedBy;
   DateTime? listedDate;
   String? agentName;
   String? mobileNumber;

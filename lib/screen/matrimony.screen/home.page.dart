@@ -40,6 +40,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     final matchProfileData = ref.watch(matchProfileBasedProvider);
 
     return WillPopScope(
+
       onWillPop: () async {
         if (tabBottom != 0) {
           setState(() {
@@ -61,8 +62,8 @@ class _HomePageState extends ConsumerState<HomePage> {
       child: Scaffold(
         backgroundColor: Color(0xFFFDF6F8),
         body:
-            tabBottom == 0
-                ?
+            tabBottom == 0 ?
+
             Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -185,6 +186,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                             Expanded(
                               child: TabBarView(
                                 children: [
+
+
                                  /* profileSearch.when(
                                     loading:
                                         () => Center(
@@ -735,6 +738,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                       );
                                     },
                                   ),
+
                                   matchProfileData.when(
                                     loading:
                                         () => Center(
@@ -789,6 +793,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                       );
                                     },
                                   ),
+
                                 ],
                               ),
                             ),
@@ -800,11 +805,14 @@ class _HomePageState extends ConsumerState<HomePage> {
                   ],
                 )
 
-                : tabBottom == 1
-                ?
+
+                : tabBottom == 1 ?
+
             MessagePage()
                 : tabBottom == 2
+
                 ? UserViewedProfilesScreen()
+
                 : BasicDetail(),
 
         bottomNavigationBar: Padding(
@@ -863,6 +871,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             ),
           ),
         ),
+
 
       ),
     );

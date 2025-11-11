@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -180,7 +182,7 @@ class _MyJobApplicationState extends ConsumerState<MyJobApplication> {
               loading: () => const Center(child: CircularProgressIndicator()),
               error: (error, stack) => Center(child: Text('Error: $error')),
               data: (jobApplications) {
-                if (jobApplications.applications.isEmpty) {
+                if (jobApplications.applications!.isEmpty) {
                   return Center(
                     child: Text(
                       'No applications found',
@@ -195,9 +197,9 @@ class _MyJobApplicationState extends ConsumerState<MyJobApplication> {
                 return ListView.builder(
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
-                  itemCount: jobApplications.applications.length,
+                  itemCount: jobApplications.applications!.length,
                   itemBuilder: (context, index) {
-                    final application = jobApplications.applications[index];
+                    final application = jobApplications.applications![index];
                     return _buildApplicationCard(application);
                   },
                 );
@@ -214,7 +216,7 @@ class _MyJobApplicationState extends ConsumerState<MyJobApplication> {
     // Format the appliedDate to DD-MM-YYYY
     final dateFormat = DateFormat('dd-MM-yyyy');
     final formattedDate = application.appliedDate != null
-        ? dateFormat.format(application.appliedDate)
+        ? dateFormat.format(application.appliedDate!)
         : "Not specified";
     return
 
@@ -271,7 +273,7 @@ Row(children: [
         ),
       ),
       Text(
-        application.company ?? "Unknown Company",
+        application.jobTitle ?? "Unknown Company",
         style: GoogleFonts.alexandria(
           fontSize: 11.sp,
           fontWeight: FontWeight.w500,
@@ -333,16 +335,56 @@ Row(children: [
   }
 }
 
+
+JobApplicationListModel jobApplicationListModelFromJson(String str) => JobApplicationListModel.fromJson(json.decode(str));
+
+String jobApplicationListModelToJson(JobApplicationListModel data) => json.encode(data.toJson());
+
 class JobApplicationListModel {
-  final List<Application> applications;
+  List<Application>? applications;
 
-  JobApplicationListModel({required this.applications});
+  JobApplicationListModel({
+    this.applications,
+  });
 
-  factory JobApplicationListModel.fromJson(Map<String, dynamic> json) {
-    return JobApplicationListModel(
-      applications: (json['applications'] as List)
-          .map((e) => Application.fromJson(e))
-          .toList(),
-    );
-  }
+  factory JobApplicationListModel.fromJson(Map<String, dynamic> json) => JobApplicationListModel(
+    applications: json["applications"] == null ? [] : List<Application>.from(json["applications"]!.map((x) => Application.fromJson(x))),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "applications": applications == null ? [] : List<dynamic>.from(applications!.map((x) => x.toJson())),
+  };
 }
+
+class Application {
+  int? applicationId;
+  String? jobId;
+  String? jobTitle;
+  String? status;
+  DateTime? appliedDate;
+
+  Application({
+    this.applicationId,
+    this.jobId,
+    this.jobTitle,
+    this.status,
+    this.appliedDate,
+  });
+
+  factory Application.fromJson(Map<String, dynamic> json) => Application(
+    applicationId: json["application_id"],
+    jobId: json["job_id"],
+    jobTitle: json["job_title"],
+    status: json["status"],
+    appliedDate: json["applied_date"] == null ? null : DateTime.parse(json["applied_date"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "application_id": applicationId,
+    "job_id": jobId,
+    "job_title": jobTitle,
+    "status": status,
+    "applied_date": "${appliedDate!.year.toString().padLeft(4, '0')}-${appliedDate!.month.toString().padLeft(2, '0')}-${appliedDate!.day.toString().padLeft(2, '0')}",
+  };
+}
+

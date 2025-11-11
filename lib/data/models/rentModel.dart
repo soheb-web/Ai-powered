@@ -1,38 +1,30 @@
 // To parse this JSON data, do
+//
 //     final rentModel = rentModelFromJson(jsonString);
 
 import 'dart:convert';
 
 RentModel rentModelFromJson(String str) => RentModel.fromJson(json.decode(str));
+
 String rentModelToJson(RentModel data) => json.encode(data.toJson());
 
 class RentModel {
   String? status;
   List<Property>? properties;
-  int? totalProperties;
-  int? page;
 
   RentModel({
     this.status,
     this.properties,
-    this.totalProperties,
-    this.page,
   });
 
   factory RentModel.fromJson(Map<String, dynamic> json) => RentModel(
     status: json["status"],
-    properties: json["properties"] == null
-        ? []
-        : List<Property>.from(json["properties"].map((x) => Property.fromJson(x))),
-    totalProperties: json["total_properties"],
-    page: json["page"],
+    properties: json["properties"] == null ? [] : List<Property>.from(json["properties"]!.map((x) => Property.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
     "status": status,
     "properties": properties == null ? [] : List<dynamic>.from(properties!.map((x) => x.toJson())),
-    "total_properties": totalProperties,
-    "page": page,
   };
 }
 
@@ -44,23 +36,23 @@ class Property {
   String? category;
   String? price;
   String? location;
-  int? bedrooms;
-  int? bathrooms;
+  String? bedrooms;
+  String? bathrooms;
   String? area;
-  List<String>? amenities;
-  int? listedBy;
+  dynamic amenities;
+  String? listedBy;
   DateTime? listedDate;
   String? agentName;
   String? mobileNumber;
   String? email;
   String? localArea;
   String? completeAddress;
-  int? bhk;
+  String? bhk;
   String? furnishSuch;
   String? photo;
   DateTime? createdAt;
   DateTime? updatedAt;
-  bool? is_favorite;
+  bool? isFavorite;
 
   Property({
     this.id,
@@ -86,7 +78,7 @@ class Property {
     this.photo,
     this.createdAt,
     this.updatedAt,
-    this.is_favorite,
+    this.isFavorite,
   });
 
   factory Property.fromJson(Map<String, dynamic> json) => Property(
@@ -100,14 +92,7 @@ class Property {
     bedrooms: json["bedrooms"],
     bathrooms: json["bathrooms"],
     area: json["area"],
-
-    // ✅ Updated amenities logic
-    amenities: json["amenities"] == null
-        ? []
-        : (json["amenities"] is String
-        ? (json["amenities"] as String).split(',').map((e) => e.trim()).toList()
-        : List<String>.from(json["amenities"])),
-
+    amenities: json["amenities"],
     listedBy: json["listed_by"],
     listedDate: json["listed_date"] == null ? null : DateTime.parse(json["listed_date"]),
     agentName: json["agent_name"],
@@ -115,16 +100,13 @@ class Property {
     email: json["email"],
     localArea: json["local_area"],
     completeAddress: json["complete_address"],
-
-    // ✅ Safe parsing of bhk if it's a string or int
-    bhk: json["bhk"] is int ? json["bhk"] : int.tryParse(json["bhk"]?.toString() ?? ""),
+    bhk: json["bhk"],
     furnishSuch: json["furnish_such"],
     photo: json["photo"],
     createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
     updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
-    is_favorite: json["is_favorite"],
+    isFavorite: json["is_favorite"],
   );
-
 
   Map<String, dynamic> toJson() => {
     "id": id,
@@ -137,7 +119,7 @@ class Property {
     "bedrooms": bedrooms,
     "bathrooms": bathrooms,
     "area": area,
-    "amenities": amenities == null ? [] : List<dynamic>.from(amenities!.map((x) => x)),
+    "amenities": amenities,
     "listed_by": listedBy,
     "listed_date": listedDate?.toIso8601String(),
     "agent_name": agentName,
@@ -150,6 +132,6 @@ class Property {
     "photo": photo,
     "created_at": createdAt?.toIso8601String(),
     "updated_at": updatedAt?.toIso8601String(),
-    "is_favorite": is_favorite,
+    "is_favorite": isFavorite,
   };
 }
