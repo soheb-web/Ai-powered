@@ -257,6 +257,10 @@
 // }
 
 import 'dart:convert';
+import 'dart:developer';
+import 'package:ai_powered_app/core/network/api.state.dart';
+import 'package:ai_powered_app/core/utils/preety.dio.dart';
+import 'package:ai_powered_app/data/models/toggleFavouriteBodyModel.dart';
 import 'package:ai_powered_app/screen/matrimony.screen/message.page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -264,6 +268,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive/hive.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import '../../data/providers/sentInterestToAnother.dart';
@@ -308,6 +313,8 @@ class _PartnerPreferencePageState extends ConsumerState<PartnerPreferencePage> {
 
   @override
   Widget build(BuildContext context) {
+    var box = Hive.box("userdata");
+    var userId = box.get("user_id");
     final userAsyncValue = ref.watch(
       targetUserDetailsProvider(widget.targetUserId ?? ""),
     );
@@ -705,17 +712,38 @@ class _PartnerPreferencePageState extends ConsumerState<PartnerPreferencePage> {
 
                 setState(() => isLoading = true);
 
+                // try {
+                //   await ref.read(
+                //     sentInterestProvider({
+                //       "target_user_id": widget.targetUserId!,
+                //     }).future,
+                //   );
+                //   Fluttertoast.showToast(msg: "Interest sent successfully");
+                // } catch (e) {
+                //   Fluttertoast.showToast(msg: "Error: $e");
+                // } finally {
+                //   setState(() => isLoading = false);
+                // }
+
                 try {
-                  await ref.read(
-                    sentInterestProvider({
-                      "target_user_id": widget.targetUserId!,
-                    }).future,
+                  final body = ToggleFavouriteBodyModel(
+                    userId: userId,
+                    favoriteUserId: widget.targetUserId.toString(),
                   );
-                  Fluttertoast.showToast(msg: "Interest sent successfully");
-                } catch (e) {
-                  Fluttertoast.showToast(msg: "Error: $e");
+                  final service = APIStateNetwork(createDio());
+                  final response = await service.toggleFavourite(body);
+                  if (response.success == true) {
+                    Fluttertoast.showToast(msg: response.message);
+                  } else {
+                    Fluttertoast.showToast(msg: response.message);
+                  }
+                } catch (e, st) {
+                  log("${e.toString()} /n ${st.toString()}");
+                  Fluttertoast.showToast(msg: "Api Error :$e");
                 } finally {
-                  setState(() => isLoading = false);
+                  setState(() {
+                    isLoading = false;
+                  });
                 }
               },
               child: Container(

@@ -891,7 +891,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 : tabBottom == 1
                 ? MessagePage()
                 : tabBottom == 2
-                ? UserViewedProfilesScreen()
+                ? FavouritePage()
                 : BasicDetail(),
 
         bottomNavigationBar: Padding(

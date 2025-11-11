@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
+import 'package:ai_powered_app/core/utils/globalroute.key.dart';
 import 'package:ai_powered_app/screen/jobs.screen/home.screen.dart';
 import 'package:ai_powered_app/screen/matrimony.screen/home.page.dart';
 import 'package:ai_powered_app/screen/realEstate/realEstate.home.page.dart';
@@ -43,6 +44,7 @@ class MyApp extends StatelessWidget {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'Flutter Demo',
+            navigatorKey: navigatorKey,
             theme: ThemeData(
               colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
             ),

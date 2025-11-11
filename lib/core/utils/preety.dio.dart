@@ -50,22 +50,21 @@ Dio createDio() {
         }
 
         if (e.response?.statusCode == 401) {
-          // log(e.response.toString());
-          //
-          // Fluttertoast.showToast(
-          //   msg: "Token expire please login",
-          //   gravity: ToastGravity.BOTTOM,
-          //   toastLength: Toast.LENGTH_SHORT,
-          //   backgroundColor: Colors.red,
-          //   textColor: Color(0xFFFFFFFF),
-          // );
-          //
-          // navigatorKey.currentState?.pushAndRemoveUntil(
-          //   CupertinoPageRoute(builder: (_) => StartPage()),
-          //       (_) => false,
-          // );
-          //
-          // return handler.next(e);
+          log(e.response.toString());
+
+          Fluttertoast.showToast(
+            msg: "Token expire please login",
+            gravity: ToastGravity.BOTTOM,
+            toastLength: Toast.LENGTH_SHORT,
+            backgroundColor: Colors.red,
+            textColor: Color(0xFFFFFFFF),
+          );
+
+          navigatorKey.currentState?.pushAndRemoveUntil(
+            CupertinoPageRoute(builder: (_) => StartPage()),
+            (_) => false,
+          );
+          Fluttertoast.showToast(msg: "Please Navigator");
 
           // Log the full error response for debugging
           log('Validation Error: ${e.response?.data}');

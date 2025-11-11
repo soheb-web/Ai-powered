@@ -321,13 +321,16 @@ class ProfileCard extends StatelessWidget {
   }
 }*/
 
+import 'dart:developer';
 
-
-
+import 'package:ai_powered_app/data/models/favouriteListBodyModel.dart';
+import 'package:ai_powered_app/data/providers/FavoritesPropertyListProvider.dart';
+import 'package:ai_powered_app/data/providers/favouriteListProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive/hive.dart';
 import '../../data/models/profileBasedModel.dart'; // Adjust import based on your project structure
 import '../../data/providers/searcProfileBased.dart'; // Adjust import for your provider
 
@@ -482,7 +485,10 @@ class UserViewedProfilesScreen extends ConsumerWidget {
           Expanded(
             child: TextField(
               decoration: InputDecoration(
-                contentPadding: EdgeInsets.symmetric(vertical: 0.w, horizontal: 12.w),
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 0.w,
+                  horizontal: 12.w,
+                ),
                 hintText: 'Search',
                 prefixIcon: const Icon(Icons.search),
                 border: OutlineInputBorder(
@@ -545,25 +551,27 @@ class ProfileCard extends StatelessWidget {
   Widget _buildProfileImage() {
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
-      child: imagePath != null && imagePath!.isNotEmpty
-          ? Image.asset(
-        imagePath!,
-        width: 75.w,
-        height: 75.w,
-        fit: BoxFit.cover,
-        errorBuilder: (context, error, stackTrace) => Image.asset(
-          'assets/female.png',
-          width: 75.w,
-          height: 75.w,
-          fit: BoxFit.cover,
-        ),
-      )
-          : Image.asset(
-        'assets/female.png',
-        width: 75.w,
-        height: 75.w,
-        fit: BoxFit.cover,
-      ),
+      child:
+          imagePath != null && imagePath!.isNotEmpty
+              ? Image.asset(
+                imagePath!,
+                width: 75.w,
+                height: 75.w,
+                fit: BoxFit.cover,
+                errorBuilder:
+                    (context, error, stackTrace) => Image.asset(
+                      'assets/female.png',
+                      width: 75.w,
+                      height: 75.w,
+                      fit: BoxFit.cover,
+                    ),
+              )
+              : Image.asset(
+                'assets/female.png',
+                width: 75.w,
+                height: 75.w,
+                fit: BoxFit.cover,
+              ),
     );
   }
 
@@ -589,10 +597,7 @@ class ProfileCard extends StatelessWidget {
         ),
         Text(
           location,
-          style: GoogleFonts.gothicA1(
-            fontSize: 12.sp,
-            color: Colors.grey,
-          ),
+          style: GoogleFonts.gothicA1(fontSize: 12.sp, color: Colors.grey),
         ),
         SizedBox(height: 4.h),
         Row(
@@ -607,11 +612,15 @@ class ProfileCard extends StatelessWidget {
             ),
             Row(
               children: [
-                 Icon(Icons.call, color: Color(0xFF97144d), size: 20.sp),
+                Icon(Icons.call, color: Color(0xFF97144d), size: 20.sp),
                 SizedBox(width: 6.w),
-                 Icon(Icons.settings, color: Color(0xFF97144d), size: 20.sp),
+                Icon(Icons.settings, color: Color(0xFF97144d), size: 20.sp),
                 SizedBox(width: 6.w),
-                 Icon(Icons.favorite_border, color: Color(0xFF97144d), size: 20.sp),
+                Icon(
+                  Icons.favorite_border,
+                  color: Color(0xFF97144d),
+                  size: 20.sp,
+                ),
               ],
             ),
           ],
@@ -642,6 +651,277 @@ class ProfileCard extends StatelessWidget {
           ],
         ),
       ],
+    );
+  }
+}
+
+class FavouritePage extends ConsumerStatefulWidget {
+  const FavouritePage({super.key});
+
+  @override
+  ConsumerState<FavouritePage> createState() => _FavouritePageState();
+}
+
+class _FavouritePageState extends ConsumerState<FavouritePage> {
+  final TextEditingController _searchController = TextEditingController();
+  String searchQuery = "";
+
+  @override
+  Widget build(BuildContext context) {
+    var box = Hive.box("userdata");
+    var id = box.get("user_id");
+    final favouriteData = ref.watch(favouriteListProvider(id));
+
+    return Scaffold(
+      backgroundColor: const Color(0xFFFDF6F8),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFFFDF6F8),
+        elevation: 0,
+        title: Text(
+          "Your Favourites ❤️",
+          style: GoogleFonts.gothicA1(
+            fontSize: 20.sp,
+            fontWeight: FontWeight.w700,
+            color: const Color(0xFF030016),
+          ),
+        ),
+      ),
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20.w),
+        child: Column(
+          children: [
+            // 🔍 Search Bar
+            Container(
+              margin: EdgeInsets.only(top: 10.h, bottom: 20.h),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12.r),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 6,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: TextField(
+                controller: _searchController,
+                decoration: InputDecoration(
+                  hintText: 'Search your favourites...',
+                  hintStyle: GoogleFonts.gothicA1(fontSize: 14.sp),
+                  prefixIcon: const Icon(Icons.search, color: Colors.grey),
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.symmetric(vertical: 12.h),
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    searchQuery = value;
+                  });
+                },
+              ),
+            ),
+
+            Expanded(
+              child: favouriteData.when(
+                data: (data) {
+                  final query = searchQuery.toLowerCase().trim();
+
+                  // 🔍 Multi-field search (name + city + age)
+                  final filterData =
+                      data.data.where((element) {
+                        final name =
+                            element.favoriteUser?.name?.toLowerCase() ?? '';
+                        final city =
+                            element.favoriteUser?.city?.toLowerCase() ?? '';
+                        final age =
+                            element.favoriteUser?.age?.toLowerCase() ?? '';
+
+                        return name.contains(query) ||
+                            city.contains(query) ||
+                            age.contains(query);
+                      }).toList();
+
+                  if (filterData.isEmpty) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.favorite_border,
+                            size: 60.sp,
+                            color: const Color(0xFF97144d),
+                          ),
+                          SizedBox(height: 10.h),
+                          Text(
+                            query.isEmpty
+                                ? "No Favourite List Yet!"
+                                : "No results found for \"$searchQuery\"",
+                            style: GoogleFonts.gothicA1(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black54,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                  return ListView.builder(
+                    padding: EdgeInsets.zero,
+                    itemCount: data.data.length,
+                    itemBuilder: (context, index) {
+                      final fav = filterData[index].favoriteUser;
+
+                      return Container(
+                        margin: EdgeInsets.only(bottom: 15.h),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20.r),
+                          gradient: const LinearGradient(
+                            colors: [Color(0xFFFFEBEE), Color(0xFFFFFFFF)],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 8,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(14.w),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              // 🖼 Profile Image
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(15.r),
+                                child: Image.network(
+                                  fav?.photos ??
+                                      "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
+                                  width: 85.w,
+                                  height: 85.w,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Image.network(
+                                      "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
+                                      width: 85.w,
+                                      height: 85.w,
+                                      fit: BoxFit.cover,
+                                    );
+                                  },
+                                ),
+                              ),
+                              SizedBox(width: 12.w),
+
+                              // 🧾 User Info
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      fav?.name ?? "Unknown",
+                                      style: GoogleFonts.gothicA1(
+                                        fontSize: 17.sp,
+                                        fontWeight: FontWeight.w700,
+                                        color: const Color(0xFF333333),
+                                      ),
+                                    ),
+                                    SizedBox(height: 4.h),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          "Age: ${fav?.age ?? '--'}",
+                                          style: GoogleFonts.gothicA1(
+                                            fontSize: 13.sp,
+                                            color: Colors.grey[700],
+                                          ),
+                                        ),
+                                        const SizedBox(width: 6),
+                                        Text(
+                                          "| Gender: ${fav?.gender ?? '--'}",
+                                          style: GoogleFonts.gothicA1(
+                                            fontSize: 13.sp,
+                                            color: Colors.grey[700],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 5.h),
+                                    Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.location_on,
+                                          size: 16,
+                                          color: Colors.pink,
+                                        ),
+                                        SizedBox(width: 4.w),
+                                        Expanded(
+                                          child: Text(
+                                            "${fav?.city ?? ''}, ${fav?.state ?? ''}",
+                                            style: GoogleFonts.gothicA1(
+                                              fontSize: 13.sp,
+                                              color: Colors.grey[800],
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+                              // ❤️ Icon Button
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: const Color(
+                                    0xFF97144d,
+                                  ).withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                                child: IconButton(
+                                  onPressed: () {
+                                    // TODO: Remove from favourites action
+                                  },
+                                  icon: const Icon(
+                                    Icons.favorite,
+                                    color: Color(0xFF97144d),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+                error: (error, stackTrace) {
+                  log("$error\n$stackTrace");
+                  return Center(
+                    child: Text(
+                      "Something went wrong 😕\n${error.toString()}",
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.gothicA1(
+                        fontSize: 14.sp,
+                        color: Colors.redAccent,
+                      ),
+                    ),
+                  );
+                },
+                loading:
+                    () => const Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.pinkAccent,
+                      ),
+                    ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
