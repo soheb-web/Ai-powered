@@ -19,31 +19,50 @@ class InterestPage extends ConsumerStatefulWidget {
 class _InterestPageState extends ConsumerState<InterestPage> {
   Set<String> selectedInterests = {};
   final List<String> interestList = [
-    "Music","Reading","Cricket",  "Art","Test", "Technology", "Science", "Literature",
-    "Travel", "Food", "Fashion", "Health", "Fitness",
-    "Photography", "Gaming", "Nature", "History", "Education",
-    "Finance", "Sports", "Theater", "Crafts",
+    "Music",
+    "Reading",
+    "Cricket",
+    "Art",
+    "Test",
+    "Technology",
+    "Science",
+    "Literature",
+    "Travel",
+    "Food",
+    "Fashion",
+    "Health",
+    "Fitness",
+    "Photography",
+    "Gaming",
+    "Nature",
+    "History",
+    "Education",
+    "Finance",
+    "Sports",
+    "Theater",
+    "Crafts",
   ];
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    final profileData = ref.read(profileDataProvider).maybeWhen(
-      data: (data) => data,
-      orElse: () => null,
-    );
+    final profileData = ref
+        .read(profileDataProvider)
+        .maybeWhen(data: (data) => data, orElse: () => null);
 
     if (profileData != null && selectedInterests.isEmpty) {
-      final existing = profileData.data.profile.interest;  // Example: "Music, Travel, Food"
+      final existing =
+          profileData.data.profile.interest; // Example: "Music, Travel, Food"
 
       if (existing != null && existing.isNotEmpty) {
         try {
           final List<dynamic> decoded = jsonDecode(existing);
-          final parsed = decoded
-              .map((e) => e.toString().trim())
-              .where((e) => interestList.contains(e))
-              .toSet();
+          final parsed =
+              decoded
+                  .map((e) => e.toString().trim())
+                  .where((e) => interestList.contains(e))
+                  .toSet();
 
           setState(() {
             selectedInterests = parsed;
@@ -52,7 +71,6 @@ class _InterestPageState extends ConsumerState<InterestPage> {
           print("Failed to decode interest: $e");
         }
       }
-
     }
   }
 
@@ -74,7 +92,6 @@ class _InterestPageState extends ConsumerState<InterestPage> {
                 fontSize: 30.sp,
                 fontWeight: FontWeight.w600,
                 color: Color(0xFF030016),
-                
               ),
             ),
             SizedBox(height: 8.h),
@@ -84,7 +101,6 @@ class _InterestPageState extends ConsumerState<InterestPage> {
                 fontSize: 16.sp,
                 fontWeight: FontWeight.w400,
                 color: Color(0xFF9A97AE),
-                
               ),
             ),
             SizedBox(height: 25.h),
@@ -93,35 +109,36 @@ class _InterestPageState extends ConsumerState<InterestPage> {
             Wrap(
               runSpacing: 10.w,
               spacing: 10.h,
-              children: interestList.map((interest) {
-                final isSelected = selectedInterests.contains(interest);
-                return FilterChip(
-                  label: Text(
-                    interest,
-                    style: GoogleFonts.gothicA1(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w400,
-                      color:isSelected?Colors.white:  Color(0xFF030016),
-                    ),
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.r),
-                  ),
-                  selected: isSelected,
-                  showCheckmark: false,
-                  selectedColor: Color(0xFF97144d),
-                  backgroundColor: Color(0xFFF2D4DC),
-                  onSelected: (selected) {
-                    setState(() {
-                      if (selected) {
-                        selectedInterests.add(interest);
-                      } else {
-                        selectedInterests.remove(interest);
-                      }
-                    });
-                  },
-                );
-              }).toList(),
+              children:
+                  interestList.map((interest) {
+                    final isSelected = selectedInterests.contains(interest);
+                    return FilterChip(
+                      label: Text(
+                        interest,
+                        style: GoogleFonts.gothicA1(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w400,
+                          color: isSelected ? Colors.white : Color(0xFF030016),
+                        ),
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.r),
+                      ),
+                      selected: isSelected,
+                      showCheckmark: false,
+                      selectedColor: Color(0xFF97144d),
+                      backgroundColor: Color(0xFFF2D4DC),
+                      onSelected: (selected) {
+                        setState(() {
+                          if (selected) {
+                            selectedInterests.add(interest);
+                          } else {
+                            selectedInterests.remove(interest);
+                          }
+                        });
+                      },
+                    );
+                  }).toList(),
             ),
 
             SizedBox(height: 30.h),
@@ -129,7 +146,6 @@ class _InterestPageState extends ConsumerState<InterestPage> {
             /// Continue Button
             GestureDetector(
               onTap: () {
-
                 if (selectedInterests.isEmpty) {
                   // Show error message
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -145,19 +161,16 @@ class _InterestPageState extends ConsumerState<InterestPage> {
                   );
                   return; // Prevent navigation
                 }
-                final interestJsonString = jsonEncode(selectedInterests.toList()) + "\n";
-                ref.read(selectedInterestProvider.notifier).state = interestJsonString;
-
-
+                final interestJsonString =
+                    jsonEncode(selectedInterests.toList()) + "\n";
+                ref.read(selectedInterestProvider.notifier).state =
+                    interestJsonString;
 
                 Navigator.push(
-                    context,
-                    CupertinoPageRoute(builder: (_) => EducationPage()),
-                  );
-
-
+                  context,
+                  CupertinoPageRoute(builder: (_) => EducationPage()),
+                );
               },
-
 
               child: Container(
                 width: double.infinity,

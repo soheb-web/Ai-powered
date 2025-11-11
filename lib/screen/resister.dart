@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,14 +8,12 @@ import 'package:razorpay_flutter/razorpay_flutter.dart';
 import '../core/auth/login.auth.dart';
 import 'dart:io';
 
-
 class RegisterPage extends StatefulWidget {
   final String title;
   const RegisterPage({super.key, required this.title});
   @override
   State<RegisterPage> createState() => _RegisterPageState();
 }
-
 
 class _RegisterPageState extends State<RegisterPage> {
   bool _paymentSuccess = false;
@@ -26,9 +26,7 @@ class _RegisterPageState extends State<RegisterPage> {
     _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
-
   }
-
 
   void _openCheckout() {
     var options = {
@@ -36,10 +34,7 @@ class _RegisterPageState extends State<RegisterPage> {
       'amount': 50000, // ₹500 in paise
       'name': 'Test App',
       'description': 'Testing Payment',
-      'prefill': {
-        'contact': '9876543210',
-        'email': 'test@example.com',
-      }
+      'prefill': {'contact': '9876543210', 'email': 'test@example.com'},
     };
     try {
       _razorpay.open(options);
@@ -47,9 +42,6 @@ class _RegisterPageState extends State<RegisterPage> {
       debugPrint('Error: $e');
     }
   }
-
-
-
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
     setState(() {
@@ -89,19 +81,27 @@ class _RegisterPageState extends State<RegisterPage> {
   bool _buttonLoader = false;
   String? listGender;
   String? listRole;
-  final genderList = ["Male", "Female",];
-  final roleList = ["Buyer", "Seller",];
-
+  final genderList = ["Male", "Female"];
+  final roleList = ["Buyer", "Seller"];
 
   Future<void> _pickFile() async {
     // Pick a file (image or document) from the gallery
     final pickedFile = await FilePicker.platform.pickFiles(
       type: FileType.custom,
-      allowedExtensions: ['pdf', 'doc', 'docx', 'jpg', 'jpeg', 'png'], // Allow both documents and images
+      allowedExtensions: [
+        'pdf',
+        'doc',
+        'docx',
+        'jpg',
+        'jpeg',
+        'png',
+      ], // Allow both documents and images
     );
     if (pickedFile != null) {
       setState(() {
-        _selectedFile = File(pickedFile.files.single.path!); // Store the selected file
+        _selectedFile = File(
+          pickedFile.files.single.path!,
+        ); // Store the selected file
       });
     } else {
       // No file was picked
@@ -109,19 +109,15 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
 
-
   File? _selectedFile;
-
 
   Widget _getFilePreview(File file) {
     String fileExtension = file.path.split('.').last.toLowerCase();
-    if (fileExtension == 'jpg' || fileExtension == 'jpeg' || fileExtension == 'png') {
+    if (fileExtension == 'jpg' ||
+        fileExtension == 'jpeg' ||
+        fileExtension == 'png') {
       // It's an image, so show it as an image
-      return Image.file(
-        file,
-        fit: BoxFit.cover,
-        width: double.infinity,
-      );
+      return Image.file(file, fit: BoxFit.cover, width: double.infinity);
     } else if (fileExtension == 'pdf') {
       // It's a PDF, show an icon or file name (as preview)
       return Center(
@@ -166,7 +162,6 @@ class _RegisterPageState extends State<RegisterPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
               _buildLabel("Full Name"),
 
               _buildTextField(
@@ -259,45 +254,42 @@ class _RegisterPageState extends State<RegisterPage> {
                 SizedBox(height: 15.h),
               ],
               SizedBox(height: 15.h),
-            if (widget.title.toUpperCase() == "MATRIMONY") ...[
-              _buildLabel("Age"),
-              _buildTextField(
-                keyboardType: TextInputType.number,
-                controller: ageController,
-                hint: "Age",
-                label: "Age",
-                borderColor: themeColor,
-              ),
-              SizedBox(height: 15.h),
+              if (widget.title.toUpperCase() == "MATRIMONY") ...[
+                _buildLabel("Age"),
+                _buildTextField(
+                  keyboardType: TextInputType.number,
+                  controller: ageController,
+                  hint: "Age",
+                  label: "Age",
+                  borderColor: themeColor,
+                ),
+                SizedBox(height: 15.h),
 
-              _buildLabel("Gender"),
-              BuildDropDown(
-              title:  widget.title,
-                hint: "Select Gender",
-                items: genderList,
-                onChange: (value) {
-                  setState(() {
-                    listGender = value;
-                  });
-                },
-              ),
+                _buildLabel("Gender"),
+                BuildDropDown(
+                  title: widget.title,
+                  hint: "Select Gender",
+                  items: genderList,
+                  onChange: (value) {
+                    setState(() {
+                      listGender = value;
+                    });
+                  },
+                ),
 
-              SizedBox(height: 15.h),
+                SizedBox(height: 15.h),
 
-              _buildLabel("Date of Birth"),
+                _buildLabel("Date of Birth"),
 
-
-              buildDatePickerField(dobController, "Date of birth"),
-              SizedBox(height: 30.h),
-],
-
-
+                buildDatePickerField(dobController, "Date of birth"),
+                SizedBox(height: 30.h),
+              ],
 
               if (widget.title.toUpperCase() == "JOBS") ...[
                 _buildLabel("Upload Resume (Pdf, Doc, Docx, jpg, jpeg, png)"),
                 SizedBox(height: 8.h),
                 GestureDetector(
-                  onTap: _pickFile,  // Changed to pickFile
+                  onTap: _pickFile, // Changed to pickFile
                   child: Container(
                     width: double.infinity,
                     height: 150.h,
@@ -305,24 +297,39 @@ class _RegisterPageState extends State<RegisterPage> {
                       border: Border.all(color: themeColor, width: 1.5.w),
                       borderRadius: BorderRadius.circular(15.r),
                     ),
-                    child: _selectedFile == null
-                        ? Center(
-                      child: Text(
-                        "Tap to select resume (Image or Document)",
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                    )
-                        : ClipRRect(
-                      borderRadius: BorderRadius.circular(15.r),
-                      child: _selectedFile is File
-                          ? _getFilePreview(_selectedFile!)  // Use a helper method to display the file preview
-                          : Center(
-                        child: Text(
-                          "Selected file: ${_selectedFile?.path.split('/').last}",
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      ),
-                    ),
+                    child:
+                        _selectedFile == null
+                            ? Center(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.file_upload_outlined,
+                                    color: Colors.grey,
+                                    size: 35.sp,
+                                  ),
+                                  Text(
+                                    "Upload Document",
+                                    style: TextStyle(color: Colors.grey),
+                                  ),
+                                ],
+                              ),
+                            )
+                            : ClipRRect(
+                              borderRadius: BorderRadius.circular(15.r),
+                              child:
+                                  _selectedFile is File
+                                      ? _getFilePreview(
+                                        _selectedFile!,
+                                      ) // Use a helper method to display the file preview
+                                      : Center(
+                                        child: Text(
+                                          "Selected file: ${_selectedFile?.path.split('/').last}",
+                                          style: TextStyle(color: Colors.black),
+                                        ),
+                                      ),
+                            ),
                   ),
                 ),
                 SizedBox(height: 15.h),
@@ -333,12 +340,14 @@ class _RegisterPageState extends State<RegisterPage> {
                   if (_formKey.currentState?.validate() ?? false) {
                     setState(() => _buttonLoader = true);
                     try {
-                      if ( widget.title.toUpperCase() == "JOBS") {
+                      if (widget.title.toUpperCase() == "JOBS") {
                         if (_selectedFile == null) {
                           // If no file is selected, show an error message
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text("Please select a resume (Image or Document)"),
+                              content: Text(
+                                "Please select a resume (Image or Document)",
+                              ),
                               backgroundColor: Colors.red,
                             ),
                           );
@@ -357,19 +366,16 @@ class _RegisterPageState extends State<RegisterPage> {
                         );
 
                         // Navigation already handled in Auth.registerJobSeeker
-                      }
-                     else if ( widget.title.toUpperCase() == "REAL ESTATE") {
+                      } else if (widget.title.toUpperCase() == "REAL ESTATE") {
                         await Auth.registerRealState(
-                         nameController.text.trim(),
-                         emailController.text.trim(), 
-                         passwordController.text.trim(),
-                         phoneController.text.trim(),
-                          listRole=="Seller"?"agent":"buyer",
-                        context,
-
+                          nameController.text.trim(),
+                          emailController.text.trim(),
+                          passwordController.text.trim(),
+                          phoneController.text.trim(),
+                          listRole == "Seller" ? "agent" : "buyer",
+                          context,
                         );
-                      }
-                      else {
+                      } else {
                         await Auth.register(
                           emailController.text,
                           passwordController.text,
@@ -381,8 +387,8 @@ class _RegisterPageState extends State<RegisterPage> {
                           context,
                         );
                       }
-                    } catch (e) {
-
+                    } catch (e, st) {
+                      log("${e.toString()} /n ${st.toString()}");
                     } finally {
                       if (mounted) setState(() => _buttonLoader = false);
                     }
@@ -397,24 +403,24 @@ class _RegisterPageState extends State<RegisterPage> {
                       color: themeColor,
                     ),
                     child: Center(
-                      child: _buttonLoader
-                          ? const SizedBox(
-                        width: 24,
-                        height: 24,
-                        child: CircularProgressIndicator(
-                          color: Colors.white,
-                          strokeWidth: 2,
-                        ),
-                      )
-                          : Text(
-                        'Register',
-                        style: GoogleFonts.gothicA1(
-                          fontSize: 18.sp,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
-                          
-                        ),
-                      ),
+                      child:
+                          _buttonLoader
+                              ? const SizedBox(
+                                width: 24,
+                                height: 24,
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                  strokeWidth: 2,
+                                ),
+                              )
+                              : Text(
+                                'Register',
+                                style: GoogleFonts.gothicA1(
+                                  fontSize: 18.sp,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white,
+                                ),
+                              ),
                     ),
                   ),
                 ),
@@ -427,7 +433,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                  /*  Text(
+                    /*  Text(
                       "Already have Account? Login ",
                       style: GoogleFonts.gothicA1(
                         fontSize: 16.sp,
@@ -435,7 +441,6 @@ class _RegisterPageState extends State<RegisterPage> {
                         color: Colors.black,
                       ),
                     ),*/
-
                     RichText(
                       text: TextSpan(
                         children: [
@@ -444,7 +449,9 @@ class _RegisterPageState extends State<RegisterPage> {
                             style: GoogleFonts.gothicA1(
                               fontSize: 16.sp,
                               fontWeight: FontWeight.bold,
-                              color: Colors.black, // Color for "Already have Account?"
+                              color:
+                                  Colors
+                                      .black, // Color for "Already have Account?"
                             ),
                           ),
                           TextSpan(
@@ -452,17 +459,15 @@ class _RegisterPageState extends State<RegisterPage> {
                             style: GoogleFonts.gothicA1(
                               fontSize: 16.sp,
                               fontWeight: FontWeight.bold,
-                              color:_getThemeColor(widget.title)
+                              color: _getThemeColor(widget.title),
                             ),
                           ),
                         ],
                       ),
                     ),
-
                   ],
                 ),
               ),
-
             ],
           ),
         ),
@@ -511,8 +516,9 @@ class _RegisterPageState extends State<RegisterPage> {
         disabledBorder: customBorder,
         counterText: '', // hide character counter
       ),
-      validator: validator ??
-              (value) {
+      validator:
+          validator ??
+          (value) {
             if (value == null || value.trim().isEmpty) {
               return 'Please enter $label';
             }
@@ -534,8 +540,7 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
 
-
-/*
+  /*
 
   Widget buildDatePickerField(TextEditingController controller, String hint) {
     return TextField(
@@ -581,7 +586,7 @@ class _RegisterPageState extends State<RegisterPage> {
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12.r),
           borderSide: BorderSide(
-            color:_getThemeColor(widget.title),
+            color: _getThemeColor(widget.title),
             width: 1.5,
           ),
         ),
@@ -590,7 +595,7 @@ class _RegisterPageState extends State<RegisterPage> {
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12.r),
           borderSide: BorderSide(
-            color:_getThemeColor(widget.title),
+            color: _getThemeColor(widget.title),
             width: 2.0,
           ),
         ),
@@ -598,9 +603,7 @@ class _RegisterPageState extends State<RegisterPage> {
         // Optional: default border for consistency
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12.r),
-          borderSide: BorderSide(
-            color:_getThemeColor(widget.title),
-          ),
+          borderSide: BorderSide(color: _getThemeColor(widget.title)),
         ),
       ),
       onTap: () async {
@@ -612,13 +615,13 @@ class _RegisterPageState extends State<RegisterPage> {
         );
 
         if (pickedDate != null) {
-          final formattedDate = "${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
+          final formattedDate =
+              "${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
           controller.text = formattedDate;
         }
       },
     );
   }
-
 }
 
 class BuildDropDown extends StatelessWidget {
@@ -637,8 +640,7 @@ class BuildDropDown extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
-    return
-      DropdownButtonFormField<String>(
+    return DropdownButtonFormField<String>(
       icon: const Icon(Icons.keyboard_arrow_down),
       value: value != null && items.contains(value) ? value : null,
       decoration: InputDecoration(
@@ -649,8 +651,7 @@ class BuildDropDown extends StatelessWidget {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15.r),
-          borderSide: BorderSide(color:
-          _getThemeColor(title), width: 2.w),
+          borderSide: BorderSide(color: _getThemeColor(title), width: 2.w),
         ),
         hintText: value == null ? hint : null,
         hintStyle: GoogleFonts.inter(

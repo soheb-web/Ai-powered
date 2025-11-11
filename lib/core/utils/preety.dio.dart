@@ -1,4 +1,3 @@
-
 import 'dart:developer';
 
 import 'package:ai_powered_app/screen/start.page.dart';
@@ -14,7 +13,6 @@ import 'globalroute.key.dart';
 
 Dio createDio() {
   final dio = Dio();
-
 
   // Logging interceptor
   dio.interceptors.add(
@@ -44,7 +42,8 @@ Dio createDio() {
         return handler.next(response);
       },
       onError: (DioException e, handler) {
-        if (e.requestOptions.path.contains("/api/login")) { /// ye line sirf login agar wrong ho to sirf invalid emal or password message show karega
+        if (e.requestOptions.path.contains("/api/login")) {
+          /// ye line sirf login agar wrong ho to sirf invalid emal or password message show karega
           log("Invalid email or passworld");
           handler.next(e);
           return;
@@ -88,22 +87,18 @@ Dio createDio() {
           Fluttertoast.showToast(
             msg: errorMessage,
             gravity: ToastGravity.BOTTOM,
-            toastLength: Toast.LENGTH_LONG,  // Changed to LONG for better readability
+            toastLength:
+                Toast.LENGTH_LONG, // Changed to LONG for better readability
             backgroundColor: Colors.red,
             textColor: Colors.white,
             fontSize: 16.0,
           );
           navigatorKey.currentState?.pushAndRemoveUntil(
             CupertinoPageRoute(builder: (_) => StartPage()),
-                (_) => false,
-          ); 
+            (_) => false,
+          );
           return handler.next(e);
-        }
-
-
-
-
-        else if (e.response?.statusCode == 422) {
+        } else if (e.response?.statusCode == 422) {
           // Log the full error response for debugging
           log('Validation Error: ${e.response?.data}');
 
@@ -124,16 +119,43 @@ Dio createDio() {
           Fluttertoast.showToast(
             msg: errorMessage,
             gravity: ToastGravity.BOTTOM,
-            toastLength: Toast.LENGTH_LONG,  // Changed to LONG for better readability
+            toastLength:
+                Toast.LENGTH_LONG, // Changed to LONG for better readability
             backgroundColor: Colors.red,
             textColor: Colors.white,
             fontSize: 16.0,
           );
 
           return handler.next(e);
-        }
+        } else if (e.response?.statusCode == 404) {
+          // Log the full error response for debugging
+          log('Validation Error: ${e.response?.data}');
 
-        else if (e.response?.statusCode == 404) {
+          // Extract validation messages if available
+          String errorMessage = "Date Not Found";
+          if (e.response?.data is Map<String, dynamic>) {
+            final errors = e.response?.data['errors'];
+            if (errors != null && errors is Map) {
+              // Get the first error message from validation errors
+              final firstError = errors.values.first;
+              if (firstError is List && firstError.isNotEmpty) {
+                errorMessage = firstError.first;
+              }
+            }
+          }
+
+          // Show user-friendly error message
+          // Fluttertoast.showToast(
+          //   msg: errorMessage,
+          //   gravity: ToastGravity.BOTTOM,
+          //   toastLength: Toast.LENGTH_LONG,  // Changed to LONG for better readability
+          //   backgroundColor: Colors.red,
+          //   textColor: Colors.white,
+          //   fontSize: 16.0,
+          // );
+
+          return handler.next(e);
+        } else if (e.response?.statusCode == 403) {
           // Log the full error response for debugging
           log('Validation Error: ${e.response?.data}');
 
@@ -162,38 +184,6 @@ Dio createDio() {
 
           return handler.next(e);
         }
-
-        else if (e.response?.statusCode == 403) {
-          // Log the full error response for debugging
-          log('Validation Error: ${e.response?.data}');
-
-          // Extract validation messages if available
-          String errorMessage = "Date Not Found";
-          if (e.response?.data is Map<String, dynamic>) {
-            final errors = e.response?.data['errors'];
-            if (errors != null && errors is Map) {
-              // Get the first error message from validation errors
-              final firstError = errors.values.first;
-              if (firstError is List && firstError.isNotEmpty) {
-                errorMessage = firstError.first;
-              }
-            }
-          }
-
-          // Show user-friendly error message
-          // Fluttertoast.showToast(
-          //   msg: errorMessage,
-          //   gravity: ToastGravity.BOTTOM,
-          //   toastLength: Toast.LENGTH_LONG,  // Changed to LONG for better readability
-          //   backgroundColor: Colors.red,
-          //   textColor: Colors.white,
-          //   fontSize: 16.0,
-          // );
-
-          return handler.next(e);
-        }
-
-
       },
     ),
   );

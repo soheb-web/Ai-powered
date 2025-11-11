@@ -420,8 +420,6 @@ class PropertyDetailPage extends ConsumerWidget {
   }
 }*/
 
-
-
 import 'package:ai_powered_app/screen/realEstate/realEstate.home.page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -435,24 +433,24 @@ import '../../data/providers/realStateBookProperty.dart';
 import 'InquariesScreen.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-
-
 class PropertyDetailPage extends ConsumerStatefulWidget {
   final int? propertyId;
   const PropertyDetailPage(this.propertyId, {super.key});
 
   @override
   _PropertyDetailPageState createState() => _PropertyDetailPageState();
-
 }
 
 class _PropertyDetailPageState extends ConsumerState<PropertyDetailPage> {
-
-  DateTime _selectedDateTime = DateTime.now(); // Initialize with current date and time
+  DateTime _selectedDateTime =
+      DateTime.now(); // Initialize with current date and time
   bool _isBooking = false; // To manage loading state during booking
   // Function to show Date and Time Picker and handle booking
 
-  Future<void> _selectDateTimeAndBook(BuildContext context, WidgetRef ref) async {
+  Future<void> _selectDateTimeAndBook(
+    BuildContext context,
+    WidgetRef ref,
+  ) async {
     // Step 1: Select Date
 
     final DateTime? pickedDate = await showDatePicker(
@@ -498,7 +496,6 @@ class _PropertyDetailPageState extends ConsumerState<PropertyDetailPage> {
       },
     );
 
-
     if (pickedTime == null) return; // User cancelled time picker
 
     // Combine date and time
@@ -530,12 +527,14 @@ class _PropertyDetailPageState extends ConsumerState<PropertyDetailPage> {
     });
 
     // Step 3: Prepare booking payload
-    final String selectedDate = DateFormat('yyyy-MM-dd').format(selectedDateTime);
+    final String selectedDate = DateFormat(
+      'yyyy-MM-dd',
+    ).format(selectedDateTime);
     final String selectedTime = DateFormat('HH:mm').format(selectedDateTime);
     final box = await Hive.openBox('userdata');
     final userId = box.get('user_id');
     final Map<String, dynamic> bookingPayload = {
-      "user_id":userId.toString(),
+      "user_id": userId.toString(),
       "property_id": widget.propertyId,
       "date": selectedDate,
       "time": selectedTime,
@@ -550,7 +549,10 @@ class _PropertyDetailPageState extends ConsumerState<PropertyDetailPage> {
       await ref.read(bookPropertyProvider(bookingPayload).future);
       // Success toast is handled by the provider
 
-      Navigator.push(context, MaterialPageRoute(builder: (context)=>RealestateHomePage()));
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => RealestateHomePage()),
+      );
     } catch (e) {
       // Show error toast if API call fails
       Fluttertoast.showToast(
@@ -568,16 +570,15 @@ class _PropertyDetailPageState extends ConsumerState<PropertyDetailPage> {
     }
   }
 
-
-String? role;
+  String? role;
   @override
   void initState() {
     super.initState();
     // Load role from Hive
     _loadRole();
     // Refresh job list when the HomeScreen is first initialized
-
   }
+
   // Function to load role from Hive
   Future<void> _loadRole() async {
     final box = await Hive.openBox('userdata');
@@ -585,9 +586,12 @@ String? role;
       role = box.get('role') ?? 'user'; // Default to 'user' if role is null
     });
   }
+
   @override
-  Widget build(BuildContext context,) {
-    final propertyDetailAsync = ref.watch(propertyDetailProvider(widget.propertyId!));
+  Widget build(BuildContext context) {
+    final propertyDetailAsync = ref.watch(
+      propertyDetailProvider(widget.propertyId!),
+    );
 
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
@@ -610,23 +614,24 @@ String? role;
                     children: [
                       property?.photo != null
                           ? Image.network(
-                        property!.photo!,
-                        width: MediaQuery.of(context).size.width,
-                        height: 400.h,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) => Image.asset(
-                          "assets/image.png",
-                          width: MediaQuery.of(context).size.width,
-                          height: 400.h,
-                          fit: BoxFit.cover,
-                        ),
-                      )
+                            property!.photo!,
+                            width: MediaQuery.of(context).size.width,
+                            height: 400.h,
+                            fit: BoxFit.cover,
+                            errorBuilder:
+                                (context, error, stackTrace) => Image.asset(
+                                  "assets/image.png",
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 400.h,
+                                  fit: BoxFit.cover,
+                                ),
+                          )
                           : Image.asset(
-                        "assets/image.png",
-                        width: MediaQuery.of(context).size.width,
-                        height: 400.h,
-                        fit: BoxFit.cover,
-                      ),
+                            "assets/image.png",
+                            width: MediaQuery.of(context).size.width,
+                            height: 400.h,
+                            fit: BoxFit.cover,
+                          ),
                       Positioned(
                         left: 20.w,
                         top: 20.h,
@@ -649,15 +654,16 @@ String? role;
                 Row(
                   children: [
                     SizedBox(width: 24.w),
-Expanded(child:
-                    Text(
-                      property!.title ?? "Property Title",
-                      style: GoogleFonts.inter(
-                        fontSize: 20.sp,
-                        fontWeight: FontWeight.w500,
-                        color: const Color(0xFF1E1E1E),
+                    Expanded(
+                      child: Text(
+                        property!.title ?? "Property Title",
+                        style: GoogleFonts.inter(
+                          fontSize: 20.sp,
+                          fontWeight: FontWeight.w500,
+                          color: const Color(0xFF1E1E1E),
+                        ),
                       ),
-                    ),),
+                    ),
                     // const Spacer(),
                     Container(
                       width: 50.w,
@@ -669,7 +675,11 @@ Expanded(child:
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.star, color: const Color(0xFFF4B400), size: 15.sp),
+                          Icon(
+                            Icons.star,
+                            color: const Color(0xFFF4B400),
+                            size: 15.sp,
+                          ),
                           SizedBox(width: 3.w),
                           Text(
                             "4.5",
@@ -708,9 +718,8 @@ Expanded(child:
                 ),
                 SizedBox(height: 20.h),
                 Padding(
-                  padding
-                      : EdgeInsets.only(left: 24.w),
-                  child:  Text(
+                  padding: EdgeInsets.only(left: 24.w),
+                  child: Text(
                     "₹$formattedPrice",
                     style: GoogleFonts.inter(
                       fontSize: 18.sp,
@@ -737,7 +746,10 @@ Expanded(child:
                         height: 39.h,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10.r),
-                          border: Border.all(color: const Color(0xFFDADADA), width: 1.w),
+                          border: Border.all(
+                            color: const Color(0xFFDADADA),
+                            width: 1.w,
+                          ),
                         ),
                         child: Center(
                           child: Text(
@@ -757,7 +769,10 @@ Expanded(child:
                         height: 39.h,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10.r),
-                          border: Border.all(color: const Color(0xFFDADADA), width: 1.w),
+                          border: Border.all(
+                            color: const Color(0xFFDADADA),
+                            width: 1.w,
+                          ),
                         ),
                         child: Center(
                           child: Text(
@@ -777,7 +792,10 @@ Expanded(child:
                         height: 39.h,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10.r),
-                          border: Border.all(color: const Color(0xFFDADADA), width: 1.w),
+                          border: Border.all(
+                            color: const Color(0xFFDADADA),
+                            width: 1.w,
+                          ),
                         ),
                         child: Center(
                           child: Text(
@@ -818,23 +836,24 @@ Expanded(child:
                   ),
                 ),
                 SizedBox(height: 30.h),
-                Padding(
-                  padding: EdgeInsets.only(left: 24.w),
-                  child: Text(
-                    "Location",
-                    style: GoogleFonts.inter(
-                      fontSize: 20.sp,
-                      fontWeight: FontWeight.w400,
-                      color: const Color(0xFF1E1E1E),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 15.h),
-                Padding(
-                  padding: EdgeInsets.only(left: 24.w, right: 24.w),
-                  child: Image.asset("assets/map.png"),
-                ),
-                SizedBox(height: 20.h),
+                // Padding(
+                //   padding: EdgeInsets.only(left: 24.w),
+                //   child: Text(
+                //     "Location",
+                //     style: GoogleFonts.inter(
+                //       fontSize: 20.sp,
+                //       fontWeight: FontWeight.w400,
+                //       color: const Color(0xFF1E1E1E),
+                //     ),
+                //   ),
+                // ),
+                // SizedBox(height: 15.h),
+                // Padding(
+                //   padding: EdgeInsets.only(left: 24.w, right: 24.w),
+                //   child: Image.asset("assets/map.png"),
+                // ),
+                // SizedBox(height: 20.h),
+
                 // Display current or selected date and time
                 // Padding(
                 //   padding: EdgeInsets.only(left: 24.w, right: 24.w),
@@ -847,23 +866,32 @@ Expanded(child:
                 //     ),
                 //   ),
                 // ),
-
                 Padding(
                   padding: EdgeInsets.only(left: 24.w, right: 24.w),
-                  child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text("Booking Date & Time:"),
 
                       Container(
-                        width: 124.w,
-                        height: 39.h,
+                        // width: 124.w,
+                        // height: 39.h,
+                        padding: EdgeInsets.symmetric(
+                          vertical: 10.h,
+                          horizontal: 12.w,
+                        ),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10.r),
-                          border: Border.all(color: const Color(0xFFDADADA), width: 1.w),
+                          border: Border.all(
+                            color: const Color(0xFFDADADA),
+                            width: 1.w,
+                          ),
                         ),
                         child: Center(
                           child: Text(
-                            DateFormat('dd-mm-yyyy HH:mm').format(_selectedDateTime),
+                            DateFormat(
+                              'dd-mm-yyyy HH:mm',
+                            ).format(_selectedDateTime),
                             style: GoogleFonts.inter(
                               fontSize: 14.sp,
                               fontWeight: FontWeight.w400,
@@ -873,12 +901,11 @@ Expanded(child:
                           ),
                         ),
                       ),
-
                     ],
                   ),
                 ),
 
-                SizedBox(height: 20.h,),
+                SizedBox(height: 20.h),
                 Padding(
                   padding: EdgeInsets.only(left: 24.w, right: 24.w),
                   child: Row(
@@ -887,11 +914,18 @@ Expanded(child:
                       Text("Mobile Number:"),
 
                       Container(
-                        width: 124.w,
-                        height: 39.h,
+                        // width: 124.w,
+                        // height: 39.h,
+                        padding: EdgeInsets.symmetric(
+                          vertical: 10.h,
+                          horizontal: 12.w,
+                        ),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10.r),
-                          border: Border.all(color: const Color(0xFFDADADA), width: 1.w),
+                          border: Border.all(
+                            color: const Color(0xFFDADADA),
+                            width: 1.w,
+                          ),
                         ),
                         child: Center(
                           child: Text(
@@ -905,7 +939,6 @@ Expanded(child:
                           ),
                         ),
                       ),
-
                     ],
                   ),
                 ),
@@ -915,87 +948,98 @@ Expanded(child:
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stackTrace) => Center(
-          child: Text(
-            "Error: $error",
-            style: GoogleFonts.inter(
-              fontSize: 16.sp,
-              color: Colors.red,
+        error:
+            (error, stackTrace) => Center(
+              child: Text(
+                "Error: $error",
+                style: GoogleFonts.inter(fontSize: 16.sp, color: Colors.red),
+              ),
             ),
-          ),
-        ),
       ),
 
       bottomSheet:
-      role!="agent"?
-      Padding(
-        padding: EdgeInsets.only(bottom: 10.h, left: 16.w, right: 16.w),
-        child: Row(
-          children: [
-            Expanded(
-              child: GestureDetector(
-                onTap: _isBooking
-                    ? null // Disable button while booking
-                    : () => _selectDateTimeAndBook(context, ref),
-                child: Container(
-                  height: 74.h,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20.r),
-                    color: _isBooking ? Colors.grey : const Color(0xFF00796B),
-                  ),
-                  child: Center(
-                    child: _isBooking
-                        ? const SizedBox(
-                      height: 24,
-                      width: 24,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                      ),
-                    )
-                        : Text(
-                      "Book Viewing",
-                      style: GoogleFonts.inter(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(width: 10.w),
-            Expanded(
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    CupertinoPageRoute(builder: (context) => EnquariesScreen(widget.propertyId)),
-                  );
-                },
-                child: Container(
-                  height: 74.h,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20.r),
-                    color: const Color(0xFF00796B),
-                  ),
-                  child: Center(
-                    child: Text(
-                      "Contact Agent",
-                      style: GoogleFonts.inter(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.white,
+          role != "agent"
+              ? Padding(
+                padding: EdgeInsets.only(bottom: 10.h, left: 16.w, right: 16.w),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: GestureDetector(
+                        onTap:
+                            _isBooking
+                                ? null // Disable button while booking
+                                : () => _selectDateTimeAndBook(context, ref),
+                        child: Container(
+                          height: 74.h,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20.r),
+                            color:
+                                _isBooking
+                                    ? Colors.grey
+                                    : const Color(0xFF00796B),
+                          ),
+                          child: Center(
+                            child:
+                                _isBooking
+                                    ? const SizedBox(
+                                      height: 24,
+                                      width: 24,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                              Colors.white,
+                                            ),
+                                      ),
+                                    )
+                                    : Text(
+                                      "Book Viewing",
+                                      style: GoogleFonts.inter(
+                                        fontSize: 16.sp,
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                    SizedBox(width: 10.w),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                              builder:
+                                  (context) =>
+                                      EnquariesScreen(widget.propertyId),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          height: 74.h,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20.r),
+                            color: const Color(0xFF00796B),
+                          ),
+                          child: Center(
+                            child: Text(
+                              "Contact Agent",
+                              style: GoogleFonts.inter(
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ),
-          ],
-        ),
-      ):null
+              )
+              : null,
     );
   }
 }

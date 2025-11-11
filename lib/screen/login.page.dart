@@ -204,7 +204,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                           builder:
                               (context) => PaymentPage(),
                         ),
-                      );*//*
+                      );*/ /*
 
                     },
                     child:
@@ -319,8 +319,6 @@ Widget _buildTextFormField(
   );
 }
 */
-
-
 
 /*
 
@@ -716,7 +714,7 @@ Widget _buildLabel(String label) {
       disabledBorder: border,
     ),
   );
-}*//*
+}*/ /*
 
 
 Widget _buildTextFormField(
@@ -760,9 +758,6 @@ Widget _buildTextFormField(
 
 */
 
-
-
-
 import 'package:ai_powered_app/screen/resister.dart';
 import 'package:ai_powered_app/screen/start.page.dart';
 import 'package:flutter/material.dart';
@@ -772,7 +767,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../core/auth/login.auth.dart';
 import 'OtpScreen.dart';
-
 
 class LoginPage extends ConsumerStatefulWidget {
   final String title;
@@ -816,27 +810,38 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           onPressed: () {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) =>  StartPage()),
+              MaterialPageRoute(builder: (context) => StartPage()),
             );
           },
         ),
       ),
 
-      body:
-      SingleChildScrollView(
-        padding: EdgeInsets.all(20.w),
+      body: SingleChildScrollView(
+        // padding: EdgeInsets.all(20.w),
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 20.h),
-          child:
-
-          Form(
+          child: Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-
-                SizedBox(height: 50.h),
-
+                Center(
+                  child: Stack(
+                    children: [
+                      ClipOval(
+                        child: Image.asset(
+                          "assets/bgimage.png",
+                          width: 150.w,
+                          height: 160.h,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      Positioned.fill(child: Image.asset("assets/rajveer.png")),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 35.h),
                 Text(
                   "Login To Your Account",
                   textAlign: TextAlign.start,
@@ -846,10 +851,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     color: const Color(0xFF030016),
                   ),
                 ),
-
                 SizedBox(height: 20.h),
                 // Toggle Buttons for Login Mode
-
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -877,9 +880,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     controller: phoneController,
                     hint: "Enter Mobile Number",
                     maxLength: 10,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                    ],
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     keyboardType: TextInputType.number,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -976,35 +977,32 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     setState(() => _buttonLoader = true);
                     try {
                       if (isPhoneLogin) {
-
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => Otpscreen(
-                              colorTitle: widget.title,
-                              phoneNumber: phoneController.text.trim(),
-                              title: widget.title,
-                            ),
+                            builder:
+                                (context) => Otpscreen(
+                                  colorTitle: widget.title,
+                                  phoneNumber: phoneController.text.trim(),
+                                  title: widget.title,
+                                ),
                           ),
                         );
-
-                      }
-                      else {
-                        if (widget.title.toUpperCase() == "JOBS")
-                        {
+                      } else {
+                        if (widget.title.toUpperCase() == "JOBS") {
                           await Auth.jobsLogin(
                             emailController.text.trim(),
                             passwordController.text,
                             context,
                           );
-                        } else if (widget.title.toUpperCase() == "REAL ESTATE") {
+                        } else if (widget.title.toUpperCase() ==
+                            "REAL ESTATE") {
                           await Auth.realStateLogin(
                             emailController.text.trim(),
                             passwordController.text,
                             context,
                           );
-                        }
-                        else {
+                        } else {
                           await Auth.login(
                             emailController.text.trim(),
                             passwordController.text,
@@ -1012,41 +1010,43 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                           );
                         }
                       }
-                    }
-                    finally {
+                    } finally {
                       setState(() => _buttonLoader = false);
                     }
                   },
                   child: Center(
-                    child: _buttonLoader
-                        ? const SizedBox(
-                      width: 24,
-                      height: 24,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                          Color(0xFF9A97AE),
-                        ),
-                      ),
-                    )
-                        : Container(
-                      width: double.infinity,
-                      height: 53.h,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15.r),
-                        color: _getLoginButtonColor(widget.title),
-                      ),
-                      child: Center(
-                        child: Text(
-                          isPhoneLogin ? 'Login With Phone' : 'Login With Email',
-                          style: GoogleFonts.gothicA1(
-                            fontSize: 18.sp,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
+                    child:
+                        _buttonLoader
+                            ? const SizedBox(
+                              width: 24,
+                              height: 24,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  Color(0xFF9A97AE),
+                                ),
+                              ),
+                            )
+                            : Container(
+                              width: double.infinity,
+                              height: 53.h,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15.r),
+                                color: _getLoginButtonColor(widget.title),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  isPhoneLogin
+                                      ? 'Login With Phone'
+                                      : 'Login With Email',
+                                  style: GoogleFonts.gothicA1(
+                                    fontSize: 18.sp,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
                   ),
                 ),
 
@@ -1058,7 +1058,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => RegisterPage(title: widget.title),
+                          builder:
+                              (context) => RegisterPage(title: widget.title),
                         ),
                       );
                     },
@@ -1086,15 +1087,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     ),
                   ),
                 ),
-
               ],
             ),
           ),
-
         ),
       ),
-
-
     );
   }
 
@@ -1121,7 +1118,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
         decoration: BoxDecoration(
-          color: isSelected ? _getLoginButtonColor(widget.title) : Colors.grey[200],
+          color:
+              isSelected
+                  ? _getLoginButtonColor(widget.title)
+                  : Colors.grey[200],
           borderRadius: BorderRadius.circular(10.r),
         ),
         child: Text(
@@ -1148,37 +1148,43 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   }
 
   Widget _buildTextFormField(
-      Color getLoginButtonColor, {
-        required TextEditingController controller,
-        String? hint,
-        bool obscure = false,
-        TextInputType keyboardType = TextInputType.text,
-        int? maxLength,
-        List<TextInputFormatter>? inputFormatters,
-        String? Function(String?)? validator,
-      }) {
+    Color getLoginButtonColor, {
+    required TextEditingController controller,
+    String? hint,
+    bool obscure = false,
+    TextInputType keyboardType = TextInputType.text,
+    int? maxLength,
+    List<TextInputFormatter>? inputFormatters,
+    String? Function(String?)? validator,
+  }) {
     final border = OutlineInputBorder(
       borderRadius: BorderRadius.circular(15.r),
       borderSide: BorderSide(color: getLoginButtonColor, width: 1.5.w),
     );
 
-    return TextFormField(
-      controller: controller,
-      obscureText: obscure,
-      keyboardType: keyboardType,
-      maxLength: maxLength,
-      inputFormatters: inputFormatters,
-      validator: validator,
-      decoration: InputDecoration(
-        counterText: "",
-        contentPadding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
-        hintText: hint,
-        hintStyle: GoogleFonts.gothicA1(color: Colors.grey, fontSize: 14.sp),
-        enabledBorder: border,
-        focusedBorder: border,
-        errorBorder: border,
-        focusedErrorBorder: border,
-        disabledBorder: border,
+    return Padding(
+      padding: EdgeInsets.only(top: 10.h),
+      child: TextFormField(
+        controller: controller,
+        obscureText: obscure,
+        keyboardType: keyboardType,
+        maxLength: maxLength,
+        inputFormatters: inputFormatters,
+        validator: validator,
+        decoration: InputDecoration(
+          counterText: "",
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: 20.w,
+            vertical: 16.h,
+          ),
+          hintText: hint,
+          hintStyle: GoogleFonts.gothicA1(color: Colors.grey, fontSize: 14.sp),
+          enabledBorder: border,
+          focusedBorder: border,
+          errorBorder: border,
+          focusedErrorBorder: border,
+          disabledBorder: border,
+        ),
       ),
     );
   }

@@ -73,12 +73,14 @@ class _PropertyInfoPageState extends ConsumerState<PropertyInfoPage> {
     List<String> words = text.split(' ');
     if (words.isEmpty) return text;
     // Capitalize the first letter of the first word
-    words[0] = words[0].isNotEmpty
-        ? '${words[0][0].toUpperCase()}${words[0].substring(1)}'
-        : words[0];
+    words[0] =
+        words[0].isNotEmpty
+            ? '${words[0][0].toUpperCase()}${words[0].substring(1)}'
+            : words[0];
     // Join the words back
     return words.join(' ');
   }
+
   Future<void> _loadProfile() async {
     try {
       final profile = await ref.read(realStateProfileDataProvider.future);
@@ -147,7 +149,6 @@ class _PropertyInfoPageState extends ConsumerState<PropertyInfoPage> {
         'name': nameController.text.trim(),
         'email': emailController.text.trim(),
         'phone': phoneController.text.trim(),
-
       };
       await ref.read(realStateUpdateProfileProvider(body).future);
       Fluttertoast.showToast(
@@ -217,7 +218,6 @@ class _PropertyInfoPageState extends ConsumerState<PropertyInfoPage> {
                 ),
               ),
               Row(
-
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
@@ -228,36 +228,36 @@ class _PropertyInfoPageState extends ConsumerState<PropertyInfoPage> {
                       color: const Color(0xFF9A97AE),
                     ),
                   ),
-                  GestureDetector(
-                    onTap: () async {
-                      final box = await Hive.openBox('userdata');
-                      await box.clear();
-                      if (context.mounted) {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (_) => const StartPage()),
-                        );
-                      }
-                    },
-                    child: Container(
-                      width: 103.w,
-                      height: 53.h,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15.r),
-                        color: const Color(0xFF00796B),
-                      ),
-                      child: Center(
-                        child: Text(
-                          "Logout",
-                          style: GoogleFonts.gothicA1(
-                            fontSize: 18.sp,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  // GestureDetector(
+                  //   onTap: () async {
+                  //     final box = await Hive.openBox('userdata');
+                  //     await box.clear();
+                  //     if (context.mounted) {
+                  //       Navigator.pushReplacement(
+                  //         context,
+                  //         MaterialPageRoute(builder: (_) => const StartPage()),
+                  //       );
+                  //     }
+                  //   },
+                  //   child: Container(
+                  //     width: 103.w,
+                  //     height: 53.h,
+                  //     decoration: BoxDecoration(
+                  //       borderRadius: BorderRadius.circular(15.r),
+                  //       color: const Color(0xFF00796B),
+                  //     ),
+                  //     child: Center(
+                  //       child: Text(
+                  //         "Logout",
+                  //         style: GoogleFonts.gothicA1(
+                  //           fontSize: 18.sp,
+                  //           fontWeight: FontWeight.w500,
+                  //           color: Colors.white,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
               SizedBox(height: 15.h),
@@ -375,7 +375,7 @@ class _PropertyInfoPageState extends ConsumerState<PropertyInfoPage> {
                       width: 1.5.w,
                     ),
                   ),
-                  disabledBorder:  OutlineInputBorder(
+                  disabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15.r),
                     borderSide: BorderSide(
                       color: const Color(0xFFDADADA),
@@ -402,23 +402,26 @@ class _PropertyInfoPageState extends ConsumerState<PropertyInfoPage> {
                     color: isLoading ? Colors.grey : const Color(0xFF00796B),
                   ),
                   child: Center(
-                    child: isLoading
-                        ? const SizedBox(
-                      height: 24,
-                      width: 24,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                      ),
-                    )
-                        : Text(
-                      "Continue",
-                      style: GoogleFonts.inter(
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white,
-                      ),
-                    ),
+                    child:
+                        isLoading
+                            ? const SizedBox(
+                              height: 24,
+                              width: 24,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  Colors.white,
+                                ),
+                              ),
+                            )
+                            : Text(
+                              "Continue",
+                              style: GoogleFonts.inter(
+                                fontSize: 18.sp,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white,
+                              ),
+                            ),
                   ),
                 ),
               ),
@@ -437,7 +440,6 @@ class _PropertyInfoPageState extends ConsumerState<PropertyInfoPage> {
     roleController.dispose();
     super.dispose();
   }
-
 
   Widget _buildLabel(String label) {
     return Text(

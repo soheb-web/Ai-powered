@@ -81,7 +81,7 @@
 //                       fontSize: 18.sp,
 //                       fontWeight: FontWeight.w500,
 //                       color: const Color(0xFF030016),
-//                       
+//
 //                     ),
 //                   ),
 //                   Text(
@@ -90,7 +90,7 @@
 //                       fontSize: 13.sp,
 //                       fontWeight: FontWeight.w500,
 //                       color: const Color(0xFF9A97AE),
-//                       
+//
 //                     ),
 //                   ),
 //                 ],
@@ -144,7 +144,7 @@
 //                       fontSize: 30.sp,
 //                       fontWeight: FontWeight.w500,
 //                       color: Color(0xFF030016),
-//                       
+//
 //                     ),
 //                   ),
 //                   SizedBox(height: 20.h),
@@ -330,8 +330,6 @@
 //   }
 // }
 
-
-
 //
 // import 'package:flutter/cupertino.dart';
 // import 'package:flutter/material.dart';
@@ -408,7 +406,7 @@
 //                       fontSize: 18.sp,
 //                       fontWeight: FontWeight.w500,
 //                       color: const Color(0xFF030016),
-//                       
+//
 //                     ),
 //                   ),
 //                   Text(
@@ -417,7 +415,7 @@
 //                       fontSize: 13.sp,
 //                       fontWeight: FontWeight.w500,
 //                       color: const Color(0xFF9A97AE),
-//                       
+//
 //                     ),
 //                   ),
 //                 ],
@@ -471,7 +469,7 @@
 //                         fontSize: 30.sp,
 //                         fontWeight: FontWeight.w500,
 //                         color: Color(0xFF030016),
-//                         
+//
 //                       ),
 //                     ),
 //                     SizedBox(height: 20.h),
@@ -636,9 +634,6 @@
 //   }
 // }
 
-
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -648,6 +643,7 @@ import 'package:hive/hive.dart';
 import '../../core/auth/login.auth.dart';
 import '../../data/providers/myJob.dart';
 import '../start.page.dart';
+
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
   @override
@@ -681,62 +677,57 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: const Color(0xFFF5F8FA),
-        body:
-
-            SingleChildScrollView(child:
-        Column(children: [
-          SizedBox(height: 60.h),
-          Row(
-            children: [
-              SizedBox(width: 24.w),
-              Container(
-                width: 40.w,
-                height: 40.h,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.r),
-                  color: const Color(0xFF0A66C2),
-                ),
-                child: Center(
-                  child: Image.asset(
-                    "assets/rajveer.png",
-                    color: const Color(0xFFFFFFFF),
+      backgroundColor: const Color(0xFFF5F8FA),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(height: 60.h),
+            Row(
+              children: [
+                SizedBox(width: 24.w),
+                Container(
+                  width: 40.w,
+                  height: 40.h,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.r),
+                    color: const Color(0xFF0A66C2),
                   ),
-                ),
-              ),
-              SizedBox(width: 10.w),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Job Portal",
-                    style: GoogleFonts.alexandria(
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.w500,
-                      color: const Color(0xFF030016),
-                      
+                  child: Center(
+                    child: Image.asset(
+                      "assets/rajveer.png",
+                      color: const Color(0xFFFFFFFF),
                     ),
                   ),
-                  Text(
-                    '$userId',
-                    style: GoogleFonts.alexandria(
-                      fontSize: 13.sp,
-                      fontWeight: FontWeight.w500,
-                      color: const Color(0xFF9A97AE),
-                      
+                ),
+                SizedBox(width: 10.w),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Job Portal",
+                      style: GoogleFonts.alexandria(
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.w500,
+                        color: const Color(0xFF030016),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              const Spacer(),
+                    Text(
+                      '$userId',
+                      style: GoogleFonts.alexandria(
+                        fontSize: 13.sp,
+                        fontWeight: FontWeight.w500,
+                        color: const Color(0xFF9A97AE),
+                      ),
+                    ),
+                  ],
+                ),
 
-              SizedBox(width: 24.w),
-            ],
-          ),
+                //const Spacer(),
+                //SizedBox(width: 24.w),
+              ],
+            ),
 
-
-
-          SingleChildScrollView(
+            SingleChildScrollView(
               child: Padding(
                 padding: EdgeInsets.only(left: 24.w, right: 24.w, top: 10.h),
                 child: Column(
@@ -748,12 +739,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         fontSize: 30.sp,
                         fontWeight: FontWeight.w500,
                         color: Color(0xFF030016),
-                        
                       ),
                     ),
                     SizedBox(height: 20.h),
                     TextFieldBody(
-
                       keyboardType: TextInputType.text,
                       controller: contact_personController,
                       hint: "Enter Your Name",
@@ -788,9 +777,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
                     SizedBox(height: 25.h),
 
-
-
-
                     GestureDetector(
                       onTap: () async {
                         if (contact_personController.text.isEmpty ||
@@ -799,7 +785,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             company_nameController.text.isEmpty ||
                             phoneController.text.isEmpty) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Please fill all the fields')),
+                            const SnackBar(
+                              content: Text('Please fill all the fields'),
+                            ),
                           );
                           return;
                         }
@@ -827,23 +815,26 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           color: const Color(0xFF0A66C2),
                         ),
                         child: Center(
-                          child: isLoading
-                              ? const SizedBox(
-                            height: 24,
-                            width: 24,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                            ),
-                          )
-                              : Text(
-                            "Submit",
-                            style: GoogleFonts.alexandria(
-                              fontSize: 18.sp,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.white,
-                            ),
-                          ),
+                          child:
+                              isLoading
+                                  ? const SizedBox(
+                                    height: 24,
+                                    width: 24,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        Colors.white,
+                                      ),
+                                    ),
+                                  )
+                                  : Text(
+                                    "Submit",
+                                    style: GoogleFonts.alexandria(
+                                      fontSize: 18.sp,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.white,
+                                    ),
+                                  ),
                         ),
                       ),
                     ),
@@ -851,17 +842,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     SizedBox(height: 20.h),
                   ],
                 ),
-              )
-          ),
-        ],)
-
-            )
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
-
 }
-
-
 
 class TextFieldBody extends StatelessWidget {
   final String hint;

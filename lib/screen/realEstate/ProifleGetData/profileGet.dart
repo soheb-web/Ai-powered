@@ -14,11 +14,11 @@ class ProfileGetRealState extends ConsumerStatefulWidget {
   const ProfileGetRealState({super.key});
 
   @override
-  ConsumerState<ProfileGetRealState> createState() => _ProfileGetRealStateState();
+  ConsumerState<ProfileGetRealState> createState() =>
+      _ProfileGetRealStateState();
 }
 
 class _ProfileGetRealStateState extends ConsumerState<ProfileGetRealState> {
-
   String? listing, propertyType, BHK;
   bool isLoading = false;
 
@@ -26,7 +26,6 @@ class _ProfileGetRealStateState extends ConsumerState<ProfileGetRealState> {
   final emailController = TextEditingController();
   final phoneController = TextEditingController();
   final roleController = TextEditingController();
-
 
   @override
   void initState() {
@@ -40,12 +39,14 @@ class _ProfileGetRealStateState extends ConsumerState<ProfileGetRealState> {
     List<String> words = text.split(' ');
     if (words.isEmpty) return text;
     // Capitalize the first letter of the first word
-    words[0] = words[0].isNotEmpty
-        ? '${words[0][0].toUpperCase()}${words[0].substring(1)}'
-        : words[0];
+    words[0] =
+        words[0].isNotEmpty
+            ? '${words[0][0].toUpperCase()}${words[0].substring(1)}'
+            : words[0];
     // Join the words back
     return words.join(' ');
   }
+
   Future<void> _loadProfile() async {
     try {
       final profile = await ref.read(realStateProfileDataProvider.future);
@@ -67,6 +68,7 @@ class _ProfileGetRealStateState extends ConsumerState<ProfileGetRealState> {
       );
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,6 +95,39 @@ class _ProfileGetRealStateState extends ConsumerState<ProfileGetRealState> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 20.h),
+              Align(
+                alignment: Alignment.centerRight,
+                child: GestureDetector(
+                  onTap: () async {
+                    final box = await Hive.openBox('userdata');
+                    await box.clear();
+                    if (context.mounted) {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (_) => const StartPage()),
+                      );
+                    }
+                  },
+                  child: Container(
+                    width: 103.w,
+                    height: 53.h,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15.r),
+                      color: const Color(0xFF00796B),
+                    ),
+                    child: Center(
+                      child: Text(
+                        "Logout",
+                        style: GoogleFonts.gothicA1(
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
               Text(
                 "Basic Info",
                 style: GoogleFonts.inter(
@@ -110,24 +145,26 @@ class _ProfileGetRealStateState extends ConsumerState<ProfileGetRealState> {
                   color: const Color(0xFF9A97AE),
                 ),
               ),
-              SizedBox(height: 10.h,),
+              SizedBox(height: 10.h),
               Row(
-
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-
                   GestureDetector(
                     onTap: () async {
-
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (_) => const PropertyInfoPage()),
-                        );
-
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const PropertyInfoPage(),
+                        ),
+                      );
                     },
                     child: Container(
-                      width: 113.w,
-                      height: 53.h,
+                      // width: 113.w,
+                      // height: 53.h,
+                      padding: EdgeInsets.symmetric(
+                        vertical: 12.h,
+                        horizontal: 12.w,
+                      ),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(15.r),
                         color: const Color(0xFF00796B),
@@ -135,36 +172,6 @@ class _ProfileGetRealStateState extends ConsumerState<ProfileGetRealState> {
                       child: Center(
                         child: Text(
                           "Edit Profile",
-                          style: GoogleFonts.gothicA1(
-                            fontSize: 18.sp,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () async {
-                      final box = await Hive.openBox('userdata');
-                      await box.clear();
-                      if (context.mounted) {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (_) => const StartPage()),
-                        );
-                      }
-                    },
-                    child: Container(
-                      width: 103.w,
-                      height: 53.h,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15.r),
-                        color: const Color(0xFF00796B),
-                      ),
-                      child: Center(
-                        child: Text(
-                          "Logout",
                           style: GoogleFonts.gothicA1(
                             fontSize: 18.sp,
                             fontWeight: FontWeight.w500,
@@ -198,7 +205,7 @@ class _ProfileGetRealStateState extends ConsumerState<ProfileGetRealState> {
                       width: 1.5.w,
                     ),
                   ),
-                  disabledBorder:  OutlineInputBorder(
+                  disabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15.r),
                     borderSide: BorderSide(
                       color: const Color(0xFFDADADA),
@@ -236,7 +243,7 @@ class _ProfileGetRealStateState extends ConsumerState<ProfileGetRealState> {
                       width: 1.5.w,
                     ),
                   ),
-                  disabledBorder:  OutlineInputBorder(
+                  disabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15.r),
                     borderSide: BorderSide(
                       color: const Color(0xFFDADADA),
@@ -277,7 +284,7 @@ class _ProfileGetRealStateState extends ConsumerState<ProfileGetRealState> {
                       width: 1.5.w,
                     ),
                   ),
-                  disabledBorder:  OutlineInputBorder(
+                  disabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15.r),
                     borderSide: BorderSide(
                       color: const Color(0xFFDADADA),
@@ -315,7 +322,7 @@ class _ProfileGetRealStateState extends ConsumerState<ProfileGetRealState> {
                       width: 1.5.w,
                     ),
                   ),
-                  disabledBorder:  OutlineInputBorder(
+                  disabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15.r),
                     borderSide: BorderSide(
                       color: const Color(0xFFDADADA),
@@ -332,7 +339,6 @@ class _ProfileGetRealStateState extends ConsumerState<ProfileGetRealState> {
                 ),
               ),
               SizedBox(height: 15.h),
-
             ],
           ),
         ),
@@ -348,7 +354,6 @@ class _ProfileGetRealStateState extends ConsumerState<ProfileGetRealState> {
     roleController.dispose();
     super.dispose();
   }
-
 
   Widget _buildLabel(String label) {
     return Text(

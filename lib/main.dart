@@ -9,8 +9,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/adapters.dart';
 
-
-
 class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
@@ -31,12 +29,7 @@ void main() async {
     log("Hive initialization failed: $e");
   }
 
-  runApp(
-    ProviderScope(
-      child: MyApp(),
-    ),
-  );
-
+  runApp(ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -44,9 +37,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child:
-
-      ScreenUtilInit(
+      child: ScreenUtilInit(
         designSize: const Size(440, 956),
         builder: (context, child) {
           return MaterialApp(
@@ -64,7 +55,6 @@ class MyApp extends StatelessWidget {
 }
 
 class AuthCheck extends StatelessWidget {
-
   const AuthCheck({super.key});
   Future<String?> _getInitialScreen() async {
     final box = Hive.box('userdata');
@@ -102,6 +92,4 @@ class AuthCheck extends StatelessWidget {
       },
     );
   }
-
-
 }

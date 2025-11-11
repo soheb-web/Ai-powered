@@ -1,7 +1,3 @@
-
-
-
-
 import 'package:ai_powered_app/screen/jobs.screen/job.details.screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -58,12 +54,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     _pageController.dispose();
     super.dispose();
   }
+
   Future<void> _refreshJobList() async {
     if (mounted) {
       ref.invalidate(jobListingsProvider);
       await ref.read(jobListingsProvider.future);
     }
   }
+
   @override
   Widget build(BuildContext context) {
     final jobsList = ref.watch(jobListingsProvider);
@@ -87,9 +85,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
 
     if (userId == null) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     return WillPopScope(
@@ -129,8 +125,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             });
           },
           children: [
-
-
             RefreshIndicator(
               onRefresh: _refreshJobList,
               color: const Color(0xFF0A66C2),
@@ -143,7 +137,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(height: 60.h),
+                          SizedBox(height: 50.h),
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 24.w),
                             child: TextField(
@@ -160,7 +154,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   fontSize: 16.sp,
                                   fontWeight: FontWeight.w400,
                                   color: const Color(0xFF030016),
-                                  
                                 ),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(15.r),
@@ -176,131 +169,181 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           ),
                           SizedBox(height: 16.h),
                           Container(
-                            margin: EdgeInsets.only(left: 20.w,right: 20.w),
-                            child:    Row(
+                            margin: EdgeInsets.only(left: 20.w, right: 20.w),
+                            child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                CategoryBody(name: "Computer Engineering",
-                                onTap: (){
-                                  print("dsnk m");
-                                  ref.read(selectedTagProvider.notifier).state = 'Computer Engineering';
-                                  debugPrint('Selected tag: Computer Engineering');
-                                },
-                                ),
-                                CategoryBody(name: "BPO Telecaller",
-                                  onTap: (){
+                                CategoryBody(
+                                  name: "Computer Engineering",
+                                  onTap: () {
                                     print("dsnk m");
-                                    ref.read(selectedTagProvider.notifier).state = 'BPO Telecalle';
+                                    ref
+                                        .read(selectedTagProvider.notifier)
+                                        .state = 'Computer Engineering';
+                                    debugPrint(
+                                      'Selected tag: Computer Engineering',
+                                    );
+                                  },
+                                ),
+                                CategoryBody(
+                                  name: "BPO Telecaller",
+                                  onTap: () {
+                                    print("dsnk m");
+                                    ref
+                                        .read(selectedTagProvider.notifier)
+                                        .state = 'BPO Telecalle';
                                     debugPrint('Selected tag: BPO Telecalle');
                                   },
                                 ),
-                                CategoryBody(name: "Sales Executive Manager",   onTap: (){
-                                  print("dsnk m");
-                                  ref.read(selectedTagProvider.notifier).state = 'Sales Executive Manager';
-                                  debugPrint('Selected tag: Sales Executive  Manager');
-                                },),
-                                CategoryBody(name: "House \nkeeping",   onTap: (){
-                                  print("dsnk m");
-                                  ref.read(selectedTagProvider.notifier).state = 'House \n keeping';
-                                  debugPrint('Selected tag: House\nkeeping');
-                                },),
+                                CategoryBody(
+                                  name: "Sales Executive Manager",
+                                  onTap: () {
+                                    print("dsnk m");
+                                    ref
+                                        .read(selectedTagProvider.notifier)
+                                        .state = 'Sales Executive Manager';
+                                    debugPrint(
+                                      'Selected tag: Sales Executive  Manager',
+                                    );
+                                  },
+                                ),
+                                CategoryBody(
+                                  name: "House \nkeeping",
+                                  onTap: () {
+                                    print("dsnk m");
+                                    ref
+                                        .read(selectedTagProvider.notifier)
+                                        .state = 'House \n keeping';
+                                    debugPrint('Selected tag: House\nkeeping');
+                                  },
+                                ),
                               ],
                             ),
                           ),
-                         SizedBox(height: 20.h,),
+                          SizedBox(height: 20.h),
                           Container(
-                            margin: EdgeInsets.only(left: 20.w,right: 20.w),
-                            child:
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              CategoryBody(name: "Bank  Executive  Manager",  onTap: (){
-                                print("dsnk m");
-                                ref.read(selectedTagProvider.notifier).state = 'Bank  Executive  Manager';
-                                debugPrint('Selected tag: Bank  Executive  Manager');
-                              },),
-                              CategoryBody(name: "Data Entry Operator",  onTap: (){
-                                print("dsnk m");
-                                ref.read(selectedTagProvider.notifier).state = 'Data Entry Operator';
-                                debugPrint('Selected tag: Data Entry Operator');
-                              },),
-                              CategoryBody(name: "Security Guard", onTap: (){
-                                print("dsnk m");
-                                ref.read(selectedTagProvider.notifier).state = 'Security Guard';
-                                debugPrint('Selected tag: Security Guard');
-                              },),
-                              CategoryBody(name: "See More",
-                                onTap: (){},),
-                            ],
-                          ),),
-                          SizedBox(height: 20.h,),
+                            margin: EdgeInsets.only(left: 20.w, right: 20.w),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                CategoryBody(
+                                  name: "Bank  Executive  Manager",
+                                  onTap: () {
+                                    print("dsnk m");
+                                    ref
+                                        .read(selectedTagProvider.notifier)
+                                        .state = 'Bank  Executive  Manager';
+                                    debugPrint(
+                                      'Selected tag: Bank  Executive  Manager',
+                                    );
+                                  },
+                                ),
+                                CategoryBody(
+                                  name: "Data Entry Operator",
+                                  onTap: () {
+                                    print("dsnk m");
+                                    ref
+                                        .read(selectedTagProvider.notifier)
+                                        .state = 'Data Entry Operator';
+                                    debugPrint(
+                                      'Selected tag: Data Entry Operator',
+                                    );
+                                  },
+                                ),
+                                CategoryBody(
+                                  name: "Security Guard",
+                                  onTap: () {
+                                    print("dsnk m");
+                                    ref
+                                        .read(selectedTagProvider.notifier)
+                                        .state = 'Security Guard';
+                                    debugPrint('Selected tag: Security Guard');
+                                  },
+                                ),
+                                CategoryBody(name: "See More", onTap: () {}),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 20.h),
                           SizedBox(
                             height: 40.h,
                             child: ListView(
                               scrollDirection: Axis.horizontal,
                               padding: EdgeInsets.symmetric(horizontal: 24.w),
                               children: [
-
-
                                 RecomandedBody(
                                   onTap: () {
-                                    ref.read(selectedTagProvider.notifier).state = '';
+                                    ref
+                                        .read(selectedTagProvider.notifier)
+                                        .state = '';
                                     debugPrint('Selected tag: All');
                                   },
                                   name: 'All',
-                                  bgColor: selectedTag == ''
-                                      ? const Color(0xFF0A66C2)
-                                      : const Color(0xFFE6EDF2),
-                                  textColor: selectedTag == ''
-                                      ? Colors.white
-                                      : const Color(0xFF1E1E1E),
+                                  bgColor:
+                                      selectedTag == ''
+                                          ? const Color(0xFF0A66C2)
+                                          : const Color(0xFFE6EDF2),
+                                  textColor:
+                                      selectedTag == ''
+                                          ? Colors.white
+                                          : const Color(0xFF1E1E1E),
                                 ),
                                 SizedBox(width: 10.w),
                                 RecomandedBody(
                                   onTap: () {
-                                    ref.read(selectedTagProvider.notifier).state = 'Full Time';
+                                    ref
+                                        .read(selectedTagProvider.notifier)
+                                        .state = 'Full Time';
                                     debugPrint('Selected tag: Design');
                                   },
                                   name: 'Full Time',
-                                  bgColor: selectedTag == 'Full Time'
-                                      ? const Color(0xFF0A66C2)
-                                      : const Color(0xFFE6EDF2),
-                                  textColor: selectedTag == 'Full Time'
-                                      ? Colors.white
-                                      : const Color(0xFF1E1E1E),
+                                  bgColor:
+                                      selectedTag == 'Full Time'
+                                          ? const Color(0xFF0A66C2)
+                                          : const Color(0xFFE6EDF2),
+                                  textColor:
+                                      selectedTag == 'Full Time'
+                                          ? Colors.white
+                                          : const Color(0xFF1E1E1E),
                                 ),
                                 SizedBox(width: 10.w),
                                 RecomandedBody(
                                   onTap: () {
-                                    ref.read(selectedTagProvider.notifier).state = 'Part Time';
+                                    ref
+                                        .read(selectedTagProvider.notifier)
+                                        .state = 'Part Time';
                                     debugPrint('Selected tag: Marketing');
                                   },
                                   name: 'Part Time',
-                                  bgColor: selectedTag == 'Part Time'
-                                      ? const Color(0xFF0A66C2)
-                                      : const Color(0xFFE6EDF2),
-                                  textColor: selectedTag == 'Part Time'
-                                      ? Colors.white
-                                      : const Color(0xFF1E1E1E),
+                                  bgColor:
+                                      selectedTag == 'Part Time'
+                                          ? const Color(0xFF0A66C2)
+                                          : const Color(0xFFE6EDF2),
+                                  textColor:
+                                      selectedTag == 'Part Time'
+                                          ? Colors.white
+                                          : const Color(0xFF1E1E1E),
                                 ),
                                 SizedBox(width: 10.w),
 
                                 RecomandedBody(
                                   onTap: () {
-                                    ref.read(selectedTagProvider.notifier).state = 'Remote';
+                                    ref
+                                        .read(selectedTagProvider.notifier)
+                                        .state = 'Remote';
                                     debugPrint('Selected tag: Remote');
                                   },
                                   name: 'Remote',
-                                  bgColor: selectedTag == 'Remote'
-                                      ? const Color(0xFF0A66C2)
-                                      : const Color(0xFFE6EDF2),
-                                  textColor: selectedTag == 'Remote'
-                                      ? Colors.white
-                                      : const Color(0xFF1E1E1E),
+                                  bgColor:
+                                      selectedTag == 'Remote'
+                                          ? const Color(0xFF0A66C2)
+                                          : const Color(0xFFE6EDF2),
+                                  textColor:
+                                      selectedTag == 'Remote'
+                                          ? Colors.white
+                                          : const Color(0xFF1E1E1E),
                                 ),
                                 SizedBox(width: 10.w),
-
-
                               ],
                             ),
                           ),
@@ -309,250 +352,342 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       ),
                     ),
                     jobsList.when(
-                      data: (_) => jobList.isEmpty
-                          ? SliverToBoxAdapter(
-                        child: Center(
-                          child: Text(
-                            "No jobs found",
-                            style: GoogleFonts.alexandria(fontSize: 16.sp),
-                            semanticsLabel: 'No jobs found',
-                          ),
-                        ),
-                      )
-                          : SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                              (context, index) {
-                            return Column(
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      CupertinoPageRoute(
-                                        builder: (context) =>
-                                            JobDetailsScreen(jobList[index].jobId.toString()),
-                                      ),
-                                    ).then((_) => _refreshJobList());
-                                  },
-                                  child: Container(
-                                    margin: EdgeInsets.only(
-                                      left: 24.w,
-                                      right: 24.w,
-                                      bottom: 20.h,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20.r),
-                                      color: Colors.white,
-                                      boxShadow: const [
-                                        BoxShadow(
-                                          offset: Offset(0, 10),
-                                          blurRadius: 20,
-                                          spreadRadius: 0,
-                                          color: Color.fromARGB(12, 10, 102, 194),
+                      data:
+                          (_) =>
+                              jobList.isEmpty
+                                  ? SliverToBoxAdapter(
+                                    child: Center(
+                                      child: Text(
+                                        "No jobs found",
+                                        style: GoogleFonts.alexandria(
+                                          fontSize: 16.sp,
                                         ),
-                                      ],
+                                        semanticsLabel: 'No jobs found',
+                                      ),
                                     ),
-                                    child: Padding(
-                                      padding: EdgeInsets.all(20.w),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                  )
+                                  : SliverList(
+                                    delegate: SliverChildBuilderDelegate((
+                                      context,
+                                      index,
+                                    ) {
+                                      return Column(
                                         children: [
-                                          Row(
-                                            children: [
-                                              Container(
-                                                width: 40.w,
-                                                height: 40.h,
-                                                decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.circular(10.r),
-                                                  color: const Color(0xFF0A66C2),
+                                          GestureDetector(
+                                            onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                CupertinoPageRoute(
+                                                  builder:
+                                                      (context) =>
+                                                          JobDetailsScreen(
+                                                            jobList[index].jobId
+                                                                .toString(),
+                                                          ),
                                                 ),
-                                                child: Center(
-                                                  child: Image.asset(
-                                                    "assets/rajveer.png",
-                                                    color: Colors.white,
-                                                    width: 24.w,
-                                                    height: 24.h,
-                                                    cacheWidth:
-                                                    (24.w * MediaQuery.of(context).devicePixelRatio).round(),
-                                                    cacheHeight:
-                                                    (24.h * MediaQuery.of(context).devicePixelRatio).round(),
-                                                    semanticLabel: 'Company logo',
-                                                  ),
-                                                ),
+                                              ).then((_) => _refreshJobList());
+                                            },
+                                            child: Container(
+                                              margin: EdgeInsets.only(
+                                                left: 24.w,
+                                                right: 24.w,
+                                                bottom: 20.h,
                                               ),
-                                              SizedBox(width: 10.w),
-                                              Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  jobList[index].title!=null?
-                                                  Text(
-                                                    jobList[index].title!,
-                                                    style: GoogleFonts.alexandria(
-                                                      fontSize: 14.sp,
-                                                      fontWeight: FontWeight.w500,
-                                                      color: const Color(0xFF1E1E1E),
-                                                      
-                                                    ),
-                                                  ):
-                                                  Text(
-                                                    "",
-                                                    style: GoogleFonts.alexandria(
-                                                      fontSize: 14.sp,
-                                                      fontWeight: FontWeight.w500,
-                                                      color: const Color(0xFF1E1E1E),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(20.r),
+                                                color: Colors.white,
+                                                boxShadow: const [
+                                                  BoxShadow(
+                                                    offset: Offset(0, 10),
+                                                    blurRadius: 20,
+                                                    spreadRadius: 0,
+                                                    color: Color.fromARGB(
+                                                      12,
+                                                      10,
+                                                      102,
+                                                      194,
                                                     ),
                                                   ),
-                                                  // Text(
-                                                  //   jobList[index].company!.isNotEmpty||jobList[index].company!=null
-                                                  //       ? jobList[index].company!
-                                                  //       : "",
-                                                  //   style: GoogleFonts.alexandria(
-                                                  //     fontSize: 11.sp,
-                                                  //     fontWeight: FontWeight.w500,
-                                                  //     color: const Color(0xFF9A97AE),
-                                                  //     letterSpacing: -0.2,
-                                                  //   ),
-                                                  // ),
                                                 ],
                                               ),
-                                            ],
-                                          ),
-                                          SizedBox(height: 15.h),
-                                          Row(
-                                            children: [
-                                              Icon(
-                                                Icons.location_on_outlined,
-                                                size: 20.sp,
-                                                color: const Color(0xFF9A97AE),
-                                                semanticLabel: 'Job Location',
-                                              ),
-                                              SizedBox(width: 6.w),
-                                              Text(
-                                                jobList[index].location!.isNotEmpty
-                                                    ? jobList[index].location!
-                                                    : "",
-                                                style: GoogleFonts.alexandria(
-                                                  fontSize: 11.sp,
-                                                  fontWeight: FontWeight.w500,
-                                                  color: const Color(0xFF9A97AE),
-                                                  letterSpacing: -0.2,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(height: 10.h),
-                                          Row(
-                                            children: [
-                                              Icon(
-                                                Icons.attach_money,
-                                                size: 20.sp,
-                                                color: const Color(0xFF9A97AE),
-                                                semanticLabel: 'Salary',
-                                              ),
-                                              SizedBox(width: 6.w),
-                                              Text(
-                                                (jobList[index].salaryMin != null &&
-                                                    jobList[index].salaryMax != null)
-                                                    ? "₹${jobList[index].salaryMin!.toString()} - ₹${jobList[index].salaryMax!.toString()}"
-                                                    : "Salary N/A",
-                                                style: GoogleFonts.alexandria(
-                                                  fontSize: 11.sp,
-                                                  fontWeight: FontWeight.w500,
-                                                  color: const Color(0xFF9A97AE),
-                                                  letterSpacing: -0.2,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(height: 25.h),
-                                          Row(
-                                            children: [
-                                              Container(
-                                                width: 69.w,
-                                                height: 28.h,
-                                                decoration: BoxDecoration(
-                                                  color: const Color(0xFFE6EDF2),
-                                                  borderRadius: BorderRadius.circular(40.r),
-                                                ),
-                                                child: Center(
-                                                  child: Text(
-                                                    jobList[index].jobType ?? "",
-                                                    style: GoogleFonts.alexandria(
-                                                      fontSize: 11.sp,
-                                                      fontWeight: FontWeight.w400,
-                                                      color: const Color(0xFF1E1E1E),
+                                              child: Padding(
+                                                padding: EdgeInsets.all(20.w),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        Container(
+                                                          width: 40.w,
+                                                          height: 40.h,
+                                                          decoration: BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius.circular(
+                                                                  10.r,
+                                                                ),
+                                                            color: const Color(
+                                                              0xFF0A66C2,
+                                                            ),
+                                                          ),
+                                                          child: Center(
+                                                            child: Image.asset(
+                                                              "assets/rajveer.png",
+                                                              color:
+                                                                  Colors.white,
+                                                              width: 24.w,
+                                                              height: 24.h,
+                                                              cacheWidth:
+                                                                  (24.w *
+                                                                          MediaQuery.of(
+                                                                            context,
+                                                                          ).devicePixelRatio)
+                                                                      .round(),
+                                                              cacheHeight:
+                                                                  (24.h *
+                                                                          MediaQuery.of(
+                                                                            context,
+                                                                          ).devicePixelRatio)
+                                                                      .round(),
+                                                              semanticLabel:
+                                                                  'Company logo',
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        SizedBox(width: 10.w),
+                                                        Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            jobList[index]
+                                                                        .title !=
+                                                                    null
+                                                                ? Text(
+                                                                  jobList[index]
+                                                                      .title!,
+                                                                  style: GoogleFonts.alexandria(
+                                                                    fontSize:
+                                                                        14.sp,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500,
+                                                                    color: const Color(
+                                                                      0xFF1E1E1E,
+                                                                    ),
+                                                                  ),
+                                                                )
+                                                                : Text(
+                                                                  "",
+                                                                  style: GoogleFonts.alexandria(
+                                                                    fontSize:
+                                                                        14.sp,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500,
+                                                                    color: const Color(
+                                                                      0xFF1E1E1E,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                            // Text(
+                                                            //   jobList[index].company!.isNotEmpty||jobList[index].company!=null
+                                                            //       ? jobList[index].company!
+                                                            //       : "",
+                                                            //   style: GoogleFonts.alexandria(
+                                                            //     fontSize: 11.sp,
+                                                            //     fontWeight: FontWeight.w500,
+                                                            //     color: const Color(0xFF9A97AE),
+                                                            //     letterSpacing: -0.2,
+                                                            //   ),
+                                                            // ),
+                                                          ],
+                                                        ),
+                                                      ],
                                                     ),
-                                                  ),
-                                                ),
-                                              ),
-                                              const Spacer(),
-                                              Container(
-                                                width: 80.w,
-                                                height: 32.h,
-                                                decoration: BoxDecoration(
-                                                  color: const Color(0xFF0A66C2),
-                                                  borderRadius: BorderRadius.circular(40.r),
-                                                ),
-                                                child: Center(
-                                                  child: Text(
-                                                    "Apply",
-                                                    style: GoogleFonts.alexandria(
-                                                      fontSize: 15.sp,
-                                                      fontWeight: FontWeight.w400,
-                                                      color: Colors.white,
+                                                    SizedBox(height: 15.h),
+                                                    Row(
+                                                      children: [
+                                                        Icon(
+                                                          Icons
+                                                              .location_on_outlined,
+                                                          size: 20.sp,
+                                                          color: const Color(
+                                                            0xFF9A97AE,
+                                                          ),
+                                                          semanticLabel:
+                                                              'Job Location',
+                                                        ),
+                                                        SizedBox(width: 6.w),
+                                                        Text(
+                                                          jobList[index]
+                                                                  .location!
+                                                                  .isNotEmpty
+                                                              ? jobList[index]
+                                                                  .location!
+                                                              : "",
+                                                          style:
+                                                              GoogleFonts.alexandria(
+                                                                fontSize: 11.sp,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                                color:
+                                                                    const Color(
+                                                                      0xFF9A97AE,
+                                                                    ),
+                                                                letterSpacing:
+                                                                    -0.2,
+                                                              ),
+                                                        ),
+                                                      ],
                                                     ),
-                                                  ),
+                                                    SizedBox(height: 10.h),
+                                                    Row(
+                                                      children: [
+                                                        Icon(
+                                                          Icons.attach_money,
+                                                          size: 20.sp,
+                                                          color: const Color(
+                                                            0xFF9A97AE,
+                                                          ),
+                                                          semanticLabel:
+                                                              'Salary',
+                                                        ),
+                                                        SizedBox(width: 6.w),
+                                                        Text(
+                                                          (jobList[index].salaryMin !=
+                                                                      null &&
+                                                                  jobList[index]
+                                                                          .salaryMax !=
+                                                                      null)
+                                                              ? "₹${jobList[index].salaryMin!.toString()} - ₹${jobList[index].salaryMax!.toString()}"
+                                                              : "Salary N/A",
+                                                          style:
+                                                              GoogleFonts.alexandria(
+                                                                fontSize: 11.sp,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                                color:
+                                                                    const Color(
+                                                                      0xFF9A97AE,
+                                                                    ),
+                                                                letterSpacing:
+                                                                    -0.2,
+                                                              ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    SizedBox(height: 25.h),
+                                                    Row(
+                                                      children: [
+                                                        Container(
+                                                          width: 69.w,
+                                                          height: 28.h,
+                                                          decoration: BoxDecoration(
+                                                            color: const Color(
+                                                              0xFFE6EDF2,
+                                                            ),
+                                                            borderRadius:
+                                                                BorderRadius.circular(
+                                                                  40.r,
+                                                                ),
+                                                          ),
+                                                          child: Center(
+                                                            child: Text(
+                                                              jobList[index]
+                                                                      .jobType ??
+                                                                  "",
+                                                              style: GoogleFonts.alexandria(
+                                                                fontSize: 11.sp,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400,
+                                                                color:
+                                                                    const Color(
+                                                                      0xFF1E1E1E,
+                                                                    ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        const Spacer(),
+                                                        Container(
+                                                          width: 80.w,
+                                                          height: 32.h,
+                                                          decoration: BoxDecoration(
+                                                            color: const Color(
+                                                              0xFF0A66C2,
+                                                            ),
+                                                            borderRadius:
+                                                                BorderRadius.circular(
+                                                                  40.r,
+                                                                ),
+                                                          ),
+                                                          child: Center(
+                                                            child: Text(
+                                                              "Apply",
+                                                              style: GoogleFonts.alexandria(
+                                                                fontSize: 15.sp,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400,
+                                                                color:
+                                                                    Colors
+                                                                        .white,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
-                                            ],
+                                            ),
                                           ),
                                         ],
-                                      ),
+                                      );
+                                    }, childCount: jobList.length),
+                                  ),
+                      error:
+                          (e, _) => SliverToBoxAdapter(
+                            child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Failed to load jobs: $e",
+                                    style: GoogleFonts.alexandria(
+                                      fontSize: 16.sp,
                                     ),
                                   ),
-                                ),
-                              ],
-                            );
-                          },
-                          childCount: jobList.length,
-                        ),
-                      ),
-                      error: (e, _) => SliverToBoxAdapter(
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Failed to load jobs: $e",
-                                style: GoogleFonts.alexandria(fontSize: 16.sp),
+                                  SizedBox(height: 10.h),
+                                  ElevatedButton(
+                                    onPressed: _refreshJobList,
+                                    child: Text("Retry"),
+                                  ),
+                                ],
                               ),
-                              SizedBox(height: 10.h),
-                              ElevatedButton(
-                                onPressed: _refreshJobList,
-                                child: Text("Retry"),
-                              ),
-                            ],
+                            ),
                           ),
-                        ),
-                      ),
-                      loading: () => const SliverToBoxAdapter(
-                        child: Center(child: CircularProgressIndicator()),
-                      ),
+                      loading:
+                          () => const SliverToBoxAdapter(
+                            child: Center(child: CircularProgressIndicator()),
+                          ),
                     ),
                   ],
                 ),
               ),
             ),
 
-
             const MyJobApplication(),
 
             const ProfileGet(),
-
-
           ],
         ),
-
 
         bottomNavigationBar: Padding(
           padding: EdgeInsets.only(left: 20.w, right: 20.w, bottom: 20.h),
@@ -589,7 +724,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   letterSpacing: -0.2,
                 ),
                 items: const [
-                  BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.home),
+                    label: 'Home',
+                  ),
                   // BottomNavigationBarItem(
                   //   icon: Icon(Icons.explore_outlined),
                   //   label: 'Create Jobs',
@@ -607,7 +745,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
           ),
         ),
-
       ),
     );
   }
@@ -656,50 +793,48 @@ class RecomandedBody extends StatelessWidget {
 class CategoryBody extends StatelessWidget {
   final String name;
   final VoidCallback onTap;
-  const CategoryBody({super.key, required this.name,  required this.onTap,});
+  const CategoryBody({super.key, required this.name, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return
-
-      InkWell(
-        onTap: onTap,
-    child:
-      Container(
-      width: 91.w,
-      height: 100.h,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15.r),
-        color: Color(0xFFFFFFFF),
-      ),
-      child: Padding(
-        padding: EdgeInsets.only(left: 14.w, top: 14.h),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Image.asset(
-              "assets/category.png",
-              width: 24.w,
-              height: 24.h,
-              fit: BoxFit.cover,
-            ),
-            Spacer(),
-
-            Text(
-              name,
-              textAlign: TextAlign.left,
-              style: GoogleFonts.alexandria(
-                fontSize: 12.sp,
-                fontWeight: FontWeight.w500,
-                color: Color(0xFF1E1E1E),
-                height: 1.2,
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        width: 91.w,
+        height: 105.h,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15.r),
+          color: Color(0xFFFFFFFF),
+        ),
+        child: Padding(
+          padding: EdgeInsets.only(left: 14.w, top: 14.h),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Image.asset(
+                "assets/category.png",
+                width: 24.w,
+                height: 24.h,
+                fit: BoxFit.cover,
               ),
-            ),
+              Spacer(),
 
-            SizedBox(height: 14.h),
-          ],
+              Text(
+                name,
+                textAlign: TextAlign.left,
+                style: GoogleFonts.alexandria(
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w500,
+                  color: Color(0xFF1E1E1E),
+                  height: 1.2,
+                ),
+              ),
+
+              SizedBox(height: 14.h),
+            ],
+          ),
         ),
       ),
-      )   );
+    );
   }
 }

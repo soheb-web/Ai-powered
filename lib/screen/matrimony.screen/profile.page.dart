@@ -1,5 +1,3 @@
-
-
 import 'package:ai_powered_app/screen/start.page.dart';
 import 'package:ai_powered_app/screen/matrimony.screen/upload.photo.page.dart';
 import 'package:ai_powered_app/data/providers/profileGetDataProvider.dart';
@@ -14,9 +12,16 @@ final genderProvider = StateProvider<String?>((ref) => null);
 final religionProvider = StateProvider<String?>((ref) => null);
 final castProvider = StateProvider<String?>((ref) => null);
 final maritalProvider = StateProvider<String?>((ref) => null);
-final nameControllerProvider = Provider.autoDispose<TextEditingController>((ref) => TextEditingController());
-final dobControllerProvider = Provider.autoDispose<TextEditingController>((ref) => TextEditingController());
-final customCastControllerProvider = Provider.autoDispose<TextEditingController>((ref) => TextEditingController());
+final nameControllerProvider = Provider.autoDispose<TextEditingController>(
+  (ref) => TextEditingController(),
+);
+final dobControllerProvider = Provider.autoDispose<TextEditingController>(
+  (ref) => TextEditingController(),
+);
+final customCastControllerProvider =
+    Provider.autoDispose<TextEditingController>(
+      (ref) => TextEditingController(),
+    );
 
 final Map<String, List<String>> religionToCastes = <String, List<String>>{
   "Hindu": [
@@ -61,6 +66,7 @@ final Map<String, List<String>> religionToCastes = <String, List<String>>{
     "Other",
   ],
 };
+
 class ProfilePage extends ConsumerWidget {
   const ProfilePage({super.key});
 
@@ -77,9 +83,11 @@ class ProfilePage extends ConsumerWidget {
     final genderList = ["Male", "Female"];
     final religionList = ["Hindu", "Muslim", "Sikh", "Christian", "Other"];
     final List<String> castList =
-    religion != null && religion != "Other" && religionToCastes.containsKey(religion)
-        ? religionToCastes[religion]!
-        : <String>[];
+        religion != null &&
+                religion != "Other" &&
+                religionToCastes.containsKey(religion)
+            ? religionToCastes[religion]!
+            : <String>[];
 
     return Scaffold(
       backgroundColor: const Color(0xFFFDF6F8),
@@ -92,14 +100,16 @@ class ProfilePage extends ConsumerWidget {
             if (nameController.text.isEmpty) {
               nameController.text = profile.data.profile.name ?? '';
               dobController.text =
-              profile.data.profile.dateOfBirth.toString().split(" ")[0];
-              ref.read(genderProvider.notifier).state = profile.data.profile.gender.isNotEmpty
-                  ? profile.data.profile.gender[0].toUpperCase() +
-                  profile.data.profile.gender.substring(1).toLowerCase()
-                  : null;
-              final profileReligion = religionList.contains(profile.data.profile.religion)
-                  ? profile.data.profile.religion
-                  : "Other";
+                  profile.data.profile.dateOfBirth.toString().split(" ")[0];
+              ref.read(genderProvider.notifier).state =
+                  profile.data.profile.gender.isNotEmpty
+                      ? profile.data.profile.gender[0].toUpperCase() +
+                          profile.data.profile.gender.substring(1).toLowerCase()
+                      : null;
+              final profileReligion =
+                  religionList.contains(profile.data.profile.religion)
+                      ? profile.data.profile.religion
+                      : "Other";
               ref.read(religionProvider.notifier).state = profileReligion;
               if (profileReligion == "Other") {
                 customCastController.text = profile.data.profile.caste ?? '';
@@ -107,16 +117,17 @@ class ProfilePage extends ConsumerWidget {
               } else if (religionToCastes.containsKey(profileReligion)) {
                 final validCastList = religionToCastes[profileReligion]!;
                 ref.read(castProvider.notifier).state =
-                validCastList.contains(profile.data.profile.caste)
-                    ? profile.data.profile.caste
-                    : null;
+                    validCastList.contains(profile.data.profile.caste)
+                        ? profile.data.profile.caste
+                        : null;
                 customCastController.text = '';
               } else {
                 ref.read(castProvider.notifier).state = null;
                 customCastController.text = '';
               }
               ref.read(maritalProvider.notifier).state =
-                  profile.data.profile.maritalStatus;}
+                  profile.data.profile.maritalStatus;
+            }
           });
 
           WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -164,11 +175,12 @@ class ProfilePage extends ConsumerWidget {
                         final box = await Hive.openBox('userdata');
                         await box.clear();
                         if (context.mounted) {
-                          Navigator.pushReplacement(
+                          Navigator.pushAndRemoveUntil(
                             context,
                             CupertinoPageRoute(
-                              builder: (_) => const StartPage(),
+                              builder: (context) => StartPage(),
                             ),
+                            (route) => false,
                           );
                         }
                       },
@@ -207,14 +219,14 @@ class ProfilePage extends ConsumerWidget {
                   hint: "Select Gender",
                   items: genderList,
                   value: gender,
-                  onChange: (value) =>
-                  ref.read(genderProvider.notifier).state = value,
+                  onChange:
+                      (value) =>
+                          ref.read(genderProvider.notifier).state = value,
                 ),
                 SizedBox(height: 15.h),
                 _buildLabel("Date of Birth"),
                 SizedBox(height: 10.h),
-                buildDatePickerField(context,
-                    dobController, "Date of Birth"),
+                buildDatePickerField(context, dobController, "Date of Birth"),
                 SizedBox(height: 15.h),
                 _buildLabel("Select Religion"),
                 SizedBox(height: 10.h),
@@ -230,7 +242,7 @@ class ProfilePage extends ConsumerWidget {
                 ),
                 SizedBox(height: 15.h),
                 if (religion != "Other")
-                _buildLabel("Select Caste")
+                  _buildLabel("Select Caste")
                 else
                   _buildLabel("Enter Caste"),
                 SizedBox(height: 10.h),
@@ -239,8 +251,9 @@ class ProfilePage extends ConsumerWidget {
                     hint: "Select Caste",
                     items: castList,
                     value: cast,
-                    onChange: (value) =>
-                    ref.read(castProvider.notifier).state = value,
+                    onChange:
+                        (value) =>
+                            ref.read(castProvider.notifier).state = value,
                   )
                 else
                   TextField(
@@ -260,8 +273,9 @@ class ProfilePage extends ConsumerWidget {
                     "Awaiting Divorce",
                   ],
                   value: marital,
-                  onChange: (value) =>
-                  ref.read(maritalProvider.notifier).state = value,
+                  onChange:
+                      (value) =>
+                          ref.read(maritalProvider.notifier).state = value,
                 ),
                 SizedBox(height: 25.h),
                 GestureDetector(
@@ -270,11 +284,14 @@ class ProfilePage extends ConsumerWidget {
                         gender == null ||
                         dobController.text.isEmpty ||
                         religion == null ||
-                        (religion == "Other" ? customCastController.text.trim().isEmpty : cast == null) ||
+                        (religion == "Other"
+                            ? customCastController.text.trim().isEmpty
+                            : cast == null) ||
                         marital == null) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                            content: Text("Please fill all required fields")),
+                          content: Text("Please fill all required fields"),
+                        ),
                       );
                       return;
                     }
@@ -334,7 +351,10 @@ class ProfilePage extends ConsumerWidget {
   }
 
   Widget buildDatePickerField(
-      BuildContext context, TextEditingController controller, String hint) {
+    BuildContext context,
+    TextEditingController controller,
+    String hint,
+  ) {
     return TextField(
       controller: controller,
       readOnly: true,

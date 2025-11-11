@@ -14,7 +14,6 @@ class PropertyBookByUser extends ConsumerStatefulWidget {
 }
 
 class _PropertyBookByUserState extends ConsumerState<PropertyBookByUser> {
-
   @override
   Widget build(BuildContext context) {
     final bookingList = ref.watch(propertyBookUserListProvider);
@@ -35,25 +34,20 @@ class _PropertyBookByUserState extends ConsumerState<PropertyBookByUser> {
       ),
       body: bookingList.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, stack) => Center(
-          child: Text(
-            'Error: $err',
-            style: GoogleFonts.inter(
-              fontSize: 16.sp,
-              color: Colors.red,
+        error:
+            (err, stack) => Center(
+              child: Text(
+                'Error: $err',
+                style: GoogleFonts.inter(fontSize: 16.sp, color: Colors.red),
+              ),
             ),
-          ),
-        ),
         data: (model) {
           final bookings = model.bookings ?? [];
           if (bookings.isEmpty) {
             return Center(
               child: Text(
                 "No bookings found.",
-                style: GoogleFonts.inter(
-                  fontSize: 16.sp,
-                  color: Colors.grey,
-                ),
+                style: GoogleFonts.inter(fontSize: 16.sp, color: Colors.grey),
               ),
             );
           }
@@ -83,13 +77,11 @@ class BookingCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final formattedPrice = NumberFormat.decimalPattern(
       'en_IN',
-    ).format(double.tryParse(property!.price??"") ?? 0);
+    ).format(double.tryParse(property!.price ?? "") ?? 0);
     return Card(
       elevation: 2,
       margin: EdgeInsets.only(bottom: 16.h),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12.r),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
       child: Padding(
         padding: EdgeInsets.all(16.w),
         child: Column(
@@ -141,7 +133,7 @@ class BookingCard extends StatelessWidget {
               children: [
                 Icon(Icons.info_outline, size: 16.sp, color: Colors.grey),
                 SizedBox(width: 8.w),
-               /* Text(
+                /* Text(
                   "Status: ${booking.status ?? 'N/A'}",
                   style: GoogleFonts.inter(
                     fontSize: 14.sp,
@@ -158,14 +150,14 @@ class BookingCard extends StatelessWidget {
                   style: GoogleFonts.inter(
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w500,
-                    color: booking.status == 'confirmed'
-                        ? Colors.green
-                        : booking.status == 'pending'
-                        ? Colors.orange
-                        : Colors.red,
+                    color:
+                        booking.status == 'confirmed'
+                            ? Colors.green
+                            : booking.status == 'pending'
+                            ? Colors.orange
+                            : Colors.red,
                   ),
                 ),
-
               ],
             ),
             SizedBox(height: 8.h),
@@ -177,14 +169,13 @@ class BookingCard extends StatelessWidget {
             //     fontWeight: FontWeight.w500,
             //     color: const Color(0xFF1E1E1E),
             //   ),
-        Text(
-          "₹$formattedPrice",
-          style: GoogleFonts.inter(
-            fontSize: 14.sp,
-            fontWeight: FontWeight.w400,
-            color: const Color(0xFF1E1E1E),
-          ),
-
+            Text(
+              "₹$formattedPrice",
+              style: GoogleFonts.inter(
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w400,
+                color: const Color(0xFF1E1E1E),
+              ),
             ),
           ],
         ),

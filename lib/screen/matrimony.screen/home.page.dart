@@ -16,7 +16,6 @@ import '../../data/providers/profileGetDataProvider.dart';
 import '../../data/providers/searcProfileBased.dart';
 import 'ProfileShow/basicDetail.dart';
 
-
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
   @override
@@ -40,7 +39,6 @@ class _HomePageState extends ConsumerState<HomePage> {
     final matchProfileData = ref.watch(matchProfileBasedProvider);
 
     return WillPopScope(
-
       onWillPop: () async {
         if (tabBottom != 0) {
           setState(() {
@@ -62,9 +60,8 @@ class _HomePageState extends ConsumerState<HomePage> {
       child: Scaffold(
         backgroundColor: Color(0xFFFDF6F8),
         body:
-            tabBottom == 0 ?
-
-            Column(
+            tabBottom == 0
+                ? Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(height: 60.h),
@@ -105,34 +102,37 @@ class _HomePageState extends ConsumerState<HomePage> {
                             //     color: Color(0xFF030016),
                             //   ),
                             // ),
-                            ref.watch(profileDataProvider).when(
-                              loading: () => Text(
-                                "Loading...",
-                                style: GoogleFonts.gothicA1(
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.w500,
-                                  color: Color(0xFF030016),
+                            ref
+                                .watch(profileDataProvider)
+                                .when(
+                                  loading:
+                                      () => Text(
+                                        "Loading...",
+                                        style: GoogleFonts.gothicA1(
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.w500,
+                                          color: Color(0xFF030016),
+                                        ),
+                                      ),
+                                  error:
+                                      (e, _) => Text(
+                                        "Error: $e",
+                                        style: GoogleFonts.gothicA1(
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.w500,
+                                          color: Color(0xFF030016),
+                                        ),
+                                      ),
+                                  data:
+                                      (profile) => Text(
+                                        "${profile.data?.profile.city ?? ''}  ${profile.data?.profile.state ?? ''}",
+                                        style: GoogleFonts.gothicA1(
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.w500,
+                                          color: Color(0xFF030016),
+                                        ),
+                                      ),
                                 ),
-                              ),
-                              error: (e, _) => Text(
-                                "Error: $e",
-                                style: GoogleFonts.gothicA1(
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.w500,
-                                  color: Color(0xFF030016),
-                                ),
-                              ),
-                              data: (profile) =>
-
-                                  Text(
-                                    "${profile.data?.profile.city ?? ''}  ${profile.data?.profile.state ?? ''}",
-                                    style: GoogleFonts.gothicA1(
-                                      fontSize: 16.sp,
-                                      fontWeight: FontWeight.w500,
-                                      color: Color(0xFF030016),
-                                    ),
-                                  ),
-                            ),
                           ],
                         ),
                         Spacer(),
@@ -141,12 +141,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                       ],
                     ),
 
-
-
-
-
                     SizedBox(height: 20.h),
-
 
                     Expanded(
                       child: DefaultTabController(
@@ -186,9 +181,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                             Expanded(
                               child: TabBarView(
                                 children: [
-
-
-                                 /* profileSearch.when(
+                                  /* profileSearch.when(
                                     loading:
                                         () => Center(
                                           child: CircularProgressIndicator(),
@@ -436,15 +429,17 @@ class _HomePageState extends ConsumerState<HomePage> {
                                     },
                                   ),
 */
-
-
                                   profileSearch.when(
-                                    loading: () => Center(
-                                      child: CircularProgressIndicator(),
-                                    ),
-                                    error: (e, _) => Center(child: Text("Error: $e")),
+                                    loading:
+                                        () => Center(
+                                          child: CircularProgressIndicator(),
+                                        ),
+                                    error:
+                                        (e, _) =>
+                                            Center(child: Text("Error: $e")),
                                     data: (searchModel) {
-                                      final List<Result>? results = searchModel.results;
+                                      final List<Result>? results =
+                                          searchModel.results;
 
                                       // Check if results is empty or null
                                       if (results == null || results.isEmpty) {
@@ -455,35 +450,46 @@ class _HomePageState extends ConsumerState<HomePage> {
                                             vertical: 20.h,
                                           ),
                                           child: GridView.builder(
-                                            itemCount: 6, // Fixed length of 6 for default placeholders
-                                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                              crossAxisCount: 2,
-                                              crossAxisSpacing: 20.w,
-                                              mainAxisSpacing: 20.h,
-                                              childAspectRatio: 0.95,
-                                            ),
+                                            itemCount:
+                                                6, // Fixed length of 6 for default placeholders
+                                            gridDelegate:
+                                                SliverGridDelegateWithFixedCrossAxisCount(
+                                                  crossAxisCount: 2,
+                                                  crossAxisSpacing: 20.w,
+                                                  mainAxisSpacing: 20.h,
+                                                  childAspectRatio: 0.95,
+                                                ),
                                             itemBuilder: (context, index) {
                                               return Container(
                                                 padding: EdgeInsets.zero,
                                                 decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.circular(15.r),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                        15.r,
+                                                      ),
                                                 ),
                                                 child: Stack(
                                                   children: [
                                                     ClipRRect(
-                                                      borderRadius: BorderRadius.circular(15.r),
-                                                      child:
-
-                                                      ImageFiltered(
-                                                        imageFilter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
-                                                        child:
-                                                         Image.asset(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                            15.r,
+                                                          ),
+                                                      child: ImageFiltered(
+                                                        imageFilter:
+                                                            ImageFilter.blur(
+                                                              sigmaX: 8,
+                                                              sigmaY: 8,
+                                                            ),
+                                                        child: Image.asset(
                                                           "assets/female.png",
-                                                          width: double.infinity,
-                                                          height: double.infinity,
+                                                          width:
+                                                              double.infinity,
+                                                          height:
+                                                              double.infinity,
                                                           fit: BoxFit.cover,
                                                         ),
-                                                      )
+                                                      ),
                                                       // Image.asset(
                                                       //   "assets/female.png", // Default image
                                                       //   width: double.infinity,
@@ -531,7 +537,9 @@ class _HomePageState extends ConsumerState<HomePage> {
                                                       bottom: 16.h,
                                                       left: 16.w,
                                                       child: Column(
-                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
                                                         children: [
                                                           // Text(
                                                           //   "Unknown",
@@ -543,23 +551,29 @@ class _HomePageState extends ConsumerState<HomePage> {
                                                           // ),
                                                           Text(
                                                             "",
-                                                            style: GoogleFonts.gothicA1(
-                                                              fontSize: 12.sp,
-                                                              fontWeight: FontWeight.w400,
-                                                              color: Color(0xFF9A97AE),
-                                                            ),
+                                                            style:
+                                                                GoogleFonts.gothicA1(
+                                                                  fontSize:
+                                                                      12.sp,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400,
+                                                                  color: Color(
+                                                                    0xFF9A97AE,
+                                                                  ),
+                                                                ),
                                                           ),
                                                         ],
                                                       ),
                                                     ),
                                                     // if (index != 0) // Apply lock icon for non-first items
-                                                      Center(
-                                                        child: Icon(
-                                                          Icons.lock,
-                                                          color: Colors.white,
-                                                          size: 30.sp,
-                                                        ),
+                                                    Center(
+                                                      child: Icon(
+                                                        Icons.lock,
+                                                        color: Colors.white,
+                                                        size: 30.sp,
                                                       ),
+                                                    ),
                                                   ],
                                                 ),
                                               );
@@ -576,160 +590,232 @@ class _HomePageState extends ConsumerState<HomePage> {
                                         ),
                                         child: GridView.builder(
                                           itemCount: results.length,
-                                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                            crossAxisCount: 2,
-                                            crossAxisSpacing: 20.w,
-                                            mainAxisSpacing: 20.h,
-                                            childAspectRatio: 0.95,
-                                          ),
+                                          gridDelegate:
+                                              SliverGridDelegateWithFixedCrossAxisCount(
+                                                crossAxisCount: 2,
+                                                crossAxisSpacing: 20.w,
+                                                mainAxisSpacing: 20.h,
+                                                childAspectRatio: 0.95,
+                                              ),
                                           itemBuilder: (context, index) {
                                             final user = results[index];
                                             return Container(
                                               padding: EdgeInsets.zero,
                                               decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(15.r),
+                                                borderRadius:
+                                                    BorderRadius.circular(15.r),
                                               ),
                                               child: Stack(
                                                 children: [
                                                   ClipRRect(
-                                                    borderRadius: BorderRadius.circular(15.r),
-                                                    child: isLocked
-                                                        ? GestureDetector(
-                                                      onTap: () {
-                                                        Navigator.push(
-                                                          context,
-                                                          CupertinoPageRoute(
-                                                            builder: (_) => PartnerPreferencePage(
-                                                              user.userId.toString() ?? "",
-                                                            ),
-                                                          ),
-                                                        );
-                                                      },
-                                                      child: index != 0
-                                                          ?
-                                                      // ImageFiltered(
-                                                        // imageFilter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
-                                                        // child:
-                                                      user.photoThumbnail != null
-                                                            ? Image.network(
-                                                          user.photoThumbnail!,
-                                                          width: double.infinity,
-                                                          height: double.infinity,
-                                                          fit: BoxFit.cover,
-                                                        )
-                                                            : Image.asset(
-                                                          "assets/female.png",
-                                                          width: double.infinity,
-                                                          height: double.infinity,
-                                                          fit: BoxFit.cover,
-                                                        )
-                                                      // )
-                                                          : (user.photoThumbnail != null
-                                                          ? Image.network(
-                                                        user.photoThumbnail!,
-                                                        width: double.infinity,
-                                                        height: double.infinity,
-                                                        fit: BoxFit.cover,
-                                                      )
-                                                          : Image.asset(
-                                                        "assets/female.png",
-                                                        width: double.infinity,
-                                                        height: double.infinity,
-                                                        fit: BoxFit.cover,
-                                                      )),
-                                                    )
-                                                        : GestureDetector(
-                                                      onTap: () {
-                                                        Navigator.push(
-                                                          context,
-                                                          CupertinoPageRoute(
-                                                            builder: (_, ) => PartnerPreferencePage(
-                                                              user.userId.toString() ?? "",
-                                                            ),
-                                                          ),
-                                                        );
-                                                      },
-                                                      child: Stack(
-                                                        children: [
-                                                          user.photoThumbnail != null
-                                                              ? Image.network(
-                                                            user.photoThumbnail!,
-                                                            width: double.infinity,
-                                                            height: double.infinity,
-                                                            fit: BoxFit.cover,
-                                                          )
-                                                              : Image.asset(
-                                                            "assets/female.png",
-                                                            width: double.infinity,
-                                                            height: double.infinity,
-                                                            fit: BoxFit.cover,
-                                                          ),
-                                                          Image.asset(
-                                                            "assets/femalebgimage.png",
-                                                            width: double.infinity,
-                                                            height: double.infinity,
-                                                            fit: BoxFit.cover,
-                                                          ),
-                                                          Positioned(
-                                                            left: 15.w,
-                                                            top: 15.h,
-                                                            child: Container(
-                                                              padding: EdgeInsets.symmetric(
-                                                                horizontal: 7.w,
-                                                                vertical: 5.h,
-                                                              ),
-                                                              decoration: BoxDecoration(
-                                                                borderRadius: BorderRadius.circular(6.r),
-                                                                color: Color.fromARGB(100, 0, 3, 22),
-                                                              ),
-                                                              child: Row(
-                                                                children: [
-                                                                  Image.asset(
-                                                                    "assets/loca.png",
-                                                                    color: Colors.white,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          15.r,
+                                                        ),
+                                                    child:
+                                                        isLocked
+                                                            ? GestureDetector(
+                                                              onTap: () {
+                                                                Navigator.push(
+                                                                  context,
+                                                                  CupertinoPageRoute(
+                                                                    builder:
+                                                                        (
+                                                                          _,
+                                                                        ) => PartnerPreferencePage(
+                                                                          user.userId.toString() ??
+                                                                              "",
+                                                                        ),
                                                                   ),
-                                                                  SizedBox(width: 3.w),
-                                                                  Text(
-                                                                    user.location ?? "Unknown",
-                                                                    style: GoogleFonts.gothicA1(
-                                                                      fontSize: 10.sp,
-                                                                      color: Colors.white,
+                                                                );
+                                                              },
+                                                              child:
+                                                                  index != 0
+                                                                      ?
+                                                                      // ImageFiltered(
+                                                                      // imageFilter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+                                                                      // child:
+                                                                      user.photoThumbnail !=
+                                                                              null
+                                                                          ? Image.network(
+                                                                            user.photoThumbnail!,
+                                                                            width:
+                                                                                double.infinity,
+                                                                            height:
+                                                                                double.infinity,
+                                                                            fit:
+                                                                                BoxFit.cover,
+                                                                          )
+                                                                          : Image.asset(
+                                                                            "assets/female.png",
+                                                                            width:
+                                                                                double.infinity,
+                                                                            height:
+                                                                                double.infinity,
+                                                                            fit:
+                                                                                BoxFit.cover,
+                                                                          )
+                                                                      // )
+                                                                      : (user.photoThumbnail !=
+                                                                              null
+                                                                          ? Image.network(
+                                                                            user.photoThumbnail!,
+                                                                            width:
+                                                                                double.infinity,
+                                                                            height:
+                                                                                double.infinity,
+                                                                            fit:
+                                                                                BoxFit.cover,
+                                                                          )
+                                                                          : Image.asset(
+                                                                            "assets/female.png",
+                                                                            width:
+                                                                                double.infinity,
+                                                                            height:
+                                                                                double.infinity,
+                                                                            fit:
+                                                                                BoxFit.cover,
+                                                                          )),
+                                                            )
+                                                            : GestureDetector(
+                                                              onTap: () {
+                                                                Navigator.push(
+                                                                  context,
+                                                                  CupertinoPageRoute(
+                                                                    builder:
+                                                                        (
+                                                                          _,
+                                                                        ) => PartnerPreferencePage(
+                                                                          user.userId.toString() ??
+                                                                              "",
+                                                                        ),
+                                                                  ),
+                                                                );
+                                                              },
+                                                              child: Stack(
+                                                                children: [
+                                                                  user.photoThumbnail !=
+                                                                          null
+                                                                      ? Image.network(
+                                                                        user.photoThumbnail!,
+                                                                        width:
+                                                                            double.infinity,
+                                                                        height:
+                                                                            double.infinity,
+                                                                        fit:
+                                                                            BoxFit.cover,
+                                                                      )
+                                                                      : Image.asset(
+                                                                        "assets/female.png",
+                                                                        width:
+                                                                            double.infinity,
+                                                                        height:
+                                                                            double.infinity,
+                                                                        fit:
+                                                                            BoxFit.cover,
+                                                                      ),
+                                                                  Image.asset(
+                                                                    "assets/femalebgimage.png",
+                                                                    width:
+                                                                        double
+                                                                            .infinity,
+                                                                    height:
+                                                                        double
+                                                                            .infinity,
+                                                                    fit:
+                                                                        BoxFit
+                                                                            .cover,
+                                                                  ),
+                                                                  Positioned(
+                                                                    left: 15.w,
+                                                                    top: 15.h,
+                                                                    child: Container(
+                                                                      padding: EdgeInsets.symmetric(
+                                                                        horizontal:
+                                                                            7.w,
+                                                                        vertical:
+                                                                            5.h,
+                                                                      ),
+                                                                      decoration: BoxDecoration(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(
+                                                                              6.r,
+                                                                            ),
+                                                                        color: Color.fromARGB(
+                                                                          100,
+                                                                          0,
+                                                                          3,
+                                                                          22,
+                                                                        ),
+                                                                      ),
+                                                                      child: Row(
+                                                                        children: [
+                                                                          Image.asset(
+                                                                            "assets/loca.png",
+                                                                            color:
+                                                                                Colors.white,
+                                                                          ),
+                                                                          SizedBox(
+                                                                            width:
+                                                                                3.w,
+                                                                          ),
+                                                                          Text(
+                                                                            user.location ??
+                                                                                "Unknown",
+                                                                            style: GoogleFonts.gothicA1(
+                                                                              fontSize:
+                                                                                  10.sp,
+                                                                              color:
+                                                                                  Colors.white,
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  Positioned(
+                                                                    bottom:
+                                                                        16.h,
+                                                                    left: 16.w,
+                                                                    child: Column(
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .start,
+                                                                      children: [
+                                                                        Text(
+                                                                          user.name ??
+                                                                              "",
+                                                                          style: GoogleFonts.gothicA1(
+                                                                            fontSize:
+                                                                                14.sp,
+                                                                            fontWeight:
+                                                                                FontWeight.w500,
+                                                                            color:
+                                                                                Colors.white,
+                                                                          ),
+                                                                        ),
+                                                                        Text(
+                                                                          user.age !=
+                                                                                  null
+                                                                              ? "${user.age} years old"
+                                                                              : "",
+                                                                          style: GoogleFonts.gothicA1(
+                                                                            fontSize:
+                                                                                12.sp,
+                                                                            fontWeight:
+                                                                                FontWeight.w400,
+                                                                            color: Color(
+                                                                              0xFF9A97AE,
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ],
                                                                     ),
                                                                   ),
                                                                 ],
                                                               ),
                                                             ),
-                                                          ),
-                                                          Positioned(
-                                                            bottom: 16.h,
-                                                            left: 16.w,
-                                                            child: Column(
-                                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                                              children: [
-                                                                Text(
-                                                                  user.name ?? "",
-                                                                  style: GoogleFonts.gothicA1(
-                                                                    fontSize: 14.sp,
-                                                                    fontWeight: FontWeight.w500,
-                                                                    color: Colors.white,
-                                                                  ),
-                                                                ),
-                                                                Text(
-                                                                  user.age != null ? "${user.age} years old" : "",
-                                                                  style: GoogleFonts.gothicA1(
-                                                                    fontSize: 12.sp,
-                                                                    fontWeight: FontWeight.w400,
-                                                                    color: Color(0xFF9A97AE),
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
                                                   ),
-
                                                 ],
                                               ),
                                             );
@@ -793,7 +879,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                                       );
                                     },
                                   ),
-
                                 ],
                               ),
                             ),
@@ -801,18 +886,12 @@ class _HomePageState extends ConsumerState<HomePage> {
                         ),
                       ),
                     ),
-
                   ],
                 )
-
-
-                : tabBottom == 1 ?
-
-            MessagePage()
+                : tabBottom == 1
+                ? MessagePage()
                 : tabBottom == 2
-
                 ? UserViewedProfilesScreen()
-
                 : BasicDetail(),
 
         bottomNavigationBar: Padding(
@@ -871,10 +950,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             ),
           ),
         ),
-
-
       ),
     );
   }
-
 }

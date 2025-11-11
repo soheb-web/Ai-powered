@@ -11,13 +11,12 @@ import '../../../data/providers/jobsProfileGetProvider.dart';
 import '../../start.page.dart';
 import '../ProfileJobPage.dart';
 
-
-
 class ProfileGet extends ConsumerStatefulWidget {
   const ProfileGet({super.key});
   @override
   ConsumerState<ProfileGet> createState() => _ProfileGetState();
 }
+
 class _ProfileGetState extends ConsumerState<ProfileGet> {
   final phoneController = TextEditingController();
   final contact_personController = TextEditingController();
@@ -41,9 +40,10 @@ class _ProfileGetState extends ConsumerState<ProfileGet> {
         contact_personController.text = profile.user!.name ?? '';
         phoneController.text = profile.user?.phone ?? '';
         emailController.text = profile.user?.email ?? '';
-        resumeUrl = profile.user?.resume != null
-            ? '$baseUrl${profile.user!.resume}'
-            : null;
+        resumeUrl =
+            profile.user?.resume != null
+                ? '$baseUrl${profile.user!.resume}'
+                : null;
       });
     } catch (e) {
       Fluttertoast.showToast(
@@ -55,20 +55,16 @@ class _ProfileGetState extends ConsumerState<ProfileGet> {
         fontSize: 12.0,
       );
     }
-
   }
-
 
   Widget _getFilePreview(dynamic file) {
     if (file is File) {
       // Handle local file
       String fileExtension = file.path.split('.').last.toLowerCase();
-      if (fileExtension == 'jpg' || fileExtension == 'jpeg' || fileExtension == 'png') {
-        return Image.file(
-          file,
-          fit: BoxFit.cover,
-          width: double.infinity,
-        );
+      if (fileExtension == 'jpg' ||
+          fileExtension == 'jpeg' ||
+          fileExtension == 'png') {
+        return Image.file(file, fit: BoxFit.cover, width: double.infinity);
       } else if (fileExtension == 'pdf') {
         return Center(
           child: Icon(Icons.picture_as_pdf, color: Colors.red, size: 50),
@@ -88,12 +84,15 @@ class _ProfileGetState extends ConsumerState<ProfileGet> {
     } else if (file is String) {
       // Handle remote URL
       String fileExtension = file.split('.').last.toLowerCase();
-      if (fileExtension == 'jpg' || fileExtension == 'jpeg' || fileExtension == 'png') {
+      if (fileExtension == 'jpg' ||
+          fileExtension == 'jpeg' ||
+          fileExtension == 'png') {
         return CachedNetworkImage(
           imageUrl: file,
           fit: BoxFit.cover,
           width: double.infinity,
-          placeholder: (context, url) => Center(child: CircularProgressIndicator()),
+          placeholder:
+              (context, url) => Center(child: CircularProgressIndicator()),
           errorWidget: (context, url, error) => Icon(Icons.error),
         );
       } else if (fileExtension == 'pdf') {
@@ -132,6 +131,7 @@ class _ProfileGetState extends ConsumerState<ProfileGet> {
       ),
     );
   }
+
   @override
   Widget build(BuildContext context) {
     final profileData = ref.watch(jobProfileDataProvider);
@@ -142,169 +142,180 @@ class _ProfileGetState extends ConsumerState<ProfileGet> {
           SizedBox(height: 60.h),
           // ... (Previous Row widget remains the same)
           Expanded(
-            child:
-
-            SingleChildScrollView(
+            child: SingleChildScrollView(
               child: Padding(
                 padding: EdgeInsets.only(left: 24.w, right: 24.w, top: 10.h),
                 child: profileData.when(
-                  data: (profile) => Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-
-                      Text(
-                        "Basic Information",
-                        style: GoogleFonts.alexandria(
-                          fontSize: 30.sp,
-                          fontWeight: FontWeight.w500,
-                          color: Color(0xFF030016),
-
-                        ),
-                      ),
-                      SizedBox(height: 10.h,),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  data:
+                      (profile) => Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-
-                          GestureDetector( 
-                            onTap: () async {
-
-                                Navigator.push(
-                                  context,
-                                  CupertinoPageRoute(builder: (_) => const ProfilePageJobs()),
-                                );
-
-                            },
-                            child: Container(
-                              width: 113.w,
-                              height: 53.h,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15.r),
-                                color: Color(0xFF0A66C2),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  "Edit Profile",
-                                  style: GoogleFonts.gothicA1(
-                                    fontSize: 18.sp,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.white,
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: GestureDetector(
+                              onTap: () async {
+                                final box = await Hive.openBox('userdata');
+                                await box.clear(); // Clear saved user data
+                                if (context.mounted) {
+                                  Navigator.pushAndRemoveUntil(
+                                    context,
+                                    CupertinoPageRoute(
+                                      builder: (_) => const StartPage(),
+                                    ),
+                                    (route) => false,
+                                  );
+                                }
+                              },
+                              child: Container(
+                                width: 103.w,
+                                height: 53.h,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15.r),
+                                  color: Color(0xFF0A66C2),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    "Logout",
+                                    style: GoogleFonts.gothicA1(
+                                      fontSize: 18.sp,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.white,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
                           ),
+                          Text(
+                            "Basic Information",
+                            style: GoogleFonts.alexandria(
+                              fontSize: 30.sp,
+                              fontWeight: FontWeight.w500,
+                              color: Color(0xFF030016),
+                            ),
+                          ),
+                          SizedBox(height: 10.h),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              GestureDetector(
+                                onTap: () async {
+                                  Navigator.push(
+                                    context,
+                                    CupertinoPageRoute(
+                                      builder: (_) => const ProfilePageJobs(),
+                                    ),
+                                  );
+                                },
+                                child: Container(
+                                  // width: 113.w,
+                                  // height: 53.h,
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: 12.h,
+                                    horizontal: 12.w,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15.r),
+                                    color: Color(0xFF0A66C2),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      "Edit Profile",
+                                      style: GoogleFonts.gothicA1(
+                                        fontSize: 18.sp,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 20.h),
+                          _buildLabel("Full Name"),
+
+                          SizedBox(height: 10.h),
+                          TextFieldBody(
+                            enable: false,
+                            keyboardType: TextInputType.text,
+                            controller: contact_personController,
+                            hint: "Enter Your Name",
+                          ),
+
+                          SizedBox(height: 20.h),
+                          _buildLabel("Mobile Number"),
+
+                          SizedBox(height: 10.h),
+                          TextFieldBody(
+                            enable: false,
+                            keyboardType: TextInputType.phone,
+                            controller: phoneController,
+                            hint: "Enter your mobile number",
+                          ),
+
+                          SizedBox(height: 20.h),
+                          _buildLabel("Email Address"),
+                          SizedBox(height: 10.h),
+
+                          TextFieldBody(
+                            enable: false,
+                            keyboardType: TextInputType.emailAddress,
+                            controller: emailController,
+                            hint: "Enter your email Address",
+                          ),
+                          SizedBox(height: 15.h),
+
+                          _buildLabel(
+                            "Upload Resume (Pdf, Doc, Docx, jpg, jpeg, png)",
+                          ),
+                          SizedBox(height: 10.h),
 
                           GestureDetector(
-                            onTap: () async {
-                              final box = await Hive.openBox('userdata');
-                              await box.clear(); // Clear saved user data
-                              if (context.mounted) {
-                                Navigator.pushReplacement(
-                                  context,
-                                  CupertinoPageRoute(builder: (_) => const StartPage()),
-                                );
-                              }
-                            },
+                            onTap: () {},
                             child: Container(
-                              width: 103.w,
-                              height: 53.h,
+                              width: double.infinity,
+                              height: 150.h,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15.r),
-                                color: Color(0xFF0A66C2),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  "Logout",
-                                  style: GoogleFonts.gothicA1(
-                                    fontSize: 18.sp,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.white,
-                                  ),
+                                border: Border.all(
+                                  color: Colors.grey,
+                                  width: 1.5.w,
                                 ),
+                                borderRadius: BorderRadius.circular(15.r),
                               ),
+                              child:
+                                  _selectedFile != null
+                                      ? ClipRRect(
+                                        borderRadius: BorderRadius.circular(
+                                          15.r,
+                                        ),
+                                        child: _getFilePreview(_selectedFile!),
+                                      )
+                                      : resumeUrl != null
+                                      ? ClipRRect(
+                                        borderRadius: BorderRadius.circular(
+                                          15.r,
+                                        ),
+                                        child: _getFilePreview(resumeUrl!),
+                                      )
+                                      : Center(
+                                        child: Text(
+                                          "Upload Document)",
+                                          style: TextStyle(color: Colors.grey),
+                                        ),
+                                      ),
                             ),
                           ),
+                          SizedBox(height: 25.h),
 
-                        ],),
-                      SizedBox(height: 20.h),
-                      _buildLabel("Full Name"),
-
-                      SizedBox(height: 10.h),
-                      TextFieldBody(
-                        enable: false,
-                        keyboardType: TextInputType.text,
-                        controller: contact_personController,
-                        hint: "Enter Your Name",
+                          SizedBox(height: 20.h),
+                        ],
                       ),
-
-                      SizedBox(height: 20.h),
-                      _buildLabel("Mobile Number"),
-
-                      SizedBox(height: 10.h),
-                      TextFieldBody(
-
-                        enable: false,
-                        keyboardType: TextInputType.phone,
-                        controller: phoneController,
-                        hint: "Enter your mobile number",
-                      ),
-
-                      SizedBox(height: 20.h),
-                      _buildLabel("Email Address"),
-                      SizedBox(height: 10.h),
-
-                      TextFieldBody(
-                        enable: false,
-                        keyboardType: TextInputType.emailAddress,
-                        controller: emailController,
-                        hint: "Enter your email Address",
-                      ),
-                      SizedBox(height: 15.h),
-
-                      _buildLabel("Upload Resume (Pdf, Doc, Docx, jpg, jpeg, png)"),
-                      SizedBox(height: 10.h),
-
-                      GestureDetector(
-                        onTap: (){},
-                        child: Container(
-                          width: double.infinity,
-                          height: 150.h,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey, width: 1.5.w),
-                            borderRadius: BorderRadius.circular(15.r),
-                          ),
-                          child: _selectedFile != null
-                              ? ClipRRect(
-                            borderRadius: BorderRadius.circular(15.r),
-                            child: _getFilePreview(_selectedFile!),
-                          )
-                              : resumeUrl != null
-                              ? ClipRRect(
-                            borderRadius: BorderRadius.circular(15.r),
-                            child: _getFilePreview(resumeUrl!),
-                          )
-                              : Center(
-                            child: Text(
-                              "Tap to select resume (Image or Document)",
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 25.h),
-
-
-
-                      SizedBox(height: 20.h),
-
-
-                    ],
-                  ),
-                  loading: () => const Center(child: CircularProgressIndicator()),
-                  error: (error, stack) => Center(
-                    child: Text('Error loading profile: $error'),
-                  ),
+                  loading:
+                      () => const Center(child: CircularProgressIndicator()),
+                  error:
+                      (error, stack) =>
+                          Center(child: Text('Error loading profile: $error')),
                 ),
               ),
             ),
@@ -314,6 +325,7 @@ class _ProfileGetState extends ConsumerState<ProfileGet> {
     );
   }
 }
+
 class TextFieldBody extends StatelessWidget {
   final String hint;
   final bool? enable;
