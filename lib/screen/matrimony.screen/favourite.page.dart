@@ -326,6 +326,8 @@ import 'dart:developer';
 import 'package:ai_powered_app/data/models/favouriteListBodyModel.dart';
 import 'package:ai_powered_app/data/providers/FavoritesPropertyListProvider.dart';
 import 'package:ai_powered_app/data/providers/favouriteListProvider.dart';
+import 'package:ai_powered_app/screen/matrimony.screen/particular.home.page.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -771,127 +773,139 @@ class _FavouritePageState extends ConsumerState<FavouritePage> {
                     itemCount: data.data.length,
                     itemBuilder: (context, index) {
                       final fav = filterData[index].favoriteUser;
-
-                      return Container(
-                        margin: EdgeInsets.only(bottom: 15.h),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20.r),
-                          gradient: const LinearGradient(
-                            colors: [Color(0xFFFFEBEE), Color(0xFFFFFFFF)],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black12,
-                              blurRadius: 8,
-                              offset: const Offset(0, 4),
+                      return InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                              builder:
+                                  (context) =>
+                                      PartnerPreferencePage(fav.id.toString()),
                             ),
-                          ],
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.all(14.w),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              // 🖼 Profile Image
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(15.r),
-                                child: Image.network(
-                                  fav?.photos ??
-                                      "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
-                                  width: 85.w,
-                                  height: 85.w,
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return Image.network(
-                                      "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
-                                      width: 85.w,
-                                      height: 85.w,
-                                      fit: BoxFit.cover,
-                                    );
-                                  },
-                                ),
-                              ),
-                              SizedBox(width: 12.w),
-
-                              // 🧾 User Info
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      fav?.name ?? "Unknown",
-                                      style: GoogleFonts.gothicA1(
-                                        fontSize: 17.sp,
-                                        fontWeight: FontWeight.w700,
-                                        color: const Color(0xFF333333),
-                                      ),
-                                    ),
-                                    SizedBox(height: 4.h),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          "Age: ${fav?.age ?? '--'}",
-                                          style: GoogleFonts.gothicA1(
-                                            fontSize: 13.sp,
-                                            color: Colors.grey[700],
-                                          ),
-                                        ),
-                                        const SizedBox(width: 6),
-                                        Text(
-                                          "| Gender: ${fav?.gender ?? '--'}",
-                                          style: GoogleFonts.gothicA1(
-                                            fontSize: 13.sp,
-                                            color: Colors.grey[700],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(height: 5.h),
-                                    Row(
-                                      children: [
-                                        const Icon(
-                                          Icons.location_on,
-                                          size: 16,
-                                          color: Colors.pink,
-                                        ),
-                                        SizedBox(width: 4.w),
-                                        Expanded(
-                                          child: Text(
-                                            "${fav?.city ?? ''}, ${fav?.state ?? ''}",
-                                            style: GoogleFonts.gothicA1(
-                                              fontSize: 13.sp,
-                                              color: Colors.grey[800],
-                                            ),
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-
-                              // ❤️ Icon Button
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: const Color(
-                                    0xFF97144d,
-                                  ).withOpacity(0.1),
-                                  borderRadius: BorderRadius.circular(30),
-                                ),
-                                child: IconButton(
-                                  onPressed: () {
-                                    // TODO: Remove from favourites action
-                                  },
-                                  icon: const Icon(
-                                    Icons.favorite,
-                                    color: Color(0xFF97144d),
-                                  ),
-                                ),
+                          );
+                        },
+                        child: Container(
+                          margin: EdgeInsets.only(bottom: 15.h),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20.r),
+                            gradient: const LinearGradient(
+                              colors: [Color(0xFFFFEBEE), Color(0xFFFFFFFF)],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black12,
+                                blurRadius: 8,
+                                offset: const Offset(0, 4),
                               ),
                             ],
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.all(14.w),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                // 🖼 Profile Image
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(15.r),
+                                  child: Image.network(
+                                    fav?.photos ??
+                                        "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
+                                    width: 85.w,
+                                    height: 85.w,
+                                    fit: BoxFit.cover,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return Image.network(
+                                        "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
+                                        width: 85.w,
+                                        height: 85.w,
+                                        fit: BoxFit.cover,
+                                      );
+                                    },
+                                  ),
+                                ),
+                                SizedBox(width: 12.w),
+
+                                // 🧾 User Info
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        fav?.name ?? "Unknown",
+                                        style: GoogleFonts.gothicA1(
+                                          fontSize: 17.sp,
+                                          fontWeight: FontWeight.w700,
+                                          color: const Color(0xFF333333),
+                                        ),
+                                      ),
+                                      SizedBox(height: 4.h),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            "Age: ${fav?.age ?? '--'}",
+                                            style: GoogleFonts.gothicA1(
+                                              fontSize: 13.sp,
+                                              color: Colors.grey[700],
+                                            ),
+                                          ),
+                                          const SizedBox(width: 6),
+                                          Text(
+                                            "| Gender: ${fav?.gender ?? '--'}",
+                                            style: GoogleFonts.gothicA1(
+                                              fontSize: 13.sp,
+                                              color: Colors.grey[700],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(height: 5.h),
+                                      Row(
+                                        children: [
+                                          const Icon(
+                                            Icons.location_on,
+                                            size: 16,
+                                            color: Colors.pink,
+                                          ),
+                                          SizedBox(width: 4.w),
+                                          Expanded(
+                                            child: Text(
+                                              "${fav?.city ?? ''}, ${fav?.state ?? ''}",
+                                              style: GoogleFonts.gothicA1(
+                                                fontSize: 13.sp,
+                                                color: Colors.grey[800],
+                                              ),
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+
+                                // ❤️ Icon Button
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: const Color(
+                                      0xFF97144d,
+                                    ).withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                  child: IconButton(
+                                    onPressed: () {
+                                      // TODO: Remove from favourites action
+                                    },
+                                    icon: const Icon(
+                                      Icons.favorite,
+                                      color: Color(0xFF97144d),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       );
