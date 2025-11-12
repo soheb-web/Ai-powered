@@ -841,22 +841,40 @@ class _HomePageState extends ConsumerState<HomePage> {
                                         itemCount: results!.length,
                                         itemBuilder: (context, index) {
                                           final match = results[index];
+                                          if (results.isEmpty) {
+                                            return Center(
+                                              child: Text(
+                                                "No Data found",
+                                                style: GoogleFonts.inter(
+                                                  fontSize: 15.sp,
+                                                  fontWeight: FontWeight.w300,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                            );
+                                          }
                                           return Card(
                                             margin: EdgeInsets.symmetric(
-                                              horizontal: 16,
-                                              vertical: 8,
+                                              horizontal: 16.w,
+                                              vertical: 8.w,
                                             ),
                                             child: ListTile(
                                               leading:
                                                   match
                                                           .photoThumbnail!
                                                           .isNotEmpty
-                                                      ? Image.network(
-                                                        match.photoThumbnail ??
-                                                            "",
-                                                        width: 50,
-                                                        height: 50,
-                                                        fit: BoxFit.cover,
+                                                      ? ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                              10.r,
+                                                            ),
+                                                        child: Image.network(
+                                                          match.photoThumbnail ??
+                                                              "",
+                                                          width: 50,
+                                                          height: 50,
+                                                          fit: BoxFit.cover,
+                                                        ),
                                                       )
                                                       : Image.asset(
                                                         'assets/female.png',
@@ -871,7 +889,17 @@ class _HomePageState extends ConsumerState<HomePage> {
                                                 match.status ?? "",
                                               ),
                                               onTap: () {
-                                                // Navigate or show details
+                                                Navigator.push(
+                                                  context,
+                                                  CupertinoPageRoute(
+                                                    builder:
+                                                        (context) =>
+                                                            PartnerPreferencePage(
+                                                              match.userId
+                                                                  .toString(),
+                                                            ),
+                                                  ),
+                                                );
                                               },
                                             ),
                                           );

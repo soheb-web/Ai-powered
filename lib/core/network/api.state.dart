@@ -1,4 +1,6 @@
 import 'package:ai_powered_app/data/models/RecentPrpertyModel.dart';
+import 'package:ai_powered_app/data/models/deletePhotoBodyModel.dart';
+import 'package:ai_powered_app/data/models/deletePhotoResModel.dart';
 import 'package:ai_powered_app/data/models/favouriteListBodyModel.dart';
 import 'package:ai_powered_app/data/models/favouriteListResModel.dart';
 import 'package:ai_powered_app/data/models/toggleFavouriteBodyModel.dart';
@@ -83,6 +85,11 @@ abstract class APIStateNetwork {
   Future<ToggleFavouriteResModel> toggleFavourite(
     @Body() ToggleFavouriteBodyModel body,
   );
+
+  @DELETE("/matrimony/profile/delete-photo?user_id={id}")
+  Future<DeletePhotoResModel> deletePhoto(
+    @Path() String id,
+    @Body() DeletePhotoBodyModel body);
 
   /////////////////////////////////////Jobs Api Network//////////////////////////////////////
   @POST('/jobs/auth/login')

@@ -713,7 +713,7 @@ class _FavouritePageState extends ConsumerState<FavouritePage> {
                   hintStyle: GoogleFonts.gothicA1(fontSize: 14.sp),
                   prefixIcon: const Icon(Icons.search, color: Colors.grey),
                   border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(vertical: 12.h),
+                  contentPadding: EdgeInsets.symmetric(vertical: 15.h),
                 ),
                 onChanged: (value) {
                   setState(() {
@@ -770,7 +770,7 @@ class _FavouritePageState extends ConsumerState<FavouritePage> {
                   }
                   return ListView.builder(
                     padding: EdgeInsets.zero,
-                    itemCount: data.data.length,
+                    itemCount: filterData.length,
                     itemBuilder: (context, index) {
                       final fav = filterData[index].favoriteUser;
                       return InkWell(

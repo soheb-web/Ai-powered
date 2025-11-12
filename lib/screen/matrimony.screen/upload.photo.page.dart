@@ -1,14 +1,20 @@
-
-
+import 'dart:developer';
 import 'dart:io';
+import 'package:ai_powered_app/core/network/api.state.dart';
+import 'package:ai_powered_app/core/utils/preety.dio.dart';
 import 'package:ai_powered_app/data/models/PropertyDetailModel.dart' hide Image;
+import 'package:ai_powered_app/data/models/deletePhotoBodyModel.dart';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart' hide Image;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive/hive.dart';
+import 'package:photo_view/photo_view.dart';
+import 'package:photo_view/photo_view_gallery.dart';
 import '../../data/providers/profileGetDataProvider.dart';
 import '../../data/providers/uploadFile.dart';
 import 'location.lifeStyle.page.dart';
@@ -25,8 +31,6 @@ class UploadPhotoPage extends ConsumerStatefulWidget {
 class _UploadPhotoPageState extends ConsumerState<UploadPhotoPage> {
   List<File> selectedFiles = [];
   bool isLoading = false;
-
-
 
   Future<void> pickFiles() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -46,7 +50,6 @@ class _UploadPhotoPageState extends ConsumerState<UploadPhotoPage> {
     }
   }
 
-
   void removeFile(int index) {
     setState(() {
       selectedFiles.removeAt(index);
@@ -64,9 +67,7 @@ class _UploadPhotoPageState extends ConsumerState<UploadPhotoPage> {
       body:
           isLoading
               ? const Center(child: CircularProgressIndicator())
-
-              :
-          SingleChildScrollView(
+              : SingleChildScrollView(
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 24.w),
                   child: Column(
@@ -76,7 +77,6 @@ class _UploadPhotoPageState extends ConsumerState<UploadPhotoPage> {
 
                       profileAsync.when(
                         data: (profile) {
-
                           List<String> oldPhotos =
                               profile.data.photos
                                   .where((photo) => photo is String)
@@ -105,33 +105,230 @@ class _UploadPhotoPageState extends ConsumerState<UploadPhotoPage> {
                                     gridDelegate:
                                         SliverGridDelegateWithFixedCrossAxisCount(
                                           crossAxisCount: 3,
-                                          crossAxisSpacing: 10.w,
-                                          mainAxisSpacing: 10.h,
-                                          childAspectRatio: 1,
+                                          crossAxisSpacing: 20.w,
+                                          mainAxisSpacing: 20.h,
+                                          childAspectRatio: 200 / 190,
                                         ),
                                     itemBuilder: (context, index) {
-                                      return Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                            10.r,
+                                      return Stack(
+                                        clipBehavior: Clip.none,
+                                        children: [
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10.r),
+                                              color: Colors.grey[300],
+                                            ),
+                                            child: InkWell(
+                                              onTap: () {
+                                                int currentIndex =
+                                                    0; // since you’re showing only one image here
+                                                final PageController
+                                                controller = PageController(
+                                                  initialPage: currentIndex,
+                                                );
+
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (context) {
+                                                    return Dialog(
+                                                      insetPadding:
+                                                          EdgeInsets.zero,
+                                                      child: StatefulBuilder(
+                                                        builder: (
+                                                          context,
+                                                          setState,
+                                                        ) {
+                                                          return Stack(
+                                                            children: [
+                                                              PhotoViewGallery.builder(
+                                                                itemCount:
+                                                                    oldPhotos
+                                                                        .length,
+                                                                pageController:
+                                                                    controller, // ✅ important
+                                                                backgroundDecoration:
+                                                                    const BoxDecoration(
+                                                                      color:
+                                                                          Colors
+                                                                              .black,
+                                                                    ),
+                                                                builder: (
+                                                                  context,
+                                                                  i,
+                                                                ) {
+                                                                  return PhotoViewGalleryPageOptions(
+                                                                    imageProvider:
+                                                                        NetworkImage(
+                                                                          oldPhotos[i], // ✅ show the actual photo
+                                                                        ),
+                                                                    minScale:
+                                                                        PhotoViewComputedScale
+                                                                            .contained,
+                                                                    maxScale:
+                                                                        PhotoViewComputedScale
+                                                                            .covered *
+                                                                        3,
+                                                                    heroAttributes:
+                                                                        PhotoViewHeroAttributes(
+                                                                          tag:
+                                                                              oldPhotos[i],
+                                                                        ),
+                                                                  );
+                                                                },
+                                                                onPageChanged: (
+                                                                  i,
+                                                                ) {
+                                                                  setState(() {
+                                                                    currentIndex =
+                                                                        i;
+                                                                  });
+                                                                },
+                                                              ),
+                                                              Positioned(
+                                                                top: 10,
+                                                                left: 10,
+                                                                right: 10,
+                                                                child: Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .spaceBetween,
+                                                                  children: [
+                                                                    IconButton(
+                                                                      icon: const Icon(
+                                                                        Icons
+                                                                            .close,
+                                                                        color:
+                                                                            Colors.white,
+                                                                        size:
+                                                                            28,
+                                                                      ),
+                                                                      onPressed:
+                                                                          () => Navigator.pop(
+                                                                            context,
+                                                                          ),
+                                                                    ),
+                                                                    Text(
+                                                                      "${currentIndex + 1} / ${oldPhotos.length}",
+                                                                      style: const TextStyle(
+                                                                        color:
+                                                                            Colors.white,
+                                                                        fontSize:
+                                                                            16,
+                                                                      ),
+                                                                    ),
+                                                                    SizedBox(
+                                                                      width:
+                                                                          48.w,
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          );
+                                                        },
+                                                      ),
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(10.r),
+                                                child: Image.network(
+                                                  oldPhotos[index],
+                                                  width: 200.w,
+                                                  height: 190.h,
+                                                  fit: BoxFit.cover,
+                                                  errorBuilder:
+                                                      (
+                                                        context,
+                                                        error,
+                                                        stackTrace,
+                                                      ) => Image.asset(
+                                                        'assets/placeholder.png',
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                ),
+                                              ),
+                                            ),
                                           ),
-                                          color: Colors.grey[300],
-                                        ),
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.circular(
-                                            10.r,
+                                          Positioned(
+                                            top: -8,
+                                            right: -5,
+                                            child: InkWell(
+                                              onTap: () async {
+                                                final photoUrl =
+                                                    profile.data.photos[index];
+
+                                                final relativePath = photoUrl
+                                                    .replaceAll(
+                                                      "https://matrimony.rajveerfacility.in/public/",
+                                                      "",
+                                                    );
+
+                                                final userId =
+                                                    Hive.box(
+                                                      'userdata',
+                                                    ).get('user_id').toString();
+
+                                                final body =
+                                                    DeletePhotoBodyModel(
+                                                      photos: [relativePath],
+                                                    );
+
+                                                try {
+                                                  final service =
+                                                      APIStateNetwork(
+                                                        createDio(),
+                                                      );
+                                                  final response = await service
+                                                      .deletePhoto(
+                                                        userId,
+                                                        body,
+                                                      );
+
+                                                  if (response.status == true) {
+                                                    Fluttertoast.showToast(
+                                                      msg: response.message,
+                                                    );
+                                                    ref.invalidate(
+                                                      profileDataProvider,
+                                                    );
+                                                    setState(() {
+                                                      oldPhotos.removeAt(index);
+                                                    });
+                                                  } else {
+                                                    Fluttertoast.showToast(
+                                                      msg:
+                                                          "Failed to delete photo :${response.message}",
+                                                    );
+                                                  }
+                                                } catch (e, st) {
+                                                  log(
+                                                    "${e.toString()}/n ${st.toString()}",
+                                                  );
+                                                  Fluttertoast.showToast(
+                                                    msg: "Api Error :$e",
+                                                  );
+                                                }
+                                              },
+                                              child: Container(
+                                                width: 28.w,
+                                                height: 28.h,
+                                                decoration: const BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: Colors.red,
+                                                ),
+                                                child: Icon(
+                                                  Icons.close,
+                                                  color: Colors.white,
+                                                  size: 18.sp,
+                                                ),
+                                              ),
+                                            ),
                                           ),
-                                          child: Image.network(
-                                            oldPhotos[index],
-                                            fit: BoxFit.cover,
-                                            errorBuilder:
-                                                (context, error, stackTrace) =>
-                                                    Image.asset(
-                                                      'assets/placeholder.png',
-                                                      fit: BoxFit.cover,
-                                                    ),
-                                          ),
-                                        ),
+                                        ],
                                       );
                                     },
                                   ),
@@ -263,8 +460,6 @@ class _UploadPhotoPageState extends ConsumerState<UploadPhotoPage> {
                         ),
                       SizedBox(height: 20.h),
 
-
-
                       GestureDetector(
                         onTap: () async {
                           setState(() {
@@ -273,18 +468,23 @@ class _UploadPhotoPageState extends ConsumerState<UploadPhotoPage> {
 
                           bool hasExistingPhotos = false;
 
-                          ref.read(profileDataProvider).maybeWhen(
-                            data: (profile) {
-                              hasExistingPhotos = profile.data.photos?.isNotEmpty ?? false;
-                            },
-                            orElse: () => null,
-                          );
+                          ref
+                              .read(profileDataProvider)
+                              .maybeWhen(
+                                data: (profile) {
+                                  hasExistingPhotos =
+                                      profile.data.photos?.isNotEmpty ?? false;
+                                },
+                                orElse: () => null,
+                              );
 
                           // ✅ Unified validation: At least 1 image must exist
                           if (!hasExistingPhotos && selectedFiles.isEmpty) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
-                                content: Text("Please upload at least one photo before continuing!"),
+                                content: Text(
+                                  "Please upload at least one photo before continuing!",
+                                ),
                                 backgroundColor: Colors.redAccent,
                               ),
                             );
@@ -297,10 +497,18 @@ class _UploadPhotoPageState extends ConsumerState<UploadPhotoPage> {
                           try {
                             // Upload only if new files are selected
                             if (selectedFiles.isNotEmpty) {
-                              await ref.read(uploadProfilePhotosProvider(selectedFiles).future);
+                              await ref.read(
+                                uploadProfilePhotosProvider(
+                                  selectedFiles,
+                                ).future,
+                              );
 
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text("Photos uploaded successfully!")),
+                                const SnackBar(
+                                  content: Text(
+                                    "Photos uploaded successfully!",
+                                  ),
+                                ),
                               );
                             }
                           } catch (e) {
@@ -320,7 +528,8 @@ class _UploadPhotoPageState extends ConsumerState<UploadPhotoPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const LocationLifestylePage(),
+                              builder:
+                                  (context) => const LocationLifestylePage(),
                             ),
                           );
                         },
@@ -333,23 +542,27 @@ class _UploadPhotoPageState extends ConsumerState<UploadPhotoPage> {
                             color: const Color(0xFF97144d),
                           ),
                           child: Center(
-                            child: isLoading
-                                ? SizedBox(
-                              width: 24.sp,
-                              height: 24.sp,
-                              child: const CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                                strokeWidth: 2,
-                              ),
-                            )
-                                : Text(
-                              "Continue",
-                              style: GoogleFonts.inter(
-                                fontSize: 18.sp,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.white,
-                              ),
-                            ),
+                            child:
+                                isLoading
+                                    ? SizedBox(
+                                      width: 24.sp,
+                                      height: 24.sp,
+                                      child: const CircularProgressIndicator(
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                              Colors.white,
+                                            ),
+                                        strokeWidth: 2,
+                                      ),
+                                    )
+                                    : Text(
+                                      "Continue",
+                                      style: GoogleFonts.inter(
+                                        fontSize: 18.sp,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.white,
+                                      ),
+                                    ),
                           ),
                         ),
                       ),
