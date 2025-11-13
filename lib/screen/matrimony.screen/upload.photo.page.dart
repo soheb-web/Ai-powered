@@ -258,60 +258,157 @@ class _UploadPhotoPageState extends ConsumerState<UploadPhotoPage> {
                                             right: -5,
                                             child: InkWell(
                                               onTap: () async {
-                                                final photoUrl =
-                                                    profile.data.photos[index];
+                                                final confirm = await showDialog<
+                                                  bool
+                                                >(
+                                                  context: context,
+                                                  builder:
+                                                      (_) => AlertDialog(
+                                                        title: const Text(
+                                                          'Delete Photo?',
+                                                        ),
+                                                        content: const Text(
+                                                          'Are you sure you want to delete this photo?',
+                                                        ),
+                                                        actions: [
+                                                          TextButton(
+                                                            onPressed:
+                                                                () =>
+                                                                    Navigator.pop(
+                                                                      context,
+                                                                      false,
+                                                                    ),
+                                                            child: const Text(
+                                                              'Cancel',
+                                                            ),
+                                                          ),
+                                                          ElevatedButton(
+                                                            onPressed:
+                                                                () =>
+                                                                    Navigator.pop(
+                                                                      context,
+                                                                      true,
+                                                                    ),
+                                                            child: const Text(
+                                                              'Delete',
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                );
 
-                                                final relativePath = photoUrl
-                                                    .replaceAll(
-                                                      "https://matrimony.rajveerfacility.in/public/",
-                                                      "",
-                                                    );
+                                                if (confirm == true) {
+                                                  final photoUrl =
+                                                      profile
+                                                          .data
+                                                          .photos[index];
 
-                                                final userId =
-                                                    Hive.box(
-                                                      'userdata',
-                                                    ).get('user_id').toString();
-
-                                                final body =
-                                                    DeletePhotoBodyModel(
-                                                      photos: [relativePath],
-                                                    );
-
-                                                try {
-                                                  final service =
-                                                      APIStateNetwork(
-                                                        createDio(),
+                                                  final relativePath = photoUrl
+                                                      .replaceAll(
+                                                        "https://matrimony.rajveerfacility.in/public/",
+                                                        "",
                                                       );
-                                                  final response = await service
-                                                      .deletePhoto(
-                                                        userId,
-                                                        body,
+
+                                                  final userId =
+                                                      Hive.box('userdata')
+                                                          .get('user_id')
+                                                          .toString();
+
+                                                  final body =
+                                                      DeletePhotoBodyModel(
+                                                        photos: [relativePath],
                                                       );
 
-                                                  if (response.status == true) {
-                                                    Fluttertoast.showToast(
-                                                      msg: response.message,
+                                                  try {
+                                                    final service =
+                                                        APIStateNetwork(
+                                                          createDio(),
+                                                        );
+                                                    final response =
+                                                        await service
+                                                            .deletePhoto(
+                                                              userId,
+                                                              body,
+                                                            );
+
+                                                    if (response.status ==
+                                                        true) {
+                                                      Fluttertoast.showToast(
+                                                        msg: response.message,
+                                                      );
+                                                      ref.invalidate(
+                                                        profileDataProvider,
+                                                      );
+                                                      setState(() {
+                                                        oldPhotos.removeAt(
+                                                          index,
+                                                        );
+                                                      });
+                                                    } else {
+                                                      Fluttertoast.showToast(
+                                                        msg:
+                                                            "Failed to delete photo :${response.message}",
+                                                      );
+                                                    }
+                                                  } catch (e, st) {
+                                                    log(
+                                                      "${e.toString()}/n ${st.toString()}",
                                                     );
-                                                    ref.invalidate(
-                                                      profileDataProvider,
-                                                    );
-                                                    setState(() {
-                                                      oldPhotos.removeAt(index);
-                                                    });
-                                                  } else {
                                                     Fluttertoast.showToast(
-                                                      msg:
-                                                          "Failed to delete photo :${response.message}",
+                                                      msg: "Api Error :$e",
                                                     );
                                                   }
-                                                } catch (e, st) {
-                                                  log(
-                                                    "${e.toString()}/n ${st.toString()}",
-                                                  );
-                                                  Fluttertoast.showToast(
-                                                    msg: "Api Error :$e",
-                                                  );
                                                 }
+
+                                                // final photoUrl =
+                                                //     profile.data.photos[index];
+                                                // final relativePath = photoUrl
+                                                //     .replaceAll(
+                                                //       "https://matrimony.rajveerfacility.in/public/",
+                                                //       "",
+                                                //     );
+                                                // final userId =
+                                                //     Hive.box(
+                                                //       'userdata',
+                                                //     ).get('user_id').toString();
+                                                // final body =
+                                                //     DeletePhotoBodyModel(
+                                                //       photos: [relativePath],
+                                                //     );
+                                                // try {
+                                                //   final service =
+                                                //       APIStateNetwork(
+                                                //         createDio(),
+                                                //       );
+                                                //   final response = await service
+                                                //       .deletePhoto(
+                                                //         userId,
+                                                //         body,
+                                                //       );
+                                                //   if (response.status == true) {
+                                                //     Fluttertoast.showToast(
+                                                //       msg: response.message,
+                                                //     );
+                                                //     ref.invalidate(
+                                                //       profileDataProvider,
+                                                //     );
+                                                //     setState(() {
+                                                //       oldPhotos.removeAt(index);
+                                                //     });
+                                                //   } else {
+                                                //     Fluttertoast.showToast(
+                                                //       msg:
+                                                //           "Failed to delete photo :${response.message}",
+                                                //     );
+                                                //   }
+                                                // } catch (e, st) {
+                                                //   log(
+                                                //     "${e.toString()}/n ${st.toString()}",
+                                                //   );
+                                                //   Fluttertoast.showToast(
+                                                //     msg: "Api Error :$e",
+                                                //   );
+                                                // }
                                               },
                                               child: Container(
                                                 width: 28.w,
