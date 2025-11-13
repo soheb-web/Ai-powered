@@ -394,76 +394,76 @@ class _ProfileGetPhotoState extends ConsumerState<ProfileGetPhoto> {
                                             ),
                                           ),
                                         ),
-                                        Positioned(
-                                          top: -8,
-                                          right: -5,
-                                          child: InkWell(
-                                            onTap: () async {
-                                              final photoUrl =
-                                                  profile.data.photos[index];
+                                        // Positioned(
+                                        //   top: -8,
+                                        //   right: -5,
+                                        //   child: InkWell(
+                                        //     onTap: () async {
+                                        //       final photoUrl =
+                                        //           profile.data.photos[index];
 
-                                              final relativePath = photoUrl
-                                                  .replaceAll(
-                                                    "https://matrimony.rajveerfacility.in/public/",
-                                                    "",
-                                                  );
+                                        //       final relativePath = photoUrl
+                                        //           .replaceAll(
+                                        //             "https://matrimony.rajveerfacility.in/public/",
+                                        //             "",
+                                        //           );
 
-                                              final userId =
-                                                  Hive.box(
-                                                    'userdata',
-                                                  ).get('user_id').toString();
+                                        //       final userId =
+                                        //           Hive.box(
+                                        //             'userdata',
+                                        //           ).get('user_id').toString();
 
-                                              final body = DeletePhotoBodyModel(
-                                                photos: [relativePath],
-                                              );
+                                        //       final body = DeletePhotoBodyModel(
+                                        //         photos: [relativePath],
+                                        //       );
 
-                                              try {
-                                                final service = APIStateNetwork(
-                                                  createDio(),
-                                                );
-                                                final response = await service
-                                                    .deletePhoto(userId, body);
+                                        //       try {
+                                        //         final service = APIStateNetwork(
+                                        //           createDio(),
+                                        //         );
+                                        //         final response = await service
+                                        //             .deletePhoto(userId, body);
 
-                                                if (response.status == true) {
-                                                  Fluttertoast.showToast(
-                                                    msg: response.message,
-                                                  );
-                                                  ref.invalidate(
-                                                    profileDataProvider,
-                                                  );
-                                                  setState(() {
-                                                    oldPhotos.removeAt(index);
-                                                  });
-                                                } else {
-                                                  Fluttertoast.showToast(
-                                                    msg:
-                                                        "Failed to delete photo :${response.message}",
-                                                  );
-                                                }
-                                              } catch (e, st) {
-                                                log(
-                                                  "${e.toString()}/n ${st.toString()}",
-                                                );
-                                                Fluttertoast.showToast(
-                                                  msg: "Api Error :$e",
-                                                );
-                                              }
-                                            },
-                                            child: Container(
-                                              width: 28.w,
-                                              height: 28.h,
-                                              decoration: const BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                color: Colors.red,
-                                              ),
-                                              child: Icon(
-                                                Icons.close,
-                                                color: Colors.white,
-                                                size: 18.sp,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
+                                        //         if (response.status == true) {
+                                        //           Fluttertoast.showToast(
+                                        //             msg: response.message,
+                                        //           );
+                                        //           ref.invalidate(
+                                        //             profileDataProvider,
+                                        //           );
+                                        //           setState(() {
+                                        //             oldPhotos.removeAt(index);
+                                        //           });
+                                        //         } else {
+                                        //           Fluttertoast.showToast(
+                                        //             msg:
+                                        //                 "Failed to delete photo :${response.message}",
+                                        //           );
+                                        //         }
+                                        //       } catch (e, st) {
+                                        //         log(
+                                        //           "${e.toString()}/n ${st.toString()}",
+                                        //         );
+                                        //         Fluttertoast.showToast(
+                                        //           msg: "Api Error :$e",
+                                        //         );
+                                        //       }
+                                        //     },
+                                        //     child: Container(
+                                        //       width: 28.w,
+                                        //       height: 28.h,
+                                        //       decoration: const BoxDecoration(
+                                        //         shape: BoxShape.circle,
+                                        //         color: Colors.red,
+                                        //       ),
+                                        //       child: Icon(
+                                        //         Icons.close,
+                                        //         color: Colors.white,
+                                        //         size: 18.sp,
+                                        //       ),
+                                        //     ),
+                                        //   ),
+                                        // ),
                                       ],
                                     );
                                   },
