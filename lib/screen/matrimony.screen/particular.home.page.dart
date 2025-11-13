@@ -261,6 +261,7 @@ import 'dart:developer';
 import 'package:ai_powered_app/core/network/api.state.dart';
 import 'package:ai_powered_app/core/utils/preety.dio.dart';
 import 'package:ai_powered_app/data/models/toggleFavouriteBodyModel.dart';
+import 'package:ai_powered_app/data/providers/favouriteListProvider.dart';
 import 'package:ai_powered_app/screen/matrimony.screen/message.page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -698,88 +699,237 @@ class _PartnerPreferencePageState extends ConsumerState<PartnerPreferencePage> {
         ),
       ),
 
+      // bottomSheet: Padding(
+      //   padding: EdgeInsets.only(bottom: 10.h, top: 6.h),
+      //   child: Row(
+      //     mainAxisAlignment: MainAxisAlignment.center,
+      //     children: [
+      //       GestureDetector(
+      //         onTap: () async {
+      //           if (widget.targetUserId == null) {
+      //             Fluttertoast.showToast(msg: "Invalid target user ID");
+      //             return;
+      //           }
+      //           setState(() => isLoading = true);
+      //           // try {
+      //           //   await ref.read(
+      //           //     sentInterestProvider({
+      //           //       "target_user_id": widget.targetUserId!,
+      //           //     }).future,
+      //           //   );
+      //           //   Fluttertoast.showToast(msg: "Interest sent successfully");
+      //           // } catch (e) {
+      //           //   Fluttertoast.showToast(msg: "Error: $e");
+      //           // } finally {
+      //           //   setState(() => isLoading = false);
+      //           // }
+      //           try {
+      //             final body = ToggleFavouriteBodyModel(
+      //               userId: userId,
+      //               favoriteUserId: widget.targetUserId.toString(),
+      //             );
+      //             final service = APIStateNetwork(createDio());
+      //             final response = await service.toggleFavourite(body);
+      //             if (response.success == true) {
+      //               Fluttertoast.showToast(msg: response.message);
+      //               var box = Hive.box("userdata");
+      //               var id = box.get("user_id");
+      //               ref.invalidate(favouriteListProvider(id));
+      //             } else {
+      //               Fluttertoast.showToast(msg: response.message);
+      //             }
+      //           } catch (e, st) {
+      //             log("${e.toString()} /n ${st.toString()}");
+      //             Fluttertoast.showToast(msg: "Api Error :$e");
+      //           } finally {
+      //             setState(() {
+      //               isLoading = false;
+      //             });
+      //           }
+      //         },
+      //         child: Container(
+      //           width: 160.w,
+      //           height: 74.h,
+      //           decoration: BoxDecoration(
+      //             color: const Color(0xFF97144d),
+      //             borderRadius: BorderRadius.circular(20.r),
+      //             boxShadow: const [
+      //               BoxShadow(
+      //                 offset: Offset(0, -6),
+      //                 blurRadius: 40,
+      //                 spreadRadius: 0,
+      //                 color: Color.fromARGB(63, 0, 0, 0),
+      //               ),
+      //             ],
+      //           ),
+      //           child: Center(
+      //             child:
+      //                 isLoading
+      //                     ? const SizedBox(
+      //                       height: 24,
+      //                       width: 24,
+      //                       child: CircularProgressIndicator(
+      //                         color: Colors.white,
+      //                         strokeWidth: 2.5,
+      //                       ),
+      //                     )
+      //                     : const Icon(
+      //                       Icons.favorite_border,
+      //                       color: Colors.white,
+      //                     ),
+      //           ),
+      //         ),
+      //       ),
+      //       SizedBox(width: 20.w),
+      //       GestureDetector(
+      //         onTap: () {
+      //           Navigator.push(
+      //             context,
+      //             CupertinoPageRoute(builder: (context) => MessagePage()),
+      //           );
+      //         },
+      //         child: Container(
+      //           width: 160.w,
+      //           height: 74.h,
+      //           decoration: BoxDecoration(
+      //             color: const Color(0xFFF2D4DC),
+      //             borderRadius: BorderRadius.circular(20.r),
+      //             boxShadow: const [
+      //               BoxShadow(
+      //                 offset: Offset(0, -6),
+      //                 blurRadius: 40,
+      //                 spreadRadius: 0,
+      //                 color: Color.fromARGB(63, 0, 0, 0),
+      //               ),
+      //             ],
+      //           ),
+      //           child: const Center(
+      //             child: Icon(Icons.chat, color: Color(0xFF97144d)),
+      //           ),
+      //         ),
+      //       ),
+      //     ],
+      //   ),
+      // ),
       bottomSheet: Padding(
         padding: EdgeInsets.only(bottom: 10.h, top: 6.h),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            GestureDetector(
-              onTap: () async {
-                if (widget.targetUserId == null) {
-                  Fluttertoast.showToast(msg: "Invalid target user ID");
-                  return;
-                }
+            Consumer(
+              builder: (context, ref, _) {
+                var box = Hive.box("userdata");
+                var userId = box.get("user_id");
+                final favouriteListAsync = ref.watch(
+                  favouriteListProvider(userId),
+                );
 
-                setState(() => isLoading = true);
+                return favouriteListAsync.when(
+                  data: (favouriteData) {
+                    // ✅ Check if current target user is already in favourites
+                    final isFavourited = favouriteData.data.any(
+                      (item) =>
+                          item.favoriteUser.id.toString() ==
+                          widget.targetUserId,
+                    );
 
-                // try {
-                //   await ref.read(
-                //     sentInterestProvider({
-                //       "target_user_id": widget.targetUserId!,
-                //     }).future,
-                //   );
-                //   Fluttertoast.showToast(msg: "Interest sent successfully");
-                // } catch (e) {
-                //   Fluttertoast.showToast(msg: "Error: $e");
-                // } finally {
-                //   setState(() => isLoading = false);
-                // }
+                    return GestureDetector(
+                      onTap: () async {
+                        if (widget.targetUserId == null) {
+                          Fluttertoast.showToast(msg: "Invalid target user ID");
+                          return;
+                        }
 
-                try {
-                  final body = ToggleFavouriteBodyModel(
-                    userId: userId,
-                    favoriteUserId: widget.targetUserId.toString(),
-                  );
-                  final service = APIStateNetwork(createDio());
-                  final response = await service.toggleFavourite(body);
-                  if (response.success == true) {
-                    Fluttertoast.showToast(msg: response.message);
-                  } else {
-                    Fluttertoast.showToast(msg: response.message);
-                  }
-                } catch (e, st) {
-                  log("${e.toString()} /n ${st.toString()}");
-                  Fluttertoast.showToast(msg: "Api Error :$e");
-                } finally {
-                  setState(() {
-                    isLoading = false;
-                  });
-                }
-              },
-              child: Container(
-                width: 160.w,
-                height: 74.h,
-                decoration: BoxDecoration(
-                  color: const Color(0xFF97144d),
-                  borderRadius: BorderRadius.circular(20.r),
-                  boxShadow: const [
-                    BoxShadow(
-                      offset: Offset(0, -6),
-                      blurRadius: 40,
-                      spreadRadius: 0,
-                      color: Color.fromARGB(63, 0, 0, 0),
-                    ),
-                  ],
-                ),
-                child: Center(
-                  child:
-                      isLoading
-                          ? const SizedBox(
-                            height: 24,
-                            width: 24,
-                            child: CircularProgressIndicator(
-                              color: Colors.white,
-                              strokeWidth: 2.5,
+                        setState(() => isLoading = true);
+
+                        try {
+                          final body = ToggleFavouriteBodyModel(
+                            userId: userId,
+                            favoriteUserId: widget.targetUserId.toString(),
+                          );
+                          final service = APIStateNetwork(createDio());
+                          final response = await service.toggleFavourite(body);
+
+                          if (response.success == true) {
+                            Fluttertoast.showToast(msg: response.message);
+                            ref.invalidate(favouriteListProvider(userId));
+                          } else {
+                            Fluttertoast.showToast(msg: response.message);
+                          }
+                        } catch (e, st) {
+                          log("${e.toString()} /n ${st.toString()}");
+                          Fluttertoast.showToast(msg: "Api Error :$e");
+                        } finally {
+                          setState(() => isLoading = false);
+                        }
+                      },
+                      child: Container(
+                        width: 160.w,
+                        height: 74.h,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF97144d),
+                          borderRadius: BorderRadius.circular(20.r),
+                          boxShadow: const [
+                            BoxShadow(
+                              offset: Offset(0, -6),
+                              blurRadius: 40,
+                              spreadRadius: 0,
+                              color: Color.fromARGB(63, 0, 0, 0),
                             ),
-                          )
-                          : const Icon(
-                            Icons.favorite_border,
-                            color: Colors.white,
+                          ],
+                        ),
+                        child: Center(
+                          child:
+                              isLoading
+                                  ? const SizedBox(
+                                    height: 24,
+                                    width: 24,
+                                    child: CircularProgressIndicator(
+                                      color: Colors.white,
+                                      strokeWidth: 2.5,
+                                    ),
+                                  )
+                                  : Icon(
+                                    isFavourited
+                                        ? Icons
+                                            .favorite // ❤️ filled
+                                        : Icons.favorite_border, // 🤍 border
+                                    color: Colors.white,
+                                  ),
+                        ),
+                      ),
+                    );
+                  },
+                  loading:
+                      () => Container(
+                        width: 160.w,
+                        height: 74.h,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF97144d),
+                          borderRadius: BorderRadius.circular(20.r),
+                          boxShadow: const [
+                            BoxShadow(
+                              offset: Offset(0, -6),
+                              blurRadius: 40,
+                              spreadRadius: 0,
+                              color: Color.fromARGB(63, 0, 0, 0),
+                            ),
+                          ],
+                        ),
+                        child: Center(
+                          child: Icon(
+                            Icons.favorite,
+                            color: const Color(0xFF97144d),
                           ),
-                ),
-              ),
+                        ),
+                      ),
+                  error: (error, _) => Icon(Icons.error, color: Colors.red),
+                );
+              },
             ),
+
             SizedBox(width: 20.w),
+
             GestureDetector(
               onTap: () {
                 Navigator.push(
