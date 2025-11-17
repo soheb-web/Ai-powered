@@ -229,7 +229,7 @@ class _OtpVerifyPageState extends State<OtpVerifyPage> {
                             style: GoogleFonts.roboto(
                               fontSize: 16.sp,
                               fontWeight: FontWeight.w500,
-                              color: Color(0xFF001E6C),
+                              color: _getLoginButtonColor(widget.title),
                             ),
                           ),
                 ),
