@@ -828,7 +828,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Center(child: Image.asset("assets/loginlogo.png")),
+                 Center(child: Image.asset("assets/loginlogo.png")),
+               // Center(child: Image.asset("assets/loginlogo2.png")),
                 SizedBox(height: 25.h),
                 Text(
                   "Login To Your Account",
