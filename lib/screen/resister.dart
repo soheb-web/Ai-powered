@@ -1,6 +1,8 @@
 import 'dart:developer';
 
+import 'package:ai_powered_app/screen/login.page.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -361,7 +363,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           resumeFile: _selectedFile!, // This is a File object
                           context: context,
                           onSuccess: () {
-                            _openCheckout(); // Call _openCheckout on successful registration
+                            // _openCheckout();
                           },
                         );
 

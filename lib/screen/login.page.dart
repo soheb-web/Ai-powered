@@ -758,8 +758,10 @@ Widget _buildTextFormField(
 
 */
 
+import 'package:ai_powered_app/screen/forgotpassword.page.dart';
 import 'package:ai_powered_app/screen/resister.dart';
 import 'package:ai_powered_app/screen/start.page.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -826,22 +828,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Center(
-                  child: Stack(
-                    children: [
-                      ClipOval(
-                        child: Image.asset(
-                          "assets/bgimage.png",
-                          width: 150.w,
-                          height: 160.h,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      Positioned.fill(child: Image.asset("assets/rajveer.png")),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 35.h),
+                Center(child: Image.asset("assets/loginlogo.png")),
+                SizedBox(height: 25.h),
                 Text(
                   "Login To Your Account",
                   textAlign: TextAlign.start,
@@ -913,7 +901,38 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 35.h),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        padding: EdgeInsets.only(
+                          left: 5.w,
+                          right: 5.w,
+                          top: 0,
+                          bottom: 0,
+                        ),
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                            builder:
+                                (context) => ForgotPasswordPage(widget.title),
+                          ),
+                        );
+                      },
+                      child: Text(
+                        "Forgot Password?",
+                        style: GoogleFonts.gothicA1(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w400,
+                          color: _getLoginButtonColor(widget.title),
+                        ),
+                      ),
+                    ),
+                  ),
+                  //SizedBox(height: 10.h),
                   _buildLabel("Enter Password"),
                   _buildTextFormField(
                     _getLoginButtonColor(widget.title),
@@ -1083,6 +1102,30 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                             ),
                           ),
                         ],
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 10.h),
+                Align(
+                  alignment: Alignment.center,
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                      padding: EdgeInsets.only(
+                        left: 10.w,
+                        right: 10.w,
+                        top: 0,
+                        bottom: 0,
+                      ),
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                    onPressed: () {},
+                    child: Text(
+                      "Helpline : +91 89766 89112",
+                      style: GoogleFonts.gothicA1(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w400,
+                        color: _getLoginButtonColor(widget.title),
                       ),
                     ),
                   ),
