@@ -568,7 +568,7 @@ class Auth {
     });
     try {
       final response = await dio.post(
-        'https://aipowered.globallywebsolutions.com/api/jobs/auth/register',
+        'https://matrimony.rajveerfacility.in/api/jobs/auth/register',
         data: formData,
       );
 

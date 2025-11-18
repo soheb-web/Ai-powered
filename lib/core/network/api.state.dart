@@ -96,7 +96,7 @@ abstract class APIStateNetwork {
     @Body() DeletePhotoBodyModel body,
   );
 
-  /////////////////////////////////////Jobs Api Network//////////////////////////////////////
+  ///////////////////////////////////// Jobs Api Network //////////////////////////////////////
   @POST('/jobs/auth/login')
   Future<HttpResponse<dynamic>> jobsLogin(@Body() LoginBody body);
 
