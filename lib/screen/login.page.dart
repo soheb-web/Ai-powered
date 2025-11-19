@@ -902,6 +902,23 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       return null;
                     },
                   ),
+                  SizedBox(height: 20.h),
+                  _buildLabel("Enter Password"),
+                  _buildTextFormField(
+                    _getLoginButtonColor(widget.title),
+                    controller: passwordController,
+                    hint: "Enter Password",
+                    obscure: true,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Password is required';
+                      }
+                      if (value.length < 6) {
+                        return 'Password must be at least 6 characters';
+                      }
+                      return null;
+                    },
+                  ),
                   Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
@@ -933,35 +950,19 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       ),
                     ),
                   ),
-                  //SizedBox(height: 10.h),
-                  _buildLabel("Enter Password"),
-                  _buildTextFormField(
-                    _getLoginButtonColor(widget.title),
-                    controller: passwordController,
-                    hint: "Enter Password",
-                    obscure: true,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Password is required';
-                      }
-                      if (value.length < 6) {
-                        return 'Password must be at least 6 characters';
-                      }
-                      return null;
-                    },
-                  ),
                 ],
-
                 if (!isPhoneLogin) ...[
-                  SizedBox(height: 15.h),
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Transform.translate(
-                          offset: const Offset(-8.0, 0.0),
+                  // SizedBox(height: 10.h),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 40.w,
+                        height: 40.h,
+                        //  color: Colors.amber,
+                        child: Transform.scale(
+                          scale: 1.2,
                           child: Checkbox(
                             value: isAccepted,
                             activeColor: _getLoginButtonColor(widget.title),
@@ -972,24 +973,20 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                             },
                           ),
                         ),
-                        Expanded(
-                          child: Text(
-                            "Remember Me",
-                            textAlign: TextAlign.start,
-                            style: GoogleFonts.gothicA1(
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.black,
-                            ),
-                          ),
+                      ),
+                      Text(
+                        "Remember Me",
+                        textAlign: TextAlign.start,
+                        style: GoogleFonts.gothicA1(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.black,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ],
-
-                SizedBox(height: 25.h),
-
+                SizedBox(height: 20.h),
                 GestureDetector(
                   onTap: () async {
                     if (_buttonLoader) return;
@@ -1070,7 +1067,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   ),
                 ),
 
-                SizedBox(height: 24.h),
+                SizedBox(height: 20.h),
 
                 Center(
                   child: GestureDetector(
