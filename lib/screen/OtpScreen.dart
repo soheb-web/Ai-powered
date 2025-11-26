@@ -227,3 +227,111 @@ class _OtpscreenState extends State<Otpscreen> {
 
 
 }
+
+
+// Otpscreen.dart
+
+
+//
+//
+// import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:flutter/material.dart';
+// import 'package:fluttertoast/fluttertoast.dart';
+// import 'package:hive/hive.dart';
+//
+// class Otpscreen extends StatefulWidget {
+//   final String phoneNumber;
+//   const Otpscreen({required this.phoneNumber, super.key});
+//
+//   @override
+//   State<Otpscreen> createState() => _OtpscreenState();
+// }
+//
+// class _OtpscreenState extends State<Otpscreen> {
+//   final FirebaseAuth _auth = FirebaseAuth.instance;
+//   final TextEditingController _otpController = TextEditingController();
+//   String _verificationId = '';
+//   bool _isLoading = false;
+//
+//   @override
+//   void initState() {
+//     super.initState();
+//     _sendOtp();
+//   }
+//
+//   Future<void> _sendOtp() async {
+//     setState(() => _isLoading = true);
+//     await _auth.verifyPhoneNumber(
+//       phoneNumber: '+91${widget.phoneNumber}',
+//       verificationCompleted: (PhoneAuthCredential credential) async {
+//         await _signIn(credential);
+//       },
+//       verificationFailed: (FirebaseAuthException e) {
+//         _showToast(e.message ?? 'Failed');
+//       },
+//       codeSent: (String verificationId, int? resendToken) {
+//         _verificationId = verificationId;
+//         _showToast('OTP Sent!');
+//         setState(() => _isLoading = false);
+//       },
+//       codeAutoRetrievalTimeout: (String verificationId) {},
+//     );
+//   }
+//
+//   Future<void> _verifyOtp() async {
+//     final otp = _otpController.text.trim();
+//     if (otp.isEmpty) return _showToast('Enter OTP');
+//
+//     final credential = PhoneAuthProvider.credential(
+//       verificationId: _verificationId,
+//       smsCode: otp,
+//     );
+//     await _signIn(credential);
+//   }
+//
+//   Future<void> _signIn(PhoneAuthCredential credential) async {
+//     try {
+//       final userCredential = await _auth.signInWithCredential(credential);
+//       final idToken = await userCredential.user?.getIdToken();
+//
+//       if (idToken != null) {
+//         // Send to Laravel
+//         await _sendToLaravel(idToken);
+//       }
+//     } catch (e) {
+//       _showToast('Invalid OTP');
+//     }
+//   }
+//
+//   Future<void> _sendToLaravel(String idToken) async {
+//     // Call your Laravel /auth/firebase-login
+//     // Save token in Hive → Go to Home
+//     final box = await Hive.openBox('userdata');
+//     await box.put('token', 'from_laravel_token_here');
+//     Navigator.pushReplacementNamed(context, '/home');
+//   }
+//
+//   void _showToast(String msg) {
+//     Fluttertoast.showToast(msg: msg);
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(title: Text('Verify OTP')),
+//       body: Padding(
+//         padding: EdgeInsets.all(20),
+//         child: Column(
+//           children: [
+//             Text('OTP sent to +91${widget.phoneNumber}'),
+//             TextField(controller: _otpController, keyboardType: TextInputType.number),
+//             ElevatedButton(
+//               onPressed: _isLoading ? null : _verifyOtp,
+//               child: _isLoading ? CircularProgressIndicator() : Text('Verify'),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }

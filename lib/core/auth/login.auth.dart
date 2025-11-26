@@ -20,57 +20,6 @@ import '../utils/preety.dio.dart';
 
 
 class Auth {
-  //
-  // static Future<void> login(
-  //     String email,
-  //     String password,
-  //     BuildContext context,
-  //     ) async {
-  //   final dio = await createDio();
-  //   final service = APIStateNetwork(dio);
-  //   final response = await service.login(
-  //     LoginBody(email_or_phone: email, password: password),);
-  //   if (response.response.statusCode == 200) {
-  //     final data = response.response.data;
-  //     final loginData = LoginResponse.fromJson(data);
-  //     final box = await Hive.openBox('userdata');
-  //     await box.clear(); // Optional: Clear previous session
-  //     await box.put('token', loginData.token);
-  //     await box.put('user_id', loginData.userId);
-  //     await box.put('expiresIn', loginData.expiresIn);
-  //     await box.put('type', "MATRIMONY");
-  //     final userId = box.get('user_id');
-  //     final token = box.get('token');
-  //     print('User ID: $userId');
-  //     print('Token: $token');
-  //     Fluttertoast.showToast(
-  //       msg: data['message'] ?? 'Login successful',
-  //       toastLength: Toast.LENGTH_SHORT,
-  //       gravity: ToastGravity.TOP,
-  //       backgroundColor: Colors.green,
-  //       textColor: Colors.white,
-  //       fontSize: 12.0,
-  //     );
-  //     log('Login successful: $data');
-  //     Navigator.pushAndRemoveUntil(
-  //       context,
-  //       CupertinoPageRoute(builder: (context) => const HomePage()),
-  //           (route) => false,
-  //     );
-  //   } else {
-  //     Fluttertoast.showToast(
-  //       msg: response.response.data['message'] ?? 'Login failed',
-  //       toastLength: Toast.LENGTH_SHORT,
-  //       gravity: ToastGravity.TOP,
-  //       backgroundColor: Colors.red,
-  //       textColor: Colors.white,
-  //       fontSize: 12.0,
-  //     );
-  //
-  //     throw Exception('Failed to login');
-  //   }
-  // }
-
   static Future<void> login(
       String email,
       String password,
@@ -325,7 +274,8 @@ class Auth {
       String phone,
       String role,
       BuildContext context,
-      ) async {
+      )
+    async {
     final dio = await createDio();
     final service = APIStateNetwork(dio);
     final response = await service.registerRealState(
@@ -364,95 +314,6 @@ class Auth {
       throw Exception('Failed to login');
     }
   }
-
-/*
-
-
-  static Future<void> registerJobSeeker({
-  required String email,
-  required String password,
-  required String name,
-  required String phone,
-  required File resumeFile,
-  required BuildContext context,
-  }) async {
-  final dio = await createDio();
-  final fileExtension = resumeFile.path.split('.').last.toLowerCase();
-  MediaType mediaType;
-  if (fileExtension == 'pdf') {
-  mediaType = MediaType("application", "pdf");
-  } else if (fileExtension == 'doc') {
-  mediaType = MediaType("application", "msword");
-  } else if (fileExtension == 'docx') {
-  mediaType = MediaType("application", "vnd.openxmlformats-officedocument.wordprocessingml.document");
-  } else {
-  Fluttertoast.showToast(
-  msg: "Invalid file type. Please upload a PDF, DOC, or DOCX file.",
-  toastLength: Toast.LENGTH_SHORT,
-  gravity: ToastGravity.TOP,
-  backgroundColor: Colors.red,
-  textColor: Colors.white,
-  fontSize: 12.0,
-  );
-  return; // Exit early if the file type is not allowed
-  }
-  final formData = FormData.fromMap({
-  'name': name,
-  'email': email,
-  'password': password,
-  'phone': phone,
-  'resume': await MultipartFile.fromFile(
-  resumeFile.path,
-  filename: resumeFile.path.split('/').last,
-  contentType: mediaType,
-  ),
-  });
-  try {
-  final response = await dio.post(
-  'https://aipowered.globallywebsolutions.com/api/jobs/auth/register',
-  data: formData,
-  );
-
-  if (response.data['message'] == "Registration successful") {
-  Fluttertoast.showToast(
-  msg: "Registration successful",
-  toastLength: Toast.LENGTH_SHORT,
-  gravity: ToastGravity.TOP,
-  backgroundColor: Colors.green,
-  textColor: Colors.white,
-  fontSize: 12.0,
-  );
-  Navigator.pop(context);
-  } else {
-  Fluttertoast.showToast(
-  msg: "Registration failed: ${response.data['message']}",
-  toastLength: Toast.LENGTH_SHORT,
-  gravity: ToastGravity.TOP,
-  backgroundColor: Colors.red,
-  textColor: Colors.white,
-  fontSize: 12.0,
-  );
-  throw Exception('Job registration failed');
-  }
-  }
-  catch (e) {
-  Fluttertoast.showToast(
-  msg: "Error: $e",
-  toastLength: Toast.LENGTH_SHORT,
-  gravity: ToastGravity.TOP,
-  backgroundColor: Colors.red,
-  textColor: Colors.white,
-  fontSize: 12.0,
-  );
-  }
-
-  }
-
-
-
-
-
-*/
 
 
 
@@ -535,6 +396,9 @@ class Auth {
       );
     }
   }
+
+
+
   static Future<void> registerEmployer(
       String email,
       String password,

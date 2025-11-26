@@ -4,7 +4,6 @@ import 'package:ai_powered_app/core/network/api.state.dart';
 import 'package:ai_powered_app/core/utils/preety.dio.dart';
 import 'package:ai_powered_app/data/models/PropertyDetailModel.dart' hide Image;
 import 'package:ai_powered_app/data/models/deletePhotoBodyModel.dart';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart' hide Image;
 import 'package:flutter/material.dart';
@@ -31,7 +30,6 @@ class UploadPhotoPage extends ConsumerStatefulWidget {
 class _UploadPhotoPageState extends ConsumerState<UploadPhotoPage> {
   List<File> selectedFiles = [];
   bool isLoading = false;
-
   Future<void> pickFiles() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       allowMultiple: true,
@@ -49,14 +47,12 @@ class _UploadPhotoPageState extends ConsumerState<UploadPhotoPage> {
       ref.read(propertyImageProvider.notifier).state = selectedFiles;
     }
   }
-
   void removeFile(int index) {
     setState(() {
       selectedFiles.removeAt(index);
     });
     ref.read(propertyImageProvider.notifier).state = [...selectedFiles];
   }
-
   @override
   Widget build(BuildContext context) {
     final profileAsync = ref.watch(profileDataProvider);
@@ -65,7 +61,8 @@ class _UploadPhotoPageState extends ConsumerState<UploadPhotoPage> {
       backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(backgroundColor: const Color(0xFFF5F5F5)),
       body:
-          isLoading
+
+      isLoading
               ? const Center(child: CircularProgressIndicator())
               : SingleChildScrollView(
                 child: Padding(
@@ -669,6 +666,8 @@ class _UploadPhotoPageState extends ConsumerState<UploadPhotoPage> {
                   ),
                 ),
               ),
+
     );
+
   }
 }

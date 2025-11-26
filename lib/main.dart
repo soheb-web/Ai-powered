@@ -1,10 +1,12 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:ai_powered_app/core/utils/globalroute.key.dart';
+import 'package:ai_powered_app/screen/firbaseOptions.dart';
 import 'package:ai_powered_app/screen/jobs.screen/home.screen.dart';
 import 'package:ai_powered_app/screen/matrimony.screen/home.page.dart';
 import 'package:ai_powered_app/screen/realEstate/realEstate.home.page.dart';
 import 'package:ai_powered_app/screen/splash.page.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -20,6 +22,10 @@ class MyHttpOverrides extends HttpOverrides {
 }
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   HttpOverrides.global = MyHttpOverrides(); // ⚠️ Only for dev/test
   try {
     await Hive.initFlutter();
@@ -31,6 +37,7 @@ void main() async {
   }
 
   runApp(ProviderScope(child: MyApp()));
+
 }
 
 class MyApp extends StatelessWidget {
