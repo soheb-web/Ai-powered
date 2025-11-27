@@ -4,6 +4,7 @@ import 'package:ai_powered_app/data/providers/matchProfileBasedProvider.dart';
 import 'package:ai_powered_app/screen/matrimony.screen/favourite.page.dart';
 import 'package:ai_powered_app/screen/matrimony.screen/message.page.dart';
 import 'package:ai_powered_app/screen/matrimony.screen/particular.home.page.dart';
+import 'package:ai_powered_app/screen/matrimony.screen/profile.page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -836,23 +837,122 @@ class _HomePageState extends ConsumerState<HomePage> {
                                     data: (searchModel) {
                                       final List<Match>? results =
                                           searchModel.matches;
+                                      // 🔥 FIRST: EMPTY CHECK
+                                      if (results == null || results.isEmpty) {
+                                        return Center(
+                                          child: Padding(
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: 20.w,
+                                            ),
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                // Illustration (optional)
+                                                SizedBox(
+                                                  height: 180.h,
+                                                  child: Image.network(
+                                                    "https://cdn-icons-png.flaticon.com/512/4076/4076503.png",
+                                                    fit: BoxFit.contain,
+                                                  ),
+                                                ),
+
+                                                SizedBox(height: 20.h),
+
+                                                Text(
+                                                  "No Matches Found Yet",
+                                                  style: GoogleFonts.inter(
+                                                    fontSize: 20.sp,
+                                                    fontWeight: FontWeight.w600,
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+
+                                                SizedBox(height: 10.h),
+
+                                                Text(
+                                                  "Try updating your partner preferences to get better match results.",
+                                                  textAlign: TextAlign.center,
+                                                  style: GoogleFonts.inter(
+                                                    fontSize: 14.sp,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: Colors.grey[700],
+                                                  ),
+                                                ),
+
+                                                SizedBox(height: 25.h),
+
+                                                // Update Preference Button
+                                                SizedBox(
+                                                  width: double.infinity,
+                                                  child: ElevatedButton(
+                                                    onPressed: () {
+                                                      Navigator.push(
+                                                        context,
+                                                        CupertinoPageRoute(
+                                                          builder:
+                                                              (context) =>
+                                                                  ProfilePage(),
+                                                        ),
+                                                      );
+                                                    },
+                                                    style: ElevatedButton.styleFrom(
+                                                      backgroundColor: Color(
+                                                        0xFF97144d,
+                                                      ),
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                            vertical: 15.h,
+                                                          ),
+                                                      shape: RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                              10.r,
+                                                            ),
+                                                      ),
+                                                    ),
+                                                    child: Text(
+                                                      "Update Preferences",
+                                                      style: GoogleFonts.inter(
+                                                        fontSize: 16.sp,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+
+                                                SizedBox(height: 10.h),
+
+                                                // Refresh Button
+                                                TextButton(
+                                                  onPressed: () {
+                                                    ref.refresh(
+                                                      matchProfileBasedProvider,
+                                                    );
+                                                  },
+                                                  child: Text(
+                                                    "Refresh Matches",
+                                                    style: TextStyle(
+                                                      color: Color(0xFF97144d),
+                                                      fontSize: 14.sp,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      }
 
                                       return ListView.builder(
                                         itemCount: results!.length,
                                         itemBuilder: (context, index) {
                                           final match = results[index];
-                                          if (results.isEmpty) {
-                                            return Center(
-                                              child: Text(
-                                                "No Data found",
-                                                style: GoogleFonts.inter(
-                                                  fontSize: 15.sp,
-                                                  fontWeight: FontWeight.w300,
-                                                  color: Colors.black,
-                                                ),
-                                              ),
-                                            );
-                                          }
+
                                           return Card(
                                             margin: EdgeInsets.symmetric(
                                               horizontal: 16.w,

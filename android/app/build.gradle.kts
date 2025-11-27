@@ -32,33 +32,14 @@ android {
         versionName = flutter.versionName
     }
 
-//    buildTypes {
-//        release {
-//            // TODO: Add your own signing config for the release build.
-//            // Signing with the debug keys for now, so `flutter run --release` works.
-//            signingConfig = signingConfigs.getByName("debug")
-//        }
-//    }
-
-
-    signingConfigs {
-        create("release") {
-            storeFile = file("c:\\Users\\a2z\\Downloads\\ai_poweredapp\\ai_powered_app\\aipowered.jks")
-            storePassword = "123456"
-            keyAlias = "aipowered"
-            keyPassword = "123456"
-        }
-    }
-
-
     buildTypes {
-        getByName("release") {
-            isMinifyEnabled = true // Enable minification
-            isShrinkResources = true // Enable resource shrinking
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            signingConfig = signingConfigs.getByName("release")
+        release {
+            // TODO: Add your own signing config for the release build.
+            // Signing with the debug keys for now, so `flutter run --release` works.
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
+
 
 
 }

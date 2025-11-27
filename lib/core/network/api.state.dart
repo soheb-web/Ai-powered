@@ -3,9 +3,13 @@ import 'package:ai_powered_app/data/models/deletePhotoBodyModel.dart';
 import 'package:ai_powered_app/data/models/deletePhotoResModel.dart';
 import 'package:ai_powered_app/data/models/favouriteListBodyModel.dart';
 import 'package:ai_powered_app/data/models/favouriteListResModel.dart';
+import 'package:ai_powered_app/data/models/passwordChangeBodyModel.dart';
+import 'package:ai_powered_app/data/models/sendOTPBodyModel.dart';
 import 'package:ai_powered_app/data/models/toggleFavouriteBodyModel.dart';
 import 'package:ai_powered_app/data/models/toggleFavouriteResModel.dart';
+import 'package:ai_powered_app/data/models/verifyOTPBodyModel.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:retrofit/retrofit.dart';
 import '../../data/models/FavoritesListModel.dart';
 import '../../data/models/FetachPropertyModel.dart';
@@ -89,9 +93,10 @@ abstract class APIStateNetwork {
   @DELETE("/matrimony/profile/delete-photo?user_id={id}")
   Future<DeletePhotoResModel> deletePhoto(
     @Path() String id,
-    @Body() DeletePhotoBodyModel body);
+    @Body() DeletePhotoBodyModel body,
+  );
 
-  /////////////////////////////////////Jobs Api Network//////////////////////////////////////
+  ///////////////////////////////////// Jobs Api Network //////////////////////////////////////
   @POST('/jobs/auth/login')
   Future<HttpResponse<dynamic>> jobsLogin(@Body() LoginBody body);
 
@@ -208,5 +213,17 @@ abstract class APIStateNetwork {
   @GET('/matrimony/profile/')
   Future<HttpResponse<DetailModel>> profileDetail(
     @Query("user_id") String userId,
+  );
+
+  //////////////////// forgot password ///////////////////////////
+  @POST("/send-otp")
+  Future<SendOtpResModel> sendOTP(@Body() SendOtpBodyModel body);
+
+  @POST("/verify-otp")
+  Future<VerifyOtpResModel> verifyOTP(@Body() VerifyOtpBodyModel body);
+
+  @POST("/reset-password")
+  Future<PasswordChangeResModel> passwordChange(
+    @Body() PasswordChangeBodyModel body,
   );
 }

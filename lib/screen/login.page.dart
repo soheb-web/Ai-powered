@@ -768,15 +768,12 @@ import 'package:google_fonts/google_fonts.dart';
 import '../core/auth/login.auth.dart';
 import 'OtpScreen.dart';
 
-
 class LoginPage extends ConsumerStatefulWidget {
   final String title;
   const LoginPage(this.title, {super.key});
   @override
   ConsumerState<LoginPage> createState() => _LoginPageState();
 }
-
-
 
 class _LoginPageState extends ConsumerState<LoginPage> {
   final emailController = TextEditingController();
@@ -804,7 +801,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       backgroundColor: Colors.white,
 
       appBar: AppBar(
@@ -820,9 +816,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         ),
       ),
 
-      body:
-
-      SingleChildScrollView(
+      body: SingleChildScrollView(
         // padding: EdgeInsets.all(20.w),
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 20.h),
@@ -973,7 +967,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     ),
                   ),
                 ],
+
                 SizedBox(height: 25.h),
+
                 GestureDetector(
                   onTap: () async {
                     if (_buttonLoader) return;
@@ -992,8 +988,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                 ),
                           ),
                         );
-                      }
-                      else {
+                      } else {
                         if (widget.title.toUpperCase() == "JOBS") {
                           await Auth.jobsLogin(
                             emailController.text.trim(),
@@ -1015,8 +1010,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                           );
                         }
                       }
-                    }
-                    finally {
+                    } finally {
                       setState(() => _buttonLoader = false);
                     }
                   },
@@ -1055,7 +1049,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                             ),
                   ),
                 ),
+
                 SizedBox(height: 24.h),
+
                 Center(
                   child: GestureDetector(
                     onTap: () {
@@ -1096,7 +1092,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           ),
         ),
       ),
-
     );
   }
 
@@ -1166,6 +1161,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       borderRadius: BorderRadius.circular(15.r),
       borderSide: BorderSide(color: getLoginButtonColor, width: 1.5.w),
     );
+
     return Padding(
       padding: EdgeInsets.only(top: 10.h),
       child: TextFormField(
@@ -1192,5 +1188,4 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       ),
     );
   }
-
 }
